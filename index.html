@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Johnson Yau | Design & Creative Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: {
+                            bg: '#000000',
+                            card: '#161617',
+                            dark: '#f5f5f7',
+                            gray: '#86868b',
+                            lightgray: '#1d1d1f',
+                            border: '#333336',
+                            accent: '#2997ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .apple-glass { background: rgba(0, 0, 0, 0.75); backdrop-filter: saturate(200%) blur(30px); }
+        .card-glass { background: rgba(22, 22, 23, 0.65); backdrop-filter: blur(20px); }
+        
+        /* Dynamic Scroll Reveal */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Subtle floating glow */
+        @keyframes floatGlow {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+        .animate-glow {
+            animation: floatGlow 8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-apple-bg text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
+        <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between text-xs tracking-wide">
+            <a href="#" class="font-medium text-white hover:opacity-80 transition text-sm">Johnson Yau</a>
+            <nav class="hidden md:flex items-center space-x-8 text-apple-gray">
+                <a href="#works" class="hover:text-white transition">作品集</a>
+                <a href="#translation" class="hover:text-white transition">電影翻譯</a>
+                <a href="#about" class="hover:text-white transition">關於</a>
+            </nav>
+            <button onclick="toggleAdminModal()" class="px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-stone-200 transition transform hover:scale-105 duration-200 shadow-md">
+                <i class="fa-solid fa-gear mr-1"></i> 管理後台
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="max-w-5xl mx-auto px-6 pt-40 pb-28 text-center relative reveal-up active">
+        <div class="absolute inset-0 -z-10 flex items-center justify-center opacity-30 pointer-events-none">
+            <div class="w-[700px] h-[700px] bg-gradient-to-tr from-blue-600/30 via-indigo-600/20 to-purple-600/20 rounded-full blur-[160px] animate-glow"></div>
+        </div>
+        <span class="inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-4 px-3 py-1 rounded-full bg-apple-lightgray border border-apple-border">
+            Creative Design & Localization
+        </span>
+        <h1 class="text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08]">
+            極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-300 to-apple-gray">精準視覺敘事。</span>
+        </h1>
+        <p class="text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12">
+            專注於商品周邊、平面設計、Typeface本地化、展覽快閃店、影片剪接與日文字幕電影翻譯。
+        </p>
+        <div class="flex justify-center gap-4">
+            <a href="#works" class="px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition transform hover:scale-105 duration-300 shadow-2xl">
+                探索精選作品
+            </a>
+            <a href="#translation" class="px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition transform hover:scale-105 duration-300">
+                電影翻譯紀錄
+            </a>
+        </div>
+    </section>
+
+    <!-- Works Section (Dynamic Bento Grid Layout) -->
+    <section id="works" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/50 reveal-up">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+            <div>
+                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Works</h2>
+                <h3 class="text-4xl font-semibold tracking-tight text-white">作品一覽</h3>
+            </div>
+            <!-- Category Filter Tabs -->
+            <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
+                <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm">全部</button>
+                <button onclick="filterProjects('商品，禮品，周邊')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">商品/周邊</button>
+                <button onclick="filterProjects('平面設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">平面設計</button>
+                <button onclick="filterProjects('Typeface本地化/logo設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface/Logo</button>
+                <button onclick="filterProjects('展覽/快閃店')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">展覽/快閃店</button>
+                <button onclick="filterProjects('影片剪接')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">影片剪接</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Bento Grid -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+    </section>
+
+    <!-- Translation Archive Section -->
+    <section id="translation" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/50 reveal-up">
+        <div class="mb-16">
+            <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
+            <h3 class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
+            <p class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+        </div>
+        <div id="translation-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-[#08080a] py-32 border-t border-apple-border/50 reveal-up">
+        <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 items-center">
+            <div>
+                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-3">About Me</h2>
+                <h3 class="text-3xl font-semibold text-white tracking-tight">設計哲學與專業範疇</h3>
+            </div>
+            <div class="md:col-span-2 space-y-6 text-apple-gray font-normal leading-relaxed text-base md:text-lg">
+                <p>
+                    專注於平面設計、商品周邊開發、Logo與Typeface本地化、展覽快閃店視覺規劃及動態影像剪接。追求極致簡約、結構清晰與精準的商業視覺傳達。
+                </p>
+                <p>
+                    具備流利日語能力，長年參與日文字幕至繁體中文電影翻譯，擅長捕捉文化背景與情感細節，將語境完美轉化。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
+        <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
+    </footer>
+
+    <!-- Project Detail Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <span id="modal-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-2 block"></span>
+            <h3 id="modal-title" class="text-2xl font-semibold text-white mb-4"></h3>
+            
+            <div id="modal-video-tabs" class="flex flex-wrap gap-2 mb-4 hidden"></div>
+            <div id="modal-media-container" class="w-full h-80 rounded-2xl mb-6 overflow-hidden bg-black/50 border border-apple-border"></div>
+
+            <p id="modal-description" class="text-apple-gray text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="toggleAdminModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
+                <div class="space-x-2">
+                    <button onclick="openEditorForNewProject()" class="px-4 py-2 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow">+ 新增作品</button>
+                    <button onclick="openEditorForNewTranslation()" class="px-4 py-2 bg-apple-lightgray text-white rounded-full text-xs font-medium hover:bg-apple-border transition border border-apple-border">+ 新增翻譯紀錄</button>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">作品列表</h4>
+                    <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                </div>
+                <div class="pt-4 border-t border-apple-border/50">
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">電影翻譯紀錄列表</h4>
+                    <div id="admin-translation-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Editor Modal -->
+    <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯作品</h3>
+            <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題</label>
+                    <input type="text" id="edit-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">分類</label>
+                    <select id="edit-category" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                        <option value="商品，禮品，周邊">商品，禮品，周邊</option>
+                        <option value="平面設計">平面設計</option>
+                        <option value="Typeface本地化/logo設計">Typeface本地化/logo設計</option>
+                        <option value="展覽/快閃店">展覽/快閃店</option>
+                        <option value="影片剪接">影片剪接</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面圖片網址 (Image URL)</label>
+                    <input type="url" id="edit-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">YouTube 連結 (多條請用半形逗號 , 分隔)</label>
+                    <input type="text" id="edit-youtube" placeholder="https://youtu.be/xxx, https://youtu.be/yyy" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細說明</label>
+                    <textarea id="edit-description" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="px-5 py-2.5 bg-white text-black rounded-full font-medium">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Translation Editor Modal -->
+    <div id="trans-editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯電影翻譯紀錄</h3>
+            <form id="trans-form" onsubmit="saveTranslation(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="trans-edit-id">
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱</label>
+                    <input type="text" id="trans-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">年份</label>
+                    <input type="text" id="trans-year" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">翻譯備註</label>
+                    <textarea id="trans-desc" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeTransEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="px-5 py-2.5 bg-white text-black rounded-full font-medium">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let projects = [
+            { id: '1', title: '限定角色周邊商品設計系列', category: '商品，禮品，周邊', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', youtube: '', description: '為動漫及角色 IP 開發之精美周邊、金屬徽章及壓克力立牌視覺規劃。' },
+            { id: '2', title: '品牌形象識別與平面宣傳品', category: '平面設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', youtube: '', description: '主導整體平面印刷品排版、海報視覺與宣傳物料設計。' },
+            { id: '3', title: '特製日文字體本地化與 Logo 訂製', category: 'Typeface本地化/logo設計', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', youtube: '', description: '針對特定展覽與品牌視覺需求進行日文字體本地化調整及專屬 Logo 塑造。' },
+            { id: '4', title: '動漫IP主題快閃店與展覽空間視覺', category: '展覽/快閃店', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', youtube: '', description: '日本授權展覽與期間限定 Pop-up Store 之主視覺及空間導視規劃。' },
+            { id: '5', title: '官方宣傳短片剪輯合集 (支援多影片)', category: '影片剪接', image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80', youtube: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ, https://www.youtube.com/watch?v=3JZ_D3ELwOQ', description: '活動宣傳片與動態影像剪輯合集。點擊可透過上方分頁切換觀看不同片段。' }
+        ];
+
+        let translations = [
+            { id: 't1', title: '電影作品 A (日文字幕 > 繁體中文本地化翻譯)', year: '2025', desc: '負責全片日文字幕翻譯與在地語境潤飾，精準呈現角色情感與劇本細膩度。' },
+            { id: 't2', title: '劇場版動畫 B (字幕翻譯與專有名詞校對)', year: '2024', desc: '處理複雜日文對白、專有名詞對應及繁體中文流暢度調整。' }
+        ];
+
+        let currentFilter = 'all';
+
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return null;
+            let videoId = '';
+            if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0];
+            } else if (url.includes('watch?v=')) {
+                videoId = url.split('watch?v=')[1]?.split('&')[0];
+            } else if (url.includes('embed/')) {
+                videoId = url.split('embed/')[1]?.split('?')[0];
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+        }
+
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('project-grid');
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-apple-gray text-sm">此分類暫無作品</div>`;
+                return;
+            }
+
+            // Bento Grid styling: make some items span across columns dynamically for a lively look
+            grid.innerHTML = filtered.map((p, index) => {
+                // Bento grid span logic
+                let spanClass = "col-span-1 md:col-span-2 lg:col-span-2";
+                if (index % 3 === 0) spanClass = "col-span-1 md:col-span-2 lg:col-span-2";
+                else if (index % 5 === 0) spanClass = "col-span-1 md:col-span-3 lg:col-span-3";
+                else spanClass = "col-span-1 md:col-span-1 lg:col-span-2";
+
+                return `
+                    <div onclick="openModal('${p.id}')" class="group cursor-pointer card-glass rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 hover:scale-[1.01] ${spanClass} flex flex-col justify-between">
+                        <div class="overflow-hidden aspect-[16/10] bg-black relative">
+                            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
+                            ${p.youtube ? '<div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs text-white flex items-center border border-apple-border shadow-lg"><i class="fa-brands fa-youtube text-rose-500 mr-2 text-sm"></i> 影片剪接</div>' : ''}
+                        </div>
+                        <div class="p-8">
+                            <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${p.category}</span>
+                            <h4 class="text-xl font-semibold text-white group-hover:text-stone-300 transition">${p.title}</h4>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderTranslations() {
+            const grid = document.getElementById('translation-grid');
+            grid.innerHTML = translations.map(t => `
+                <div class="card-glass p-8 rounded-3xl border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
+                    <div>
+                        <span class="text-xs font-semibold px-3.5 py-1.5 bg-apple-lightgray text-apple-accent rounded-full inline-block mb-4 border border-apple-border">${t.year}</span>
+                        <h4 class="text-lg font-semibold text-white mb-3">${t.title}</h4>
+                        <p class="text-sm text-apple-gray leading-relaxed">${t.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProjects(category) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.textContent.trim() === category || (category === 'all' && btn.textContent.trim() === '全部')) {
+                    btn.className = "filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium text-xs shadow-sm";
+                } else {
+                    btn.className = "filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium text-xs border border-apple-border";
+                }
+            });
+            renderProjects(category);
+        }
+
+        function openModal(id) {
+            const p = projects.find(item => item.id == id);
+            if (!p) return;
+            document.getElementById('modal-category').textContent = p.category;
+            document.getElementById('modal-title').textContent = p.title;
+            document.getElementById('modal-description').textContent = p.description;
+
+            const mediaContainer = document.getElementById('modal-media-container');
+            const videoTabsContainer = document.getElementById('modal-video-tabs');
+            videoTabsContainer.innerHTML = '';
+            videoTabsContainer.classList.add('hidden');
+
+            if (p.youtube && p.youtube.trim() !== '') {
+                const urls = p.youtube.split(',').map(u => u.trim()).filter(u => u.length > 0);
+                const embedUrls = urls.map(u => getYouTubeEmbedUrl(u)).filter(u => u !== null);
+
+                if (embedUrls.length > 0) {
+                    mediaContainer.innerHTML = `<iframe src="${embedUrls[0]}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+
+                    if (embedUrls.length > 1) {
+                        videoTabsContainer.classList.remove('hidden');
+                        videoTabsContainer.classList.add('flex');
+                        videoTabsContainer.innerHTML = embedUrls.map((eUrl, index) => `
+                            <button onclick="switchModalVideo('${eUrl}', this)" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition ${index === 0 ? 'bg-white text-black' : 'bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border'}">
+                                片段 ${index + 1}
+                            </button>
+                        `).join('');
+                    }
+                } else {
+                    mediaContainer.innerHTML = `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">`;
+                }
+            } else {
+                mediaContainer.innerHTML = `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">`;
+            }
+
+            document.getElementById('project-modal').classList.remove('hidden');
+            document.getElementById('project-modal').classList.add('flex');
+        }
+
+        function switchModalVideo(embedUrl, btn) {
+            document.getElementById('modal-media-container').innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
+            const parent = btn.parentElement;
+            parent.querySelectorAll('button').forEach(b => {
+                b.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border";
+            });
+            btn.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition bg-white text-black";
+        }
+
+        function closeModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+            document.getElementById('project-modal').classList.remove('flex');
+            document.getElementById('modal-media-container').innerHTML = '';
+        }
+
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                renderAdminLists();
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function renderAdminLists() {
+            document.getElementById('admin-project-list').innerHTML = projects.map(p => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-3">
+                        <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
+                        <span class="font-medium text-white">${p.title}</span>
+                    </div>
+                    <div class="space-x-1.5">
+                        <button onclick="openEditorForEditProject('${p.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
+                        <button onclick="deleteProject('${p.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('admin-translation-list').innerHTML = translations.map(t => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <span class="font-medium text-white truncate max-w-[240px]">${t.title}</span>
+                    <div class="space-x-1.5">
+                        <button onclick="openEditorForEditTranslation('${t.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
+                        <button onclick="deleteTranslation('${t.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEditorForNewProject() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-category').value = '商品，禮品，周邊';
+            document.getElementById('edit-image').value = '';
+            document.getElementById('edit-youtube').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('editor-modal').classList.remove('hidden');
+            document.getElementById('editor-modal').classList.add('flex');
+        }
+
+        function openEditorForEditProject(id) {
+            const p = projects.find(item => item.id == id);
+            if (!p) return;
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('edit-title').value = p.title;
+            document.getElementById('edit-category').value = p.category;
+            document.getElementById('edit-image').value = p.image;
+            document.getElementById('edit-youtube').value = p.youtube || '';
+            document.getElementById('edit-description').value = p.description;
+            document.getElementById('editor-modal').classList.remove('hidden');
+            document.getElementById('editor-modal').classList.add('flex');
+        }
+
+        function closeEditor() {
+            document.getElementById('editor-modal').classList.add('hidden');
+            document.getElementById('editor-modal').classList.remove('flex');
+        }
+
+        function saveProject(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const title = document.getElementById('edit-title').value;
+            const category = document.getElementById('edit-category').value;
+            const image = document.getElementById('edit-image').value;
+            const youtube = document.getElementById('edit-youtube').value;
+            const description = document.getElementById('edit-description').value;
+
+            if (id) {
+                const idx = projects.findIndex(p => p.id == id);
+                if (idx !== -1) projects[idx] = { id, title, category, image, youtube, description };
+            } else {
+                projects.unshift({ id: Date.now().toString(), title, category, image, youtube, description });
+            }
+            closeEditor();
+            renderProjects(currentFilter);
+            renderAdminLists();
+        }
+
+        function deleteProject(id) {
+            if (confirm('確定刪除此作品？')) {
+                projects = projects.filter(p => p.id != id);
+                renderProjects(currentFilter);
+                renderAdminLists();
+            }
+        }
+
+        function openEditorForNewTranslation() {
+            document.getElementById('trans-edit-id').value = '';
+            document.getElementById('trans-title').value = '';
+            document.getElementById('trans-year').value = '2026';
+            document.getElementById('trans-desc').value = '';
+            document.getElementById('trans-editor-modal').classList.remove('hidden');
+            document.getElementById('trans-editor-modal').classList.add('flex');
+        }
+
+        function openEditorForEditTranslation(id) {
+            const t = translations.find(item => item.id == id);
+            if (!t) return;
+            document.getElementById('trans-edit-id').value = t.id;
+            document.getElementById('trans-title').value = t.title;
+            document.getElementById('trans-year').value = t.year;
+            document.getElementById('trans-desc').value = t.desc;
+            document.getElementById('trans-editor-modal').classList.remove('hidden');
+            document.getElementById('trans-editor-modal').classList.add('flex');
+        }
+
+        function closeTransEditor() {
+            document.getElementById('trans-editor-modal').classList.add('hidden');
+            document.getElementById('trans-editor-modal').classList.remove('flex');
+        }
+
+        function saveTranslation(e) {
+            e.preventDefault();
+            const id = document.getElementById('trans-edit-id').value;
+            const title = document.getElementById('trans-title').value;
+            const year = document.getElementById('trans-year').value;
+            const desc = document.getElementById('trans-desc').value;
+
+            if (id) {
+                const idx = translations.findIndex(t => t.id == id);
+                if (idx !== -1) translations[idx] = { id, title, year, desc };
+            } else {
+                translations.unshift({ id: Date.now().toString(), title, year, desc });
+            }
+            closeTransEditor();
+            renderTranslations();
+            renderAdminLists();
+        }
+
+        function deleteTranslation(id) {
+            if (confirm('確定刪除此翻譯紀錄？')) {
+                translations = translations.filter(t => t.id != id);
+                renderTranslations();
+                renderAdminLists();
+            }
+        }
+
+        // Scroll Reveal Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+            renderTranslations();
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
