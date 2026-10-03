@@ -274,7 +274,7 @@
                 </div>
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">海報圖片網址 (Image URL)</label>
-                    <input type="url" id="trans-image" required placeholder="https://images.unsplash.com/..." class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                    <input type="url" id="trans-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">翻譯備註</label>
@@ -300,34 +300,34 @@
         ];
 
         let translations = [
-            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
+            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
         ];
 
         let currentFilter = 'all';
