@@ -129,7 +129,7 @@
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-            <p class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+            <p class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
         </div>
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </section>
@@ -175,6 +175,18 @@
             <div id="modal-media-container" class="w-full h-80 rounded-2xl mb-6 overflow-hidden bg-black/50 border border-apple-border"></div>
 
             <p id="modal-description" class="text-apple-gray text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- Movie Poster Lightbox Modal (Click to Show Full Poster) -->
+    <div id="poster-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4" onclick="closePosterModal()">
+        <div class="relative max-w-md w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closePosterModal()" class="absolute -top-12 right-0 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border shadow-lg">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <img id="poster-modal-img" src="" alt="Poster" class="max-h-[75vh] w-auto object-contain rounded-2xl shadow-2xl border border-apple-border mb-4">
+            <h3 id="poster-modal-title" class="text-base font-semibold text-white text-center"></h3>
+            <span id="poster-modal-year" class="text-xs text-apple-accent mt-1"></span>
         </div>
     </div>
 
@@ -345,10 +357,29 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Click to open poster lightbox
+        function openPosterModal(title, year, image) {
+            document.getElementById('poster-modal-img').src = image;
+            document.getElementById('poster-modal-title').textContent = title;
+            document.getElementById('poster-modal-year').textContent = year + ' 劇場版本地化翻譯';
+            const modal = document.getElementById('poster-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePosterModal() {
+            const modal = document.getElementById('poster-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
                 e.preventDefault();
                 openPasswordModal();
+            }
+            if (e.key === 'Escape') {
+                closePosterModal();
             }
         });
 
@@ -423,14 +454,19 @@
             const grid = document.getElementById('translation-grid');
             grid.innerHTML = translations.map(t => `
                 <div class="card-glass rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
-                    <!-- Changed to object-contain so the full poster is always completely visible without cropping -->
-                    <div class="overflow-hidden aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-2">
-                        <img src="${t.image}" alt="${t.title}" class="w-full h-full object-contain opacity-95 hover:scale-105 transition duration-700">
-                        <span class="absolute top-3 left-3 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border">${t.year}</span>
+                    <!-- Clickable Poster Thumbnail -->
+                    <div onclick="openPosterModal('${t.title.replace(/'/g, "\\'")}', '${t.year}', '${t.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
+                        <img src="${t.image}" alt="${t.title}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
+                            <span class="px-3 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                                <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大海報
+                            </span>
+                        </div>
+                        <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${t.year}</span>
                     </div>
-                    <div class="p-5">
-                        <h4 class="text-sm font-semibold text-white mb-1.5">${t.title}</h4>
-                        <p class="text-[11px] text-apple-gray leading-relaxed">${t.desc}</p>
+                    <div class="p-6">
+                        <h4 class="text-base font-semibold text-white mb-2">${t.title}</h4>
+                        <p class="text-xs text-apple-gray leading-relaxed">${t.desc}</p>
                     </div>
                 </div>
             `).join('');
