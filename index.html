@@ -131,7 +131,7 @@
             <h3 class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
             <p class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
         </div>
-        <div id="translation-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </section>
 
     <!-- About Section -->
@@ -423,13 +423,14 @@
             const grid = document.getElementById('translation-grid');
             grid.innerHTML = translations.map(t => `
                 <div class="card-glass rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
-                    <div class="overflow-hidden aspect-[16/9] bg-black relative">
-                        <img src="${t.image}" alt="${t.title}" class="w-full h-full object-cover opacity-90 hover:scale-105 transition duration-700">
-                        <span class="absolute top-4 left-4 text-xs font-semibold px-3 py-1 bg-black/70 backdrop-blur-md text-apple-accent rounded-full border border-apple-border">${t.year}</span>
+                    <!-- Changed to object-contain so the full poster is always completely visible without cropping -->
+                    <div class="overflow-hidden aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-2">
+                        <img src="${t.image}" alt="${t.title}" class="w-full h-full object-contain opacity-95 hover:scale-105 transition duration-700">
+                        <span class="absolute top-3 left-3 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border">${t.year}</span>
                     </div>
-                    <div class="p-6">
-                        <h4 class="text-base font-semibold text-white mb-2">${t.title}</h4>
-                        <p class="text-xs text-apple-gray leading-relaxed">${t.desc}</p>
+                    <div class="p-5">
+                        <h4 class="text-sm font-semibold text-white mb-1.5">${t.title}</h4>
+                        <p class="text-[11px] text-apple-gray leading-relaxed">${t.desc}</p>
                     </div>
                 </div>
             `).join('');
