@@ -52,7 +52,6 @@
             animation: floatGlow 8s ease-in-out infinite;
         }
 
-        /* Back to top button transition */
         #back-to-top {
             opacity: 0;
             transform: translateY(10px);
@@ -297,13 +296,38 @@
         ];
 
         let translations = [
-            { id: 't1', title: '電影作品 A (日文字幕 > 繁體中文本地化翻譯)', year: '2025', desc: '負責全片日文字幕翻譯與在地語境潤飾，精準呈現角色情感與劇本細膩度。' },
-            { id: 't2', title: '劇場版動畫 B (字幕翻譯與專有名詞校對)', year: '2024', desc: '處理複雜日文對白、專有名詞對應及繁體中文流暢度調整。' }
+            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't4', title: '新・幪面超人', year: '2023', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't7', title: '電影 五等分的新娘', year: '2022', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't10', title: '漁港的肉子', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't23', title: '幼女戰記 劇場版', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't26', title: '龍珠超 布洛尼', year: '2018', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
         ];
 
         let currentFilter = 'all';
 
-        // Back to Top Logic
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
             if (window.scrollY > 400) {
@@ -317,7 +341,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Secret Admin Login Shortcut (Ctrl+Shift+L or Cmd+Shift+L)
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
                 e.preventDefault();
