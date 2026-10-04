@@ -202,7 +202,7 @@
                 </button>
             </div>
         </div>
-        <!-- 獨立一行的分類篩選按鈕列 -->
+        <!-- 獨立一行的分類篩選按鈕列（已補回影片剪接） -->
         <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs mb-12">
             <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
             <button onclick="filterProjects('字體設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
@@ -210,6 +210,7 @@
             <button onclick="filterProjects('快閃店', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
             <button onclick="filterProjects('包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
             <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
+            <button onclick="filterProjects('影片剪接', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-video">影片剪接</button>
             <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" onmouseenter="pauseAutoPlay()" onmouseleave="startAutoPlay()"></div>
@@ -310,6 +311,7 @@
                         <button onclick="filterAdminProjects('快閃店', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">快閃店</button>
                         <button onclick="filterAdminProjects('包裝設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">包裝設計</button>
                         <button onclick="filterAdminProjects('周邊設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">周邊設計</button>
+                        <button onclick="filterAdminProjects('影片剪接', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">影片剪接</button>
                         <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">其他</button>
                     </div>
                     <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center shrink-0">
@@ -447,7 +449,7 @@
                         <input type="text" id="trans-title-en" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
                     </div>
                     <div>
-                        <label class="block text-apple-gray mb-1 font-semibold">映画タイトル (JA)</label>
+                        <label class="block text-apple-gray mb-1 font-semibold">映画タイトル (日本語)</label>
                         <input type="text" id="trans-title-ja" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
                     </div>
                 </div>
@@ -483,7 +485,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                filterFeatured: "精選作品", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "快閃店", filterPkg: "包裝設計", filterMerch: "周邊設計", filterOther: "其他"
+                filterFeatured: "精選作品", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "快閃店", filterPkg: "包裝設計", filterMerch: "周邊設計", filterVideo: "影片剪接", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -494,7 +496,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                filterFeatured: "Featured", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up Store", filterPkg: "Packaging", filterMerch: "Merchandise", filterOther: "Others"
+                filterFeatured: "Featured", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up Store", filterPkg: "Packaging", filterMerch: "Merchandise", filterVideo: "Video Editing", filterOther: "Others"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -505,7 +507,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                filterFeatured: "厳選作品", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップストア", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterOther: "その他"
+                filterFeatured: "厳選作品", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップストア", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterVideo: "ビデオ編集", filterOther: "その他"
             }
         };
 
@@ -841,6 +843,7 @@
             document.getElementById('btn-popup').textContent = t.filterPopup;
             document.getElementById('btn-pkg').textContent = t.filterPkg;
             document.getElementById('btn-merch').textContent = t.filterMerch;
+            document.getElementById('btn-video').textContent = t.filterVideo;
             document.getElementById('btn-other').textContent = t.filterOther;
 
             localStorage.setItem('portfolio_lang', langKey);
