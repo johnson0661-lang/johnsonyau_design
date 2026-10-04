@@ -40,6 +40,17 @@
             opacity: 1;
             transform: translateY(0);
         }
+        #back-to-top {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="bg-apple-bg text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
@@ -138,6 +149,11 @@
             </div>
         </div>
     </section>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-8 right-8 z-40 w-11 h-11 rounded-full card-glass border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 shadow-2xl">
+        <i class="fa-solid fa-arrow-up text-xs"></i>
+    </button>
 
     <!-- Footer -->
     <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
@@ -281,7 +297,8 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                aboutDesc: "<p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p><p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>"
+                aboutDesc: "<p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p><p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>",
+                transDescDefault: "日文字幕至繁體中文電影翻譯與在地化調整。"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -292,7 +309,8 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Click any movie poster to view high-resolution details. Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                aboutDesc: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>"
+                aboutDesc: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>",
+                transDescDefault: "Japanese to Traditional Chinese film subtitle translation and localization."
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -303,7 +321,8 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "映画ポスターをクリックすると高画質で表示されます。文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                aboutDesc: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>"
+                aboutDesc: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>",
+                transDescDefault: "日本語字幕から繁体字中国語への映画翻訳およびローカライズ。"
             }
         };
 
@@ -329,6 +348,7 @@
 
             localStorage.setItem('portfolio_lang', langKey);
             renderProjects();
+            renderTranslations();
         }
 
         let projects = [
@@ -383,35 +403,48 @@
         ];
 
         let translations = [
-            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
+            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
+            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
+            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
+            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80' },
+            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
+            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
+            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
+            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
+            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
+            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
+            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
+            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' },
+            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80' },
+            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
+            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
+            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
+            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
+            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
+            { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
+            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
+            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
+            { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
+            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
+            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' }
         ];
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 400) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         function renderProjects(filter = 'all') {
             const grid = document.getElementById('project-grid');
@@ -433,20 +466,23 @@
 
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
-            grid.innerHTML = translations.map(t => `
+            const t = translationsDict[langs[currentLangIndex]];
+            const zoomText = currentLangIndex === 1 ? "Click to Zoom" : currentLangIndex === 2 ? "クリックして拡大" : "點擊放大檢視";
+
+            grid.innerHTML = translations.map(tr => `
                 <div class="card-glass rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
-                    <div onclick="openPosterModal('${t.title.replace(/'/g, "\\'")}', '${t.year}', '${t.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
-                        <img src="${t.image}" alt="${t.title}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
+                    <div onclick="openPosterModal('${tr.title.replace(/'/g, "\\'")}', '${tr.year}', '${tr.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
+                        <img src="${tr.image}" alt="${tr.title}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
                             <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                                <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
+                                <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${zoomText}
                             </span>
                         </div>
-                        <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${t.year}</span>
+                        <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-base font-semibold text-white mb-2">${t.title}</h4>
-                        <p class="text-xs text-apple-gray leading-relaxed">${t.desc}</p>
+                        <h4 class="text-base font-semibold text-white mb-2">${tr.title}</h4>
+                        <p class="text-xs text-apple-gray leading-relaxed">${t.transDescDefault}</p>
                     </div>
                 </div>
             `).join('');
@@ -634,7 +670,6 @@
             document.getElementById('trans-title').value = t.title;
             document.getElementById('trans-year').value = t.year;
             document.getElementById('trans-image').value = t.image;
-            document.getElementById('trans-desc').value = t.desc;
             document.getElementById('trans-editor-modal').classList.remove('hidden');
             document.getElementById('trans-editor-modal').classList.add('flex');
         }
@@ -646,17 +681,16 @@
 
         function saveTranslation(e) {
             e.preventDefault();
-            const id = document.getElementById('trans-edit-id').value;
+            const id = document.getElementById('trans-editor-modal').value;
             const title = document.getElementById('trans-title').value;
             const year = document.getElementById('trans-year').value;
             const image = document.getElementById('trans-image').value;
-            const desc = document.getElementById('trans-desc').value;
 
             if (id) {
                 const idx = translations.findIndex(t => t.id == id);
-                if (idx !== -1) translations[idx] = { id, title, year, image, desc };
+                if (idx !== -1) translations[idx] = { id, title, year, image };
             } else {
-                translations.unshift({ id: Date.now().toString(), title, year, image, desc });
+                translations.unshift({ id: Date.now().toString(), title, year, image });
             }
             closeTransEditor();
             renderTranslations();
