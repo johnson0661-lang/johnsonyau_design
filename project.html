@@ -65,7 +65,6 @@
             transform: translateY(0);
         }
 
-        /* 燈箱動畫 */
         #lightbox-modal {
             opacity: 0;
             pointer-events: none;
@@ -79,13 +78,14 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header (無框置中純白字導覽列) -->
+    <!-- Header (無框、置中、純白字) -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
             </a>
             
+            <!-- 中間分類：純白字、絕對置中、無任何框 -->
             <div class="absolute left-1/2 -translate-x-1/2 text-white font-medium text-xs tracking-wider">
                 <span id="nav-category-badge">載入中...</span>
             </div>
@@ -110,7 +110,7 @@
             <h1 id="project-title" class="text-3xl md:text-5xl font-semibold tracking-tight text-white leading-tight"></h1>
         </div>
 
-        <!-- 上方：大尺寸主圖展示區 (點擊亦可放大) -->
+        <!-- 上方：大尺寸主圖展示區 -->
         <div onclick="openLightbox(document.getElementById('main-preview-img').src)" class="card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl cursor-pointer group relative">
             <img id="main-preview-img" src="" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
             <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
@@ -130,7 +130,7 @@
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
 
-                    <!-- 左右切換按鈕 (上一頁 / 下一頁) -->
+                    <!-- 左右切換按鈕 -->
                     <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
@@ -139,24 +139,20 @@
                     </button>
                 </div>
 
-                <!-- 桃紅色分頁導航點 Pagination Dots -->
-                <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2">
-                    <!-- 動態生成點點 -->
-                </div>
+                <!-- 桃紅色分頁導航點 -->
+                <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
             </div>
 
-            <!-- 右側：專案詳細文案與設計理念 (Case Study) -->
+            <!-- 右側：專案詳細文案 -->
             <div class="lg:col-span-6 space-y-6">
                 <h3 id="case-study-heading" class="text-xs uppercase tracking-widest text-apple-gray font-semibold">Design Concept & Case Study</h3>
-                <div id="project-description" class="text-apple-gray font-normal leading-relaxed text-base space-y-4">
-                    <!-- 動態填入說明文字 -->
-                </div>
+                <div id="project-description" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
             </div>
 
         </div>
     </main>
 
-    <!-- 圖片點擊放大燈箱 (Lightbox Modal) -->
+    <!-- 圖片點擊放大燈箱 -->
     <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4">
         <button onclick="closeLightbox()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border z-10 shadow-xl">
             <i class="fa-solid fa-xmark text-sm"></i>
@@ -183,7 +179,7 @@
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: '字體設計', en: 'Typeface', ja: 'タイポグラフィ' }, 
                 image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
-                gallery: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png, https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
@@ -222,25 +218,25 @@
 
             const title = typeof currentProjectData.title === 'object' ? (currentProjectData.title[langKey] || currentProjectData.title.zh) : currentProjectData.title;
             
-            // 處理分類的多語言對應顯示
+            // 統一對應並清洗分類名稱
             let category = '';
-            if (typeof currentProjectData.category === 'object') {
-                category = currentProjectData.category[langKey] || currentProjectData.category.zh;
+            let rawCat = currentProjectData.category;
+            if (typeof rawCat === 'object') {
+                category = rawCat[langKey] || rawCat.zh;
             } else {
-                // 如果後台存的是舊的字串格式，自動進行三語映射
-                const catStr = currentProjectData.category;
-                if (catStr === 'Pop-up Store' || catStr === '快閃店') {
-                    category = langs[currentLangIndex] === 'en' ? 'Pop-up Store' : (langs[currentLangIndex] === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
-                } else if (catStr === '字體設計' || catStr === 'Typeface 本地化') {
-                    category = langs[currentLangIndex] === 'en' ? 'Typeface' : (langs[currentLangIndex] === 'ja' ? 'タイポグラフィ' : '字體設計');
-                } else if (catStr === '展覽與視覺企劃' || catStr === '展覽') {
-                    category = langs[currentLangIndex] === 'en' ? 'Exhibition' : (langs[currentLangIndex] === 'ja' ? '展覧会' : '展覽與視覺企劃');
-                } else if (catStr === '實體包裝設計' || catStr === '包裝設計') {
-                    category = langs[currentLangIndex] === 'en' ? 'Packaging Design' : (langs[currentLangIndex] === 'ja' ? 'パッケージ' : '實體包裝設計');
-                } else if (catStr === '周邊設計') {
-                    category = langs[currentLangIndex] === 'en' ? 'Merchandise' : (langs[currentLangIndex] === 'ja' ? 'グッズ設計' : '周邊設計');
+                let catStr = String(rawCat || '').trim();
+                if (catStr === 'Typeface 本地化' || catStr === 'Typeface' || catStr === '字體設計') {
+                    category = langKey === 'en' ? 'Typeface' : (langKey === 'ja' ? 'タイポグラフィ' : '字體設計');
+                } else if (catStr === '展覽與視覺企劃' || catStr === '展覽' || catStr === 'Exhibition') {
+                    category = langKey === 'en' ? 'Exhibition' : (langKey === 'ja' ? '展覧会' : '展覽與視覺企劃');
+                } else if (catStr === 'Pop-up Store' || catStr === '快閃店') {
+                    category = langKey === 'en' ? 'Pop-up Store' : (langKey === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
+                } else if (catStr === '實體包裝設計' || catStr === '包裝設計' || catStr === 'Packaging Design') {
+                    category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
+                } else if (catStr === '周邊設計' || catStr === 'Merchandise') {
+                    category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
                 } else {
-                    category = catStr;
+                    category = catStr || (langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : '其他'));
                 }
             }
 
