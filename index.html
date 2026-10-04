@@ -614,7 +614,6 @@
             if (!grid) return;
             const langKey = langs[currentLangIndex];
 
-            // 按照年份由新到舊排序 (例如 2024 -> 2023 -> 2022 -> 2021)
             const sortedTranslations = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a.year));
 
             grid.innerHTML = sortedTranslations.map(tr => {
