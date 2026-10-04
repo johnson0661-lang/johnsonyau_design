@@ -145,22 +145,20 @@
 
     <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
-            <div class="w-24 hidden md:block"></div>
-            <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-                <a href="index.html" class="group">
-                    <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
-                </a>
-            </div>
-            <nav class="hidden md:flex items-center space-x-8 text-apple-gray ml-auto">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
+            <a href="index.html" class="group flex items-center">
+                <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-apple-gray">
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
+            </nav>
+            <div>
                 <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
                 </button>
-            </nav>
-            <div class="md:hidden"></div>
+            </div>
         </div>
     </header>
 
@@ -445,6 +443,7 @@
         function renderProjects(filter = 'all') {
             currentFilterCategory = filter;
             const grid = document.getElementById('project-grid');
+            if (!grid) return;
             const langKey = langs[currentLangIndex];
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category.zh === filter || p.category.en === filter);
             
@@ -471,6 +470,7 @@
 
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
+            if (!grid) return;
             const langKey = langs[currentLangIndex];
             const zoomText = currentLangIndex === 1 ? "Click to Zoom" : currentLangIndex === 2 ? "クリックして拡大" : "點擊放大檢視";
 
