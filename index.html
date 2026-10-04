@@ -11,12 +11,12 @@
                 extend: {
                     colors: {
                         apple: {
-                            bg: '#000000',
-                            card: '#161617',
+                            bg: '#030307',
+                            card: '#161619',
                             dark: '#f5f5f7',
                             gray: '#86868b',
                             lightgray: '#1d1d1f',
-                            border: '#333336',
+                            border: '#38383d',
                             accent: '#2997ff'
                         }
                     },
@@ -29,36 +29,44 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 加強版高級動態微光漸層背景（亮度提升） */
-        body {
-            background-color: #050508;
-            background-image: 
-                radial-gradient(circle at 20% 15%, rgba(41, 151, 255, 0.16) 0%, transparent 50%),
-                radial-gradient(circle at 80% 55%, rgba(130, 60, 255, 0.14) 0%, transparent 55%),
-                radial-gradient(circle at 50% 85%, rgba(41, 151, 255, 0.12) 0%, transparent 45%);
-            background-attachment: fixed;
+        /* 點、線、面 Canvas 背景底層 */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            background-color: #030307;
         }
 
-        .apple-glass { background: rgba(5, 5, 8, 0.75); backdrop-filter: saturate(200%) blur(30px); }
+        .apple-glass { 
+            background: rgba(5, 5, 10, 0.8); 
+            backdrop-filter: saturate(200%) blur(35px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
         
-        /* 頂級流光邊框與游標互動卡片 */
+        /* 頂級發光邊框與流光互動卡片 */
         .spotlight-card {
             position: relative;
-            background: rgba(22, 22, 23, 0.65);
-            backdrop-filter: blur(20px);
-            border-radius: 1.5rem;
+            background: rgba(22, 22, 25, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 1.75rem;
             overflow: hidden;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
         }
 
         .spotlight-card::before {
             content: '';
             position: absolute;
             inset: -1px;
-            border-radius: 1.5rem;
-            background: linear-gradient(135deg, rgba(41, 151, 255, 0.5), rgba(255, 255, 255, 0.15), rgba(130, 60, 255, 0.35));
+            border-radius: 1.75rem;
+            background: linear-gradient(135deg, rgba(41, 151, 255, 0.6), rgba(255, 255, 255, 0.2), rgba(138, 43, 226, 0.4));
             z-index: -1;
-            opacity: 0.8;
+            opacity: 0.75;
             transition: opacity 0.4s ease;
         }
 
@@ -67,9 +75,9 @@
             position: absolute;
             top: var(--y, 0px);
             left: var(--x, 0px);
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(41, 151, 255, 0.35) 0%, rgba(130, 60, 255, 0.15) 40%, transparent 70%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(41, 151, 255, 0.35) 0%, rgba(138, 43, 226, 0.15) 45%, transparent 75%);
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -82,8 +90,9 @@
         }
 
         .spotlight-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px -15px rgba(41, 151, 255, 0.3);
+            transform: translateY(-8px);
+            border-color: rgba(41, 151, 255, 0.5);
+            box-shadow: 0 35px 70px -15px rgba(41, 151, 255, 0.35);
         }
 
         .reveal-up {
@@ -118,8 +127,11 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
 
+    <!-- 動態 點、線、面 Canvas 背景 -->
+    <canvas id="bg-canvas"></canvas>
+
     <!-- Header -->
-    <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
+    <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <div class="w-24 hidden md:block"></div>
             <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
@@ -131,7 +143,7 @@
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
-                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
+                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
                 </button>
             </nav>
@@ -140,12 +152,12 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="max-w-5xl mx-auto px-6 pt-40 pb-28 text-center relative reveal-up active">
-        <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-4 px-3 py-1 rounded-full bg-apple-lightgray border border-apple-border shadow-sm">
+    <section class="max-w-5xl mx-auto px-6 pt-44 pb-32 text-center relative reveal-up active">
+        <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
             Multimedia Design & IP Localization
         </span>
         <h1 class="hero-title text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08] text-center">
-            極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-300 to-apple-gray">精準視覺敘事。</span>
+            極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray">精準視覺敘事。</span>
         </h1>
         <p class="hero-desc text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
             專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
@@ -154,21 +166,21 @@
             <a href="#works" class="btn-works px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition shadow-2xl hover:scale-105 transform duration-300">
                 探索精選專案
             </a>
-            <a href="#translation" class="btn-trans px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition hover:border-white/50">
+            <a href="#translation" class="btn-trans px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition hover:border-white/50 shadow-lg">
                 電影翻譯紀錄
             </a>
         </div>
     </section>
 
     <!-- Works Section -->
-    <section id="works" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/50 reveal-up">
+    <section id="works" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/40 reveal-up">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 id="works-heading" class="text-4xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
-                <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm" id="btn-all">全部專案</button>
+                <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-all">全部專案</button>
                 <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface</button>
                 <button onclick="filterProjects('Pop-up Store 與展覽', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up</button>
                 <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
@@ -178,7 +190,7 @@
     </section>
 
     <!-- Translation Section -->
-    <section id="translation" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/50 reveal-up">
+    <section id="translation" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/40 reveal-up">
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 id="trans-heading" class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
@@ -188,7 +200,7 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-[#080812]/80 backdrop-blur-md py-32 border-t border-apple-border/50 reveal-up">
+    <section id="about" class="bg-[#05050c]/85 backdrop-blur-2xl py-32 border-t border-apple-border/40 reveal-up">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
             <div class="md:col-span-5 flex justify-center">
                 <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden border border-apple-border shadow-2xl bg-black group">
@@ -219,7 +231,7 @@
     </button>
 
     <!-- Footer -->
-    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
+    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/40">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
 
@@ -268,6 +280,90 @@
     </div>
 
     <script>
+        // 點、線、面互動背景 Canvas 邏輯
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 55;
+        let mouseX = -1000;
+        let mouseY = -1000;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(41, 151, 255, 0.6)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 繪製點與線
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(41, 151, 255, ${0.18 * (1 - dist / 130)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+
+                // 滑鼠互動連線（面與動態感）
+                const mDist = Math.sqrt((particles[i].x - mouseX) ** 2 + (particles[i].y - mouseY) ** 2);
+                if (mDist < 160) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.strokeStyle = `rgba(138, 43, 226, ${0.3 * (1 - mDist / 160)})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
         const ADMIN_PASSWORD = 'johnson2026';
         let currentLangIndex = 0; 
         const langs = ['zh', 'en', 'ja'];
@@ -317,8 +413,8 @@
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                image: 'images/digimon.jpg', 
+                gallery: '', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
@@ -416,7 +512,7 @@
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category.zh === filter || p.category.en === filter);
             
             grid.innerHTML = filtered.map((p) => `
-                <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
+                <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
                     <div class="overflow-hidden aspect-[16/10] bg-black relative">
                         <img src="${p.image}" alt="${p.title[langKey]}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -450,7 +546,7 @@
                 }
 
                 return `
-                    <div class="spotlight-card rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 transition duration-500" onmousemove="handleCardMouseMove(event, this)">
+                    <div class="spotlight-card rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between transition duration-500" onmousemove="handleCardMouseMove(event, this)">
                         <div onclick="openPosterModal('${displayTitle.replace(/'/g, "\\'")}', '${tr.year}', '${tr.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
                             <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
@@ -561,6 +657,8 @@
                 document.getElementById('admin-password-input').value = '';
             }
         }
+
+        let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
 
         function toggleAdminModal(show = null) {
             const modal = document.getElementById('admin-modal');
