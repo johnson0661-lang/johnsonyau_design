@@ -147,19 +147,19 @@
         </div>
     </div>
 
-    <!-- Project Editor Modal (加入電腦圖片上載功能) -->
+    <!-- Project Editor Modal (優化圖片上載與壓縮) -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (圖片與三語)</h3>
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (圖片壓縮與三語)</h3>
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片 (可輸入網址 或 選擇電腦檔案)</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片 (可輸入網址 或 選擇電腦圖片自動壓縮)</label>
                     <div class="flex gap-2">
                         <input type="text" id="edit-image" required placeholder="https:// 或上載圖片" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                         <label class="px-4 py-3 bg-apple-accent text-white rounded-xl cursor-pointer hover:bg-blue-600 transition flex items-center justify-center whitespace-nowrap font-medium shadow">
                             <i class="fa-solid fa-upload mr-1.5"></i> 選擇檔案
-                            <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'edit-image')">
+                            <input type="file" accept="image/*" class="hidden" onchange="handleImageCompression(event, 'edit-image')">
                         </label>
                     </div>
                 </div>
@@ -328,13 +328,35 @@
             modal.classList.remove('flex');
         }
 
-        // 處理從電腦上傳圖片並自動轉為 Base64
-        function handleImageUpload(event, targetInputId) {
+        // 智慧圖片壓縮與轉化函式
+        function handleImageCompression(event, targetInputId) {
             const file = event.target.files[0];
             if (!file) return;
+
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById(targetInputId).value = e.target.result;
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1200; // 限制最大寬度以防爆容量
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // 壓縮為 JPEG 格式，品質 0.8
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById(targetInputId).value = dataUrl;
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
