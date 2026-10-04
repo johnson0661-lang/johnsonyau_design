@@ -207,7 +207,7 @@
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-            <p id="trans-sub" class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+            <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
         </div>
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
@@ -246,18 +246,6 @@
     <footer class="py-16 text-center text-xs text-apple-gray">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
-
-    <!-- Poster Modal -->
-    <div id="poster-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4" onclick="closePosterModal()">
-        <div class="relative max-w-md w-full max-h-[90vh] flex flex-col items-center modal-fade" onclick="event.stopPropagation()">
-            <button onclick="closePosterModal()" class="absolute -top-12 right-0 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border shadow-lg">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <img id="poster-modal-img" src="" alt="Poster" class="max-h-[75vh] w-auto object-contain rounded-2xl shadow-2xl border border-apple-border mb-4">
-            <h3 id="poster-modal-title" class="text-base font-semibold text-white text-center"></h3>
-            <span id="poster-modal-year" class="text-xs text-apple-accent mt-1"></span>
-        </div>
-    </div>
 
     <!-- Password Prompt Modal -->
     <div id="password-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
@@ -456,7 +444,7 @@
                 heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class='hidden md:inline'>Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
                 btnWorks: "探索作品集", btnTrans: "電影翻譯紀錄",
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
-                transSub: "點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。",
+                transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
                 filterAll: "全部專案", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計"
             },
@@ -467,7 +455,7 @@
                 heroDesc: "Specializing in Japanese anime IP licensing promotional materials, Typeface localization, <br class='hidden md:inline'>Pop-up store planning, physical packaging, and Japanese-to-Chinese film subtitle translation.",
                 btnWorks: "Explore Works", btnTrans: "Translation Works",
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
-                transSub: "Click any movie poster to view high-resolution details. Cinematic localization accurately restoring context and emotional subtleties.",
+                transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
                 filterAll: "All Projects", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "Packaging"
             },
@@ -478,7 +466,7 @@
                 heroDesc: "日本アニメIPライセンス販促物、タイポグラフィローカライズ、<br class='hidden md:inline'>ポップアップストア空間設計、パッケージ開発、日本語字幕・映画翻訳に特化。",
                 btnWorks: "作品集を見る", btnTrans: "翻訳実績を見る",
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
-                transSub: "映画ポスターをクリックすると高画質で表示されます。文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
+                transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
                 filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterPopup: "ポップアップ", filterPkg: "パッケージ"
             }
@@ -625,7 +613,6 @@
             const grid = document.getElementById('translation-grid');
             if (!grid) return;
             const langKey = langs[currentLangIndex];
-            const zoomText = currentLangIndex === 1 ? "Click to Zoom" : currentLangIndex === 2 ? "クリックして拡大" : "點擊放大檢視";
 
             grid.innerHTML = translations.map(tr => {
                 let displayTitle = '';
@@ -637,13 +624,8 @@
 
                 return `
                     <div class="spotlight-card rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between transition duration-500" onmousemove="handleCardMouseMove(event, this)">
-                        <div onclick="openPosterModal('${displayTitle.replace(/'/g, "\\'")}', '${tr.year}', '${tr.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
-                            <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
-                                <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                                    <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${zoomText}
-                                </span>
-                            </div>
+                        <div class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 group">
+                            <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg transition duration-500">
                             <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                         </div>
                         <div class="p-6">
@@ -659,21 +641,6 @@
             if (!aboutContainer) return;
             const langKey = langs[currentLangIndex];
             aboutContainer.innerHTML = aboutData[langKey] || aboutData.zh;
-        }
-
-        function openPosterModal(title, year, image) {
-            document.getElementById('poster-modal-img').src = image;
-            document.getElementById('poster-modal-title').textContent = title;
-            document.getElementById('poster-modal-year').textContent = year + ' 劇場版本地化翻譯';
-            const modal = document.getElementById('poster-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closePosterModal() {
-            const modal = document.getElementById('poster-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
         }
 
         function switchLanguage() {
@@ -725,7 +692,6 @@
                 openPasswordModal();
             }
             if (e.key === 'Escape') {
-                closePosterModal();
                 closePasswordModal();
                 toggleAdminModal(false);
                 closeEditModal();
@@ -784,12 +750,12 @@
             tPanel.classList.add('hidden');
             aPanel.classList.add('hidden');
             pBtn.className = "px-3 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
-            tBtn.className = "px-3 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
+            tBtn.className = "px-3.py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
             aBtn.className = "px-3.py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
 
             if (tab === 'projects') {
                 pPanel.classList.remove('hidden');
-                pBtn.className = "px-3 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
+                pBtn.className = "px-3.py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
             } else if (tab === 'translations') {
                 tPanel.classList.remove('hidden');
                 tBtn.className = "px-3.py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
@@ -958,7 +924,7 @@
             }
         }
 
-        // 電影翻譯 Modal 控制 (支援三語)
+        // 電影翻譯 Modal 控制
         function openNewTransModal() {
             document.getElementById('trans-edit-id').value = '';
             document.getElementById('trans-title-zh').value = '';
