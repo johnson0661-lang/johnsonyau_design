@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-title">Johnson Yau | Multimedia Design & Creative Portfolio</title>
+    <title id="site-title">Johnson Yau | Minimalist Design Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        apple: {
-                            bg: '#020205',
-                            card: '#161619',
-                            dark: '#f5f5f7',
-                            gray: '#86868b',
-                            lightgray: '#1d1d1f',
-                            border: '#333338',
-                            accent: '#2997ff'
+                        minimal: {
+                            bg: '#fafafa',
+                            card: '#ffffff',
+                            text: '#222222',
+                            gray: '#888888',
+                            lightgray: '#f5f5f5',
+                            border: '#ebebeb',
+                            accent: '#111111'
                         }
                     },
                     fontFamily: {
                         sans: ['-apple-system', 'BlinkMacSystemFont', "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.04)',
+                        'hover': '0 20px 40px -10px rgba(0,0,0,0.08)',
                     }
                 }
             }
@@ -29,64 +33,51 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (使用 Compat 版本方便直接引入) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- 引入全域資料庫 -->
+    <script src="data.js"></script>
 
     <style>
         body {
-            background-color: #020205;
-            background-image: 
-                radial-gradient(circle at 50% 10%, rgba(41, 151, 255, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 15% 35%, rgba(0, 113, 227, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 85% 75%, rgba(41, 151, 255, 0.1) 0%, transparent 45%),
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 60px 60px, 60px 60px;
-            background-attachment: fixed;
-            animation: bgBreath 12s ease-in-out infinite alternate;
+            background-color: #fafafa;
+            color: #222222;
         }
 
-        @keyframes bgBreath {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-            100% { filter: brightness(1); }
-        }
-
-        .apple-glass { 
-            background: rgba(2, 2, 5, 0.85); 
-            backdrop-filter: saturate(200%) blur(35px); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .glass-header { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: saturate(180%) blur(20px); 
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
-        .card-glass { 
-            background: rgba(22, 22, 25, 0.65); 
+        .modal-glass { 
+            background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
         }
 
+        /* 日系極簡卡片效果 */
         .spotlight-card {
-            position: relative;
-            background: rgba(18, 18, 22, 0.75);
-            backdrop-filter: blur(25px);
-            border-radius: 1.75rem;
+            background: #ffffff;
+            border-radius: 1.5rem;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.03);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .spotlight-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(41, 151, 255, 0.5);
-            box-shadow: 0 30px 60px -15px rgba(41, 151, 255, 0.25);
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
         }
 
         .image-overlay {
             opacity: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(2px);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(4px);
             transition: opacity 0.4s ease;
         }
         .spotlight-card:hover .image-overlay {
@@ -96,15 +87,19 @@
             transform: translateY(20px);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #111;
+            border: 1px solid #111;
         }
         .spotlight-card:hover .view-btn {
             transform: translateY(0);
             opacity: 1;
+            background: #111;
+            color: #fff;
         }
 
         .reveal-up {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
             transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-up.active {
@@ -144,15 +139,14 @@
             pointer-events: none;
         }
         .custom-toast {
-            background: rgba(30, 30, 35, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: #ffffff;
+            border: 1px solid #ebebeb;
+            color: #222;
             padding: 12px 24px;
             border-radius: 999px;
             font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             animation: toastEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             display: flex;
             align-items: center;
@@ -169,25 +163,28 @@
             from { opacity: 1; transform: translateY(0) scale(1); }
             to { opacity: 0; transform: translateY(-20px) scale(0.9); }
         }
+        
+        /* 若原本是白色 Logo，用 filter 將其反轉為黑色 */
+        .logo-invert { filter: invert(1) grayscale(1); }
     </style>
 </head>
-<body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
+<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white overflow-x-hidden">
 
     <div id="toast-container"></div>
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 apple-glass">
+    <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
-                <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain group-hover:opacity-60 transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
-            <nav class="hidden md:flex items-center space-x-8 text-apple-gray absolute left-1/2 -translate-x-1/2">
-                <a href="index.html#works" class="nav-works hover:text-white transition font-medium">精選專案</a>
-                <a href="index.html#translation" class="nav-trans hover:text-white transition font-medium">電影翻譯紀錄</a>
-                <a href="index.html#about" class="nav-about hover:text-white transition font-medium">關於我</a>
+            <nav class="hidden md:flex items-center space-x-8 text-minimal-gray absolute left-1/2 -translate-x-1/2">
+                <a href="index.html#works" class="nav-works hover:text-minimal-accent transition font-medium">精選專案</a>
+                <a href="index.html#translation" class="nav-trans hover:text-minimal-accent transition font-medium">電影翻譯紀錄</a>
+                <a href="index.html#about" class="nav-about hover:text-minimal-accent transition font-medium">關於我</a>
             </nav>
             <div class="z-10">
-                <button onclick="switchLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
+                <button onclick="switchLanguage()" id="lang-btn" class="px-4 py-1.5 rounded-full bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition font-medium shadow-sm">
                     EN
                 </button>
             </div>
@@ -195,22 +192,22 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="min-h-[85vh] max-w-5xl mx-auto px-6 pt-40 pb-36 flex flex-col justify-center items-center text-center relative reveal-up active">
+    <section class="min-h-[80vh] max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col justify-center items-center text-center relative reveal-up active">
         <div>
-            <span class="hero-tag inline-block text-[11px] uppercase tracking-[0.2em] text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
+            <span class="hero-tag inline-block text-[10px] uppercase tracking-[0.25em] text-minimal-gray font-semibold mb-6 px-4 py-1.5 rounded-full bg-minimal-lightgray border border-minimal-border">
                 Multimedia Design & IP Localization
             </span>
-            <h1 class="hero-title text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08] text-center">
-                簡約日式美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray">精準視覺敘事。</span>
+            <h1 class="hero-title text-5xl md:text-7xl font-bold tracking-tight text-minimal-accent mb-8 leading-[1.1] text-center">
+                簡約日式美學，<br><span class="text-minimal-gray">精準視覺敘事。</span>
             </h1>
-            <p class="hero-desc text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
+            <p class="hero-desc text-lg md:text-xl text-minimal-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
                 專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class="hidden md:inline">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
             </p>
             <div class="flex justify-center gap-4">
-                <a href="#works" class="btn-works px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition shadow-2xl hover:scale-105 transform duration-300">
+                <a href="#works" class="btn-works px-8 py-4 bg-minimal-accent text-white rounded-full text-sm font-medium hover:bg-gray-800 transition shadow-lg hover:shadow-xl transform duration-300">
                     探索作品集
                 </a>
-                <a href="#translation" class="btn-trans px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-white hover:text-black transition shadow-lg">
+                <a href="#translation" class="btn-trans px-8 py-4 bg-white text-minimal-accent border border-minimal-border rounded-full text-sm font-medium hover:bg-minimal-lightgray transition shadow-sm">
                     電影翻譯紀錄
                 </a>
             </div>
@@ -218,47 +215,47 @@
     </section>
 
     <!-- Works Section -->
-    <section id="works" class="max-w-7xl mx-auto px-6 py-40 reveal-up">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+    <section id="works" class="max-w-7xl mx-auto px-6 py-32 reveal-up">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
             <div>
-                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
-                <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
+                <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Selected Projects</h2>
+                <h3 id="works-heading" class="text-4xl font-bold tracking-tight text-minimal-accent">實戰專案分類</h3>
             </div>
             <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
-                <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
+                <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-white border border-minimal-border text-minimal-gray flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-sm">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button onclick="nextPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
+                <button onclick="nextPage()" class="w-10 h-10 rounded-full bg-white border border-minimal-border text-minimal-gray flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-sm">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
         </div>
         <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs mb-12">
-            <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
-            <button onclick="filterProjects('字體設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
-            <button onclick="filterProjects('展覽', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
-            <button onclick="filterProjects('快閃店', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
-            <button onclick="filterProjects('包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
-            <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
-            <button onclick="filterProjects('影片剪接', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-video">影片剪接</button>
-            <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
+            <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-minimal-accent text-white transition font-medium shadow-sm" id="btn-featured">精選作品</button>
+            <button onclick="filterProjects('字體設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-type">字體設計</button>
+            <button onclick="filterProjects('展覽', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-exhibition">展覽</button>
+            <button onclick="filterProjects('快閃店', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-popup">快閃店</button>
+            <button onclick="filterProjects('包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-pkg">包裝設計</button>
+            <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-merch">周邊設計</button>
+            <button onclick="filterProjects('影片剪接', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-video">影片剪接</button>
+            <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm" id="btn-other">其他</button>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" onmouseenter="pauseAutoPlay()" onmouseleave="startAutoPlay()"></div>
     </section>
 
     <!-- Translation Section -->
-    <section id="translation" class="max-w-7xl mx-auto px-6 py-40 reveal-up bg-[#060608] rounded-[3rem] border border-white/5 my-12">
+    <section id="translation" class="max-w-7xl mx-auto px-6 py-32 reveal-up bg-white rounded-[2rem] border border-minimal-border my-12 shadow-soft">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
-                <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-                <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+                <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Translation Works</h2>
+                <h3 id="trans-heading" class="text-3xl md:text-4xl font-bold tracking-tight text-minimal-accent">日文字幕 > 繁體中文字幕電影翻譯</h3>
+                <p id="trans-sub" class="text-sm text-minimal-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
             </div>
             <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
-                <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
+                <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-minimal-lightgray border border-minimal-border text-minimal-gray flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-sm">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button onclick="nextTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
+                <button onclick="nextTransPage()" class="w-10 h-10 rounded-full bg-minimal-lightgray border border-minimal-border text-minimal-gray flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-sm">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
@@ -267,22 +264,22 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-[#030308]/90 backdrop-blur-2xl py-48 reveal-up">
+    <section id="about" class="bg-minimal-lightgray py-40 reveal-up border-t border-minimal-border">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center">
-                <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden border border-apple-border shadow-2xl bg-black group">
+                <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border border-minimal-border shadow-soft bg-white group">
                     <img src="profile.jpg" alt="Johnson Yau" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://via.placeholder.com/300x300?text=Profile'">
                 </div>
             </div>
             <div class="md:col-span-7 space-y-6">
                 <div>
-                    <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">About Me & Contact</h2>
-                    <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">專業背景與聯絡方式</h3>
+                    <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">About Me & Contact</h2>
+                    <h3 id="about-title" class="text-3xl font-bold text-minimal-accent tracking-tight">專業背景與聯絡方式</h3>
                 </div>
-                <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
+                <div id="about-desc" class="text-minimal-gray font-normal leading-relaxed text-sm space-y-4"></div>
                 <div class="pt-4 flex items-center space-x-4">
-                    <a href="mailto:johnson0661@gmail.com" class="px-6 py-3.5 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow-xl flex items-center hover:scale-105 transform duration-300">
-                        <i class="fa-solid fa-envelope mr-2 text-sm"></i> johnson0661@gmail.com
+                    <a href="mailto:johnson0661@gmail.com" class="px-6 py-3 bg-white text-minimal-accent border border-minimal-border rounded-full text-xs font-medium hover:border-minimal-accent transition shadow-sm flex items-center">
+                        <i class="fa-solid fa-envelope mr-2"></i> johnson0661@gmail.com
                     </a>
                 </div>
             </div>
@@ -290,148 +287,151 @@
     </section>
 
     <!-- 返回頂部按鈕 -->
-    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full card-glass border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 shadow-2xl">
+    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition-all duration-300 shadow-soft">
         <i class="fa-solid fa-arrow-up text-sm"></i>
     </button>
 
     <!-- Footer -->
-    <footer class="py-16 text-center text-xs text-apple-gray">
-        <p>&copy; 2026 Johnson Yau. All rights reserved. <br><span class="opacity-50 mt-2 inline-block">Press Ctrl/Cmd + Shift + L for Admin Panel</span></p>
+    <footer class="py-12 text-center text-[11px] text-minimal-gray">
+        <p>&copy; 2026 Johnson Yau. All rights reserved. <br><span class="opacity-50 mt-1 inline-block">Press Ctrl/Cmd + Shift + L for Admin Panel</span></p>
     </footer>
 
     <!-- Password Prompt Modal -->
-    <div id="password-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center modal-fade">
-            <h3 class="text-lg font-semibold text-white mb-4">請輸入管理員密碼</h3>
+    <div id="password-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="modal-glass rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center modal-fade">
+            <h3 class="text-lg font-semibold text-minimal-accent mb-4">系統登入</h3>
             <form onsubmit="verifyPassword(event)" class="space-y-4">
-                <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none text-center">
+                <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-minimal-lightgray border border-minimal-border rounded-xl text-minimal-accent text-sm focus:border-minimal-gray outline-none text-center transition">
                 <div class="flex space-x-2">
-                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2.5 bg-apple-lightgray text-apple-gray rounded-xl text-xs font-medium border border-apple-border">取消</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-white text-black rounded-xl text-xs font-medium">確認登入</button>
+                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2.5 bg-white text-minimal-gray rounded-xl text-xs font-medium border border-minimal-border hover:bg-minimal-lightgray transition">取消</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-minimal-accent text-white rounded-xl text-xs font-medium hover:bg-gray-800 transition">確認登入</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Admin Modal -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-5xl w-full p-8 relative max-h-[95vh] overflow-y-auto shadow-2xl modal-fade">
-            
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-apple-border pb-4 gap-4 pr-12">
-                <h3 class="text-xl font-semibold text-white flex items-center"><i class="fa-solid fa-cloud text-apple-accent mr-3"></i> Firebase 雲端管理中心</h3>
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="modal-glass rounded-[2rem] max-w-5xl w-full p-8 relative max-h-[95vh] overflow-y-auto shadow-2xl modal-fade">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-minimal-border pb-4 gap-4 pr-12">
+                <h3 class="text-xl font-bold text-minimal-accent flex items-center"><i class="fa-solid fa-cloud text-minimal-gray mr-3"></i> 雲端管理中心</h3>
                 <div class="flex flex-wrap gap-2 items-center">
-                    <button onclick="switchAdminTab('projects')" id="tab-projects-btn" class="px-3.5 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition">精選專案</button>
-                    <button onclick="switchAdminTab('translations')" id="tab-trans-btn" class="px-3.5 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition">電影翻譯紀錄</button>
-                    <button onclick="switchAdminTab('about')" id="tab-about-btn" class="px-3.5 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition">關於我</button>
+                    <button onclick="exportDataJS()" class="px-4 py-2 bg-white text-minimal-accent border border-minimal-border rounded-full text-xs font-medium hover:bg-minimal-lightgray transition flex items-center mr-2 shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-down mr-1.5 text-minimal-gray"></i> 下載最新資料庫 (data.js)
+                    </button>
+                    <div class="h-4 w-px bg-minimal-border mx-1"></div>
+                    <button onclick="switchAdminTab('projects')" id="tab-projects-btn" class="px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium transition shadow-sm">精選專案</button>
+                    <button onclick="switchAdminTab('translations')" id="tab-trans-btn" class="px-4 py-2 bg-white text-minimal-gray border border-minimal-border rounded-full text-xs font-medium hover:text-minimal-accent transition">電影翻譯紀錄</button>
+                    <button onclick="switchAdminTab('about')" id="tab-about-btn" class="px-4 py-2 bg-white text-minimal-gray border border-minimal-border rounded-full text-xs font-medium hover:text-minimal-accent transition">關於我</button>
                 </div>
             </div>
-            <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border z-10 hover:bg-apple-border">
+            <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-minimal-gray hover:text-minimal-accent w-9 h-9 rounded-full bg-minimal-lightgray flex items-center justify-center transition border border-minimal-border z-10 hover:bg-white">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
 
             <!-- 專案管理面板 -->
-            <div id="admin-projects-panel" class="space-y-4">
+            <div id="admin-projects-panel" class="space-y-4 text-minimal-accent">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex flex-wrap gap-1.5 text-xs" id="admin-proj-filter-btns">
-                        <button onclick="filterAdminProjects('all', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition">全部</button>
-                        <button onclick="filterAdminProjects('字體設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">字體設計</button>
-                        <button onclick="filterAdminProjects('展覽', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">展覽</button>
-                        <button onclick="filterAdminProjects('快閃店', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">快閃店</button>
-                        <button onclick="filterAdminProjects('包裝設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">包裝設計</button>
-                        <button onclick="filterAdminProjects('周邊設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">周邊設計</button>
-                        <button onclick="filterAdminProjects('影片剪接', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">影片剪接</button>
-                        <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">其他</button>
+                        <button onclick="filterAdminProjects('all', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-minimal-accent text-white font-medium transition">全部</button>
+                        <button onclick="filterAdminProjects('字體設計', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">字體設計</button>
+                        <button onclick="filterAdminProjects('展覽', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">展覽</button>
+                        <button onclick="filterAdminProjects('快閃店', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">快閃店</button>
+                        <button onclick="filterAdminProjects('包裝設計', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">包裝設計</button>
+                        <button onclick="filterAdminProjects('周邊設計', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">周邊設計</button>
+                        <button onclick="filterAdminProjects('影片剪接', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">影片剪接</button>
+                        <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition">其他</button>
                     </div>
-                    <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-lg flex items-center shrink-0">
+                    <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium hover:bg-gray-800 transition shadow-md flex items-center shrink-0">
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增專案
                     </button>
                 </div>
-                <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px] mt-4"></div>
-                <div id="admin-project-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
-                    <button onclick="prevAdminProjPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
-                    <span id="admin-project-page-indicator" class="font-medium px-4 py-1.5 bg-black/50 rounded-full border border-apple-border">1 / 1</span>
-                    <button onclick="nextAdminProjPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">下一頁</button>
+                <div id="admin-project-list" class="space-y-2 divide-y divide-minimal-border min-h-[300px] mt-4"></div>
+                <div id="admin-project-pagination" class="flex items-center justify-between pt-4 border-t border-minimal-border text-xs text-minimal-gray">
+                    <button onclick="prevAdminProjPage()" class="px-4 py-2 rounded-full bg-white border border-minimal-border hover:bg-minimal-lightgray transition">上一頁</button>
+                    <span id="admin-project-page-indicator" class="font-medium px-4 py-1 bg-minimal-lightgray rounded-full">1 / 1</span>
+                    <button onclick="nextAdminProjPage()" class="px-4 py-2 rounded-full bg-white border border-minimal-border hover:bg-minimal-lightgray transition">下一頁</button>
                 </div>
             </div>
 
             <!-- 電影翻譯管理面板 -->
-            <div id="admin-trans-panel" class="space-y-4 hidden">
+            <div id="admin-trans-panel" class="space-y-4 text-minimal-accent hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs text-apple-gray"><i class="fa-solid fa-filter mr-1"></i> 篩選年份:</span>
-                        <select id="admin-year-filter" onchange="adminTransPageIndex=0; renderAdminTransLists()" class="px-3 py-1.5 bg-apple-lightgray text-white text-xs border border-apple-border rounded-xl outline-none focus:border-apple-accent transition">
+                        <span class="text-xs text-minimal-gray"><i class="fa-solid fa-filter mr-1"></i> 篩選年份:</span>
+                        <select id="admin-year-filter" onchange="adminTransPageIndex=0; renderAdminTransLists()" class="px-3 py-1.5 bg-white text-minimal-accent text-xs border border-minimal-border rounded-full outline-none transition">
                             <option value="all">全部年份</option>
                         </select>
                     </div>
-                    <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-lg flex items-center shrink-0">
-                        <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
+                    <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium hover:bg-gray-800 transition shadow-md flex items-center shrink-0">
+                        <i class="fa-solid fa-plus mr-1.5"></i> 新增紀錄
                     </button>
                 </div>
-                <div id="admin-trans-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px] mt-4"></div>
-                <div id="admin-trans-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
-                    <button onclick="prevAdminTransPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
-                    <span id="admin-trans-page-indicator" class="font-medium px-4 py-1.5 bg-black/50 rounded-full border border-apple-border">1 / 1</span>
-                    <button onclick="nextAdminTransPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">下一頁</button>
+                <div id="admin-trans-list" class="space-y-2 divide-y divide-minimal-border min-h-[300px] mt-4"></div>
+                <div id="admin-trans-pagination" class="flex items-center justify-between pt-4 border-t border-minimal-border text-xs text-minimal-gray">
+                    <button onclick="prevAdminTransPage()" class="px-4 py-2 rounded-full bg-white border border-minimal-border hover:bg-minimal-lightgray transition">上一頁</button>
+                    <span id="admin-trans-page-indicator" class="font-medium px-4 py-1 bg-minimal-lightgray rounded-full">1 / 1</span>
+                    <button onclick="nextAdminTransPage()" class="px-4 py-2 rounded-full bg-white border border-minimal-border hover:bg-minimal-lightgray transition">下一頁</button>
                 </div>
             </div>
 
             <!-- 關於我管理面板 -->
-            <div id="admin-about-panel" class="space-y-4 hidden">
-                <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">編輯「關於我」內容 (支援三語)</h4>
+            <div id="admin-about-panel" class="space-y-4 text-minimal-accent hidden">
+                <h4 class="text-[11px] uppercase tracking-[0.1em] text-minimal-gray font-semibold mb-3 border-b border-minimal-border pb-2">編輯「關於我」</h4>
                 <form onsubmit="saveAbout(event)" class="space-y-4 text-xs">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-apple-gray mb-1.5 font-semibold">關於我 (繁體中文)</label>
-                            <textarea id="about-zh" rows="8" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block text-minimal-gray mb-1.5 font-medium">繁體中文</label>
+                            <textarea id="about-zh" rows="8" required class="w-full px-4 py-3 bg-white border border-minimal-border rounded-xl text-minimal-accent text-xs focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1.5 font-semibold">About Me (EN)</label>
-                            <textarea id="about-en" rows="8" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block text-minimal-gray mb-1.5 font-medium">English</label>
+                            <textarea id="about-en" rows="8" required class="w-full px-4 py-3 bg-white border border-minimal-border rounded-xl text-minimal-accent text-xs focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1.5 font-semibold">プロフィール (JA)</label>
-                            <textarea id="about-ja" rows="8" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block text-minimal-gray mb-1.5 font-medium">日本語</label>
+                            <textarea id="about-ja" rows="8" required class="w-full px-4 py-3 bg-white border border-minimal-border rounded-xl text-minimal-accent text-xs focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                     </div>
                     <div class="pt-4 flex justify-end">
-                        <button type="submit" class="px-6 py-3 bg-white text-black rounded-xl font-medium shadow-lg hover:scale-105 transition duration-300">儲存「關於我」變更</button>
+                        <button type="submit" class="px-8 py-3 bg-minimal-accent text-white rounded-full font-medium hover:bg-gray-800 transition duration-300">儲存變更</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Edit Project Modal (帶有即時圖片預覽) -->
-    <div id="edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
-            <button onclick="closeEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border hover:bg-apple-border z-10">
+    <!-- Edit Project Modal -->
+    <div id="edit-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="modal-glass rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade text-minimal-accent">
+            <button onclick="closeEditModal()" class="absolute top-6 right-6 text-minimal-gray hover:text-minimal-accent w-9 h-9 rounded-full bg-minimal-lightgray flex items-center justify-center transition border border-minimal-border z-10">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 id="edit-modal-title" class="text-xl font-semibold text-white mb-6 flex items-center"><i class="fa-solid fa-pen-to-square mr-2 text-apple-accent"></i> 編輯專案資料</h3>
+            <h3 id="edit-modal-title" class="text-xl font-bold mb-6">編輯專案</h3>
             
             <form id="edit-form" onsubmit="saveProject(event)" class="space-y-5 text-xs">
                 <input type="hidden" id="edit-id">
                 
-                <div class="p-5 rounded-2xl bg-black/30 border border-apple-border/50 space-y-4">
-                    <h4 class="text-apple-gray font-semibold border-b border-apple-border/50 pb-2 mb-3">1. 標題與分類 (自動聯動)</h4>
+                <div class="p-5 rounded-2xl bg-minimal-lightgray border border-minimal-border space-y-4">
+                    <h4 class="text-minimal-gray font-medium border-b border-minimal-border pb-2 mb-3">1. 標題與分類</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                            <label class="block text-apple-gray mb-1">標題 (繁體)</label>
-                            <input type="text" id="edit-title-zh" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                            <label class="block mb-1">標題 (繁體)</label>
+                            <input type="text" id="edit-title-zh" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1">Title (EN)</label>
-                            <input type="text" id="edit-title-en" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                            <label class="block mb-1">Title (EN)</label>
+                            <input type="text" id="edit-title-en" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1">タイトル (JA)</label>
-                            <input type="text" id="edit-title-ja" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                            <label class="block mb-1">タイトル (JA)</label>
+                            <input type="text" id="edit-title-ja" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                            <label class="block text-apple-gray mb-1">選擇分類</label>
-                            <select id="edit-cat-zh" onchange="onCategorySelectChange()" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition cursor-pointer">
+                            <label class="block mb-1">選擇分類</label>
+                            <select id="edit-cat-zh" onchange="onCategorySelectChange()" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                                 <option value="字體設計">字體設計</option>
                                 <option value="展覽">展覽</option>
                                 <option value="快閃店">快閃店</option>
@@ -442,116 +442,113 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-apple-gray/50 mb-1">Category (EN) - 自動產生</label>
-                            <input type="text" id="edit-cat-en" readonly required class="w-full px-3 py-2 bg-black/40 border border-apple-border/30 rounded-xl text-apple-gray/50 outline-none cursor-not-allowed">
+                            <label class="block text-minimal-gray mb-1">Category (EN)</label>
+                            <input type="text" id="edit-cat-en" readonly required class="w-full px-3 py-2 bg-gray-100 border border-minimal-border rounded-xl text-minimal-gray outline-none cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-apple-gray/50 mb-1">カテゴリ (JA) - 自動產生</label>
-                            <input type="text" id="edit-cat-ja" readonly required class="w-full px-3 py-2 bg-black/40 border border-apple-border/30 rounded-xl text-apple-gray/50 outline-none cursor-not-allowed">
+                            <label class="block text-minimal-gray mb-1">カテゴリ (JA)</label>
+                            <input type="text" id="edit-cat-ja" readonly required class="w-full px-3 py-2 bg-gray-100 border border-minimal-border rounded-xl text-minimal-gray outline-none cursor-not-allowed">
                         </div>
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl bg-black/30 border border-apple-border/50 space-y-4">
-                    <h4 class="text-apple-gray font-semibold border-b border-apple-border/50 pb-2 mb-3">2. 媒體素材 (即時預覽)</h4>
+                <div class="p-5 rounded-2xl bg-minimal-lightgray border border-minimal-border space-y-4">
+                    <h4 class="text-minimal-gray font-medium border-b border-minimal-border pb-2 mb-3">2. 媒體素材</h4>
                     <div class="flex gap-4 items-end">
                         <div class="flex-grow">
-                            <label class="block text-apple-gray mb-1">主圖圖片路徑 (例如: image/...)</label>
-                            <input type="text" id="edit-image" required oninput="previewAdminImage('edit-image', 'preview-main')" class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                            <label class="block mb-1">主圖圖片路徑</label>
+                            <input type="text" id="edit-image" required oninput="previewAdminImage('edit-image', 'preview-main')" class="w-full px-4 py-2.5 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                         </div>
-                        <div class="shrink-0 w-16 h-12 bg-apple-lightgray border border-apple-border rounded-lg overflow-hidden flex items-center justify-center">
+                        <div class="shrink-0 w-16 h-12 bg-white border border-minimal-border rounded-lg overflow-hidden flex items-center justify-center">
                             <img id="preview-main" src="" class="max-w-full max-h-full object-cover hidden">
-                            <i id="preview-main-icon" class="fa-regular fa-image text-apple-gray"></i>
+                            <i id="preview-main-icon" class="fa-regular fa-image text-minimal-gray"></i>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-apple-gray mb-1">更多細節圖庫路徑 (多張圖用逗號隔開)</label>
-                        <input type="text" id="edit-gallery" placeholder="例如: image/a.jpg, image/b.jpg" class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1">更多細節圖庫路徑 (多張圖用逗號隔開)</label>
+                        <input type="text" id="edit-gallery" placeholder="例如: image/a.jpg, image/b.jpg" class="w-full px-4 py-2.5 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-apple-gray mb-1">YouTube 影片連結 (選填)</label>
-                        <input type="text" id="edit-youtube" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1">YouTube 影片連結 (選填)</label>
+                        <input type="text" id="edit-youtube" placeholder="https://youtu.be/..." class="w-full px-4 py-2.5 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl bg-black/30 border border-apple-border/50 space-y-4">
-                    <h4 class="text-apple-gray font-semibold border-b border-apple-border/50 pb-2 mb-3">3. 專案詳情文案</h4>
+                <div class="p-5 rounded-2xl bg-minimal-lightgray border border-minimal-border space-y-4">
+                    <h4 class="text-minimal-gray font-medium border-b border-minimal-border pb-2 mb-3">3. 專案詳情</h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                            <label class="block text-apple-gray mb-1">簡介 (繁體)</label>
-                            <textarea id="edit-desc-zh" rows="4" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block mb-1">簡介 (繁體)</label>
+                            <textarea id="edit-desc-zh" rows="4" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1">Description (EN)</label>
-                            <textarea id="edit-desc-en" rows="4" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block mb-1">Description (EN)</label>
+                            <textarea id="edit-desc-en" rows="4" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                         <div>
-                            <label class="block text-apple-gray mb-1">説明 (JA)</label>
-                            <textarea id="edit-desc-ja" rows="4" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none resize-none transition"></textarea>
+                            <label class="block mb-1">説明 (JA)</label>
+                            <textarea id="edit-desc-ja" rows="4" required class="w-full px-3 py-2 bg-white border border-minimal-border rounded-xl focus:border-minimal-accent outline-none resize-none transition"></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex space-x-3 pt-2">
-                    <button type="button" onclick="closeEditModal()" class="w-1/3 py-3 bg-apple-lightgray text-apple-gray rounded-xl font-medium border border-apple-border hover:bg-apple-border transition">取消</button>
-                    <button type="submit" class="w-2/3 py-3 bg-white text-black rounded-xl font-medium hover:scale-[1.02] transition duration-300 shadow-lg">儲存變更</button>
+                    <button type="button" onclick="closeEditModal()" class="w-1/3 py-3 bg-white text-minimal-gray rounded-full font-medium border border-minimal-border hover:bg-minimal-lightgray transition">取消</button>
+                    <button type="submit" class="w-2/3 py-3 bg-minimal-accent text-white rounded-full font-medium hover:bg-gray-800 transition duration-300">儲存</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Edit Translation Modal (帶有即時圖片預覽) -->
-    <div id="trans-edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
-            <button onclick="closeTransEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border hover:bg-apple-border">
+    <!-- Edit Translation Modal -->
+    <div id="trans-edit-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="modal-glass rounded-3xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade text-minimal-accent">
+            <button onclick="closeTransEditModal()" class="absolute top-6 right-6 text-minimal-gray hover:text-minimal-accent w-9 h-9 rounded-full bg-minimal-lightgray flex items-center justify-center transition border border-minimal-border">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 id="trans-modal-title" class="text-xl font-semibold text-white mb-6 flex items-center"><i class="fa-solid fa-pen-to-square mr-2 text-apple-accent"></i> 編輯電影翻譯</h3>
+            <h3 id="trans-modal-title" class="text-xl font-bold mb-6">編輯翻譯紀錄</h3>
             <form onsubmit="saveTranslation(event)" class="space-y-5 text-xs">
                 <input type="hidden" id="trans-edit-id">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-apple-gray mb-1 font-semibold">電影名稱 (繁體)</label>
-                        <input type="text" id="trans-title-zh" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1 font-medium">名稱 (繁體)</label>
+                        <input type="text" id="trans-title-zh" required class="w-full px-3 py-2 bg-minimal-lightgray border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-apple-gray mb-1 font-semibold">Movie Title (EN)</label>
-                        <input type="text" id="trans-title-en" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1 font-medium">Title (EN)</label>
+                        <input type="text" id="trans-title-en" required class="w-full px-3 py-2 bg-minimal-lightgray border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-apple-gray mb-1 font-semibold">映画タイトル (JA)</label>
-                        <input type="text" id="trans-title-ja" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1 font-medium">タイトル (JA)</label>
+                        <input type="text" id="trans-title-ja" required class="w-full px-3 py-2 bg-minimal-lightgray border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-apple-gray mb-1 font-semibold">上映年份 (例如: 2024)</label>
-                    <input type="text" id="trans-edit-year" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                    <label class="block mb-1 font-medium">上映年份</label>
+                    <input type="text" id="trans-edit-year" required class="w-full px-4 py-2 bg-minimal-lightgray border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                 </div>
                 
                 <div class="flex gap-4 items-end">
                     <div class="flex-grow">
-                        <label class="block text-apple-gray mb-1 font-semibold">海報圖片路徑 (例如: image/movies/...)</label>
-                        <input type="text" id="trans-edit-image" required oninput="previewAdminImage('trans-edit-image', 'preview-trans')" class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white focus:border-apple-accent outline-none transition">
+                        <label class="block mb-1 font-medium">海報圖片路徑</label>
+                        <input type="text" id="trans-edit-image" required oninput="previewAdminImage('trans-edit-image', 'preview-trans')" class="w-full px-4 py-2 bg-minimal-lightgray border border-minimal-border rounded-xl focus:border-minimal-accent outline-none transition">
                     </div>
-                    <div class="shrink-0 w-12 h-16 bg-apple-lightgray border border-apple-border rounded-lg overflow-hidden flex items-center justify-center">
+                    <div class="shrink-0 w-12 h-16 bg-white border border-minimal-border rounded-lg overflow-hidden flex items-center justify-center">
                         <img id="preview-trans" src="" class="max-w-full max-h-full object-cover hidden">
-                        <i id="preview-trans-icon" class="fa-regular fa-image text-apple-gray"></i>
+                        <i id="preview-trans-icon" class="fa-regular fa-image text-minimal-gray"></i>
                     </div>
                 </div>
 
                 <div class="flex space-x-3 pt-4">
-                    <button type="button" onclick="closeTransEditModal()" class="w-1/3 py-3 bg-apple-lightgray text-apple-gray rounded-xl font-medium border border-apple-border hover:bg-apple-border transition">取消</button>
-                    <button type="submit" class="w-2/3 py-3 bg-white text-black rounded-xl font-medium hover:scale-[1.02] transition shadow-lg">儲存變更</button>
+                    <button type="button" onclick="closeTransEditModal()" class="w-1/3 py-3 bg-white text-minimal-gray rounded-full font-medium border border-minimal-border hover:bg-minimal-lightgray transition">取消</button>
+                    <button type="submit" class="w-2/3 py-3 bg-minimal-accent text-white rounded-full font-medium hover:bg-gray-800 transition">儲存</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- FIREBASE INITIALIZATION & CLOUD LOGIC        -->
-    <!-- ========================================== -->
+    <!-- Script Logic -->
     <script>
-        // 1. 初始化 Firebase (使用你提供的設定檔)
         const firebaseConfig = {
             apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM",
             authDomain: "johnsonportfolio-1262d.firebaseapp.com",
@@ -563,119 +560,43 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 2. 宣告全域變數 (用作存放從雲端拉取嘅資料)
         let projects = [];
         let translations = [];
-        let aboutData = {
-            zh: "正在載入...", en: "Loading...", ja: "読み込み中..."
-        };
+        let aboutData = { zh: "正在載入...", en: "Loading...", ja: "読み込み中..." };
 
-        // 3. 預設初始資料 (作 Migration 用)
-        const defaultProjects = [
-            { id: '1', title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, category: { zh: '字體設計', en: 'Typeface', ja: 'タイポグラフィ' }, image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', gallery: '', youtube: '', description: { zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現。' } },
-            { id: '2', title: { zh: 'ULTRAMAN The Hero Premiere 展覽與視覺企劃', en: 'ULTRAMAN The Hero Premiere Exhibition', ja: 'ULTRAMAN The Hero Premiere 展示' }, category: { zh: '展覽', en: 'Exhibition', ja: '展覧会' }, image: 'image/ultraman_ex.jpg', gallery: '', youtube: '', description: { zh: '主導 Ultraman 展覽之視覺統籌與現場展品空間規劃，完美重現經典特攝美學。', en: 'Led the visual coordination and exhibition space planning for Ultraman.', ja: 'ウルトラマン展のビジュアル統括と空間計画を担当。' } },
-            { id: '3', title: { zh: 'ULTRAMAN Pop-up Store 空間動線規劃', en: 'ULTRAMAN Pop-up Store Planning', ja: 'ウルトラマン ポップアップストア' }, category: { zh: '快閃店', en: 'Pop-up Store', ja: 'ポップアップストア' }, image: 'image/ultraman_pop.jpg', gallery: '', youtube: '', description: { zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。', en: 'Led spatial planning and limited merchandise development for Ultraman Pop-up at Langham Place.', ja: 'ランガム・プレイスでのウルトラマンポップアップストアの動線計画とグッズ開発を主導。' } },
-            { id: '4', title: { zh: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', en: 'SPY×FAMILY CODE: White - Physical Packaging Design', ja: '劇場版『SPY×FAMILY CODE: White』パッケージデザイン' }, category: { zh: '包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, image: 'image/spy_family.jpg', gallery: '', youtube: '', description: { zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。', en: 'Developed a series of physical F&B packaging items for film promotion.', ja: '映画プロモーション用の飲食パッケージシリーズを開発。' } }
-        ];
+        const defaultProjects = window.PORTFOLIO_DATA ? window.PORTFOLIO_DATA.projects : [];
+        const defaultTranslations = window.PORTFOLIO_DATA ? window.PORTFOLIO_DATA.translations : [];
+        const defaultAbout = window.PORTFOLIO_DATA ? window.PORTFOLIO_DATA.aboutData : {};
 
-        const defaultTranslations = [
-            { id: 't1', title: { zh: '幪面超人 555 20th PARADISE REGAINED', en: 'Kamen Rider 555 20th: Paradise Regained', ja: '仮面ライダー555 20th パラダイス・リゲインド' }, year: '2024', image: 'image/movies/kamen_555.jpg' },
-            { id: 't2', title: { zh: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', en: 'Kamen Rider The Winter Movie: Gotchard & Geats', ja: '仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ' }, year: '2023', image: 'image/movies/kamen_gotchard.jpg' },
-            { id: 't3', title: { zh: '少女與戰車 最終章 第4話', en: 'Girls und Panzer das Finale: Part 4', ja: 'ガールズ＆パンツァー 最終章 第4話' }, year: '2023', image: 'image/movies/girls_panzer.jpg' },
-            { id: 't4', title: { zh: '新・幪面超人', en: 'Shin Kamen Rider', ja: 'シン・仮面ライダー' }, year: '2023', image: 'image/movies/shin_kamen.jpg' },
-            { id: 't5', title: { zh: '幪面超人 Geats × Revice Battle Royale', en: 'Kamen Rider Geats x Revice: Battle Royale', ja: '仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル' }, year: '2022', image: 'image/movies/kamen_geats.jpg' },
-            { id: 't6', title: { zh: '幪面超人 Revice & 咚兄弟 Movie Battle Family', en: 'Kamen Rider Revice & Donbrothers', ja: '劇場版 仮面ライダーリバイスVSドンブラザーズ' }, year: '2022', image: 'image/movies/kamen_revice.jpg' },
-            { id: 't7', title: { zh: '電影 五等分的新娘', en: 'The Quintessential Quintuplets the Movie', ja: '映画 ５等分の花嫁' }, year: '2022', image: 'image/movies/quintuplets.jpg' },
-            { id: 't8', title: { zh: '幪面超人 BEYOND GENERATIONS', en: 'Kamen Rider: Beyond Generations', ja: '仮面ライダー ビヨンド・ジェネレーションズ' }, year: '2021', image: 'image/movies/kamen_beyond.jpg' },
-            { id: 't9', title: { zh: '黃金拼圖 Thank you!!', en: 'KINMOZA! Thank you!!', ja: '劇場版 きんいろモザイク Thank you!!' }, year: '2021', image: 'image/movies/kinmoza.jpg' },
-            { id: 't10', title: { zh: '漁港的肉子', en: 'Fortune Favors Lady Nikuko', ja: '漁港の肉子ちゃん' }, year: '2021', image: 'image/movies/nikuko.jpg' },
-            { id: 't11', title: { zh: 'Saber+全界者 超級英雄戰記', en: 'Saber + Zenkaiger: Super Hero Senki', ja: 'セイバー＋ゼンカイジャー スーパーヒーロー戦記' }, year: '2021', image: 'image/movies/saber_zenkaiger.jpg' },
-            { id: 't12', title: { zh: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', en: 'Zero-One Others: Kamen Rider Vulcan & Valkyrie', ja: 'ゼロワン Others 仮面ライダーバルカン＆バルキリー' }, year: '2021', image: 'image/movies/zero_one.jpg' },
-            { id: 't13', title: { zh: '美少女的謊言：龍與雀斑公主 製作特輯', en: 'Belle Making of', ja: '竜とそばかすの姫 メイキング' }, year: '2021', image: 'image/movies/belle.jpg' },
-            { id: 't14', title: { zh: '尋找小魔女DoReMi', en: 'Looking for Magical Doremi', ja: '魔女見習いをさがして' }, year: '2020', image: 'image/movies/doremi.jpg' },
-            { id: 't15', title: { zh: 'SHIROBAKO 白箱劇場版', en: 'SHIROBAKO the Movie', ja: '劇場版 SHIROBAKO' }, year: '2020', image: 'image/movies/shirobako.jpg' },
-            { id: 't16', title: { zh: '來自深淵：深沉靈魂的黎明', en: 'Made in Abyss: Dawn of the Deep Soul', ja: '劇場版メイドインアビス 深き魂の黎明' }, year: '2020', image: 'image/movies/abyss.jpg' },
-            { id: 't17', title: { zh: '數碼暴龍 Last Evolution 絆', en: 'Digimon Adventure Last Evolution Kizuna', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆' }, year: '2020', image: 'image/movies/digimon.jpg' },
-            { id: 't18', title: { zh: '7 Days War (七日戰爭)', en: '7 Days War', ja: 'ぼくらの7日間戦争' }, year: '2019', image: 'image/movies/7dayswar.jpg' },
-            { id: 't19', title: { zh: '新幹線戰士 來自未來的高速光號F', en: 'Shinkansen Henkei Robo Shinkalion', ja: '劇場版新幹線変形ロボ シンカリオ' }, year: '2019', image: 'image/movies/shinkalion.jpg' },
-            { id: 't20', title: { zh: '幪面超人 ZI-O Over Quartzer', en: 'Kamen Rider Zi-O the Movie: Over Quartzer', ja: '劇場版 仮面ライダージオウ Over Quartzer' }, year: '2019', image: 'image/movies/zio.jpg' },
-            { id: 't21', title: { zh: '為美好的世界獻上祝福！紅傳說', en: 'KonoSuba: Legend of Crimson', ja: '映画 この素晴らしい世界に祝福を！紅伝説' }, year: '2019', image: 'image/movies/konosuba.jpg' },
-            { id: 't22', title: { zh: 'PSYCHO-PASS心靈判官 Sinners of the System', en: 'Psycho-Pass: Sinners of the System', ja: 'PSYCHO-PASS サイコパス Sinners of the System' }, year: '2019', image: 'image/movies/psychopass.jpg' },
-            { id: 't23', title: { zh: '幼女戰記 劇場版', en: 'Saga of Tanya the Evil the Movie', ja: '劇場版 幼女戦記' }, year: '2019', image: 'image/movies/tanya.jpg' },
-            { id: 't24', title: { zh: '幪面超人 Heisei Generations Forever', en: 'Kamen Rider Heisei Generations Forever', ja: '仮面ライダー平成ジェネレーションズ FOREVER' }, year: '2018', image: 'image/movies/heisei.jpg' },
-            { id: 't25', title: { zh: 'Fate/stay night [Heaven\'s Feel] II', en: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', ja: '劇場版 Fate/stay night [Heaven\'s Feel] II. lost butterfly' }, year: '2019', image: 'image/movies/fate.jpg' },
-            { id: 't26', title: { zh: '龍珠超 布洛尼', en: 'Dragon Ball Super: Broly', ja: 'ドラゴンボール超 ブロリー' }, year: '2018', image: 'image/movies/dragonball.jpg' },
-            { id: 't27', title: { zh: '劇場版 幪面超人 Build / 宇宙戰隊九連者', en: 'Kamen Rider Build the Movie / Kyuranger', ja: '劇場版 仮面ライダービルド Be The One' }, year: '2017', image: 'image/movies/build.jpg' },
-            { id: 't28', title: { zh: '中二病也想談戀愛！-Take On Me-', en: 'Love, Chunibyo & Other Delusions! Take On Me', ja: '映画 中二病でも恋がしたい! -Take On Me-' }, year: '2018', image: 'image/movies/chunibyo.jpg' }
-        ];
-
-        const defaultAbout = {
-            zh: "<p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p><p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>",
-            en: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>",
-            ja: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>"
-        };
-
-        // 4. 初次載入：智能遷移與雲端讀取
         async function fetchCloudData() {
             try {
-                // 讀取 About
                 const aboutDoc = await db.collection('portfolio').doc('about').get();
-                if (aboutDoc.exists) {
-                    aboutData = aboutDoc.data();
-                } else {
-                    // 如果雲端無資料，將預設寫入
-                    await db.collection('portfolio').doc('about').set(defaultAbout);
-                    aboutData = defaultAbout;
-                }
+                if (aboutDoc.exists) aboutData = aboutDoc.data();
+                else { await db.collection('portfolio').doc('about').set(defaultAbout); aboutData = defaultAbout; }
 
-                // 讀取 Projects
                 const projSnapshot = await db.collection('projects').get();
-                if (!projSnapshot.empty) {
-                    projects = projSnapshot.docs.map(doc => doc.data());
-                    // 根據建立時間或自訂邏輯排序 (這裡簡單保留原始順序或可加 order 欄位)
-                } else {
-                    // 如果雲端無資料，將 defaultProjects 一次性寫入 Firebase
-                    console.log("Migrating default projects to Firebase...");
-                    for (const p of defaultProjects) {
-                        await db.collection('projects').doc(p.id).set(p);
-                    }
+                if (!projSnapshot.empty) { projects = projSnapshot.docs.map(doc => doc.data()); }
+                else {
+                    for (const p of defaultProjects) await db.collection('projects').doc(p.id).set(p);
                     projects = defaultProjects;
                 }
 
-                // 讀取 Translations
                 const transSnapshot = await db.collection('translations').get();
-                if (!transSnapshot.empty) {
-                    translations = transSnapshot.docs.map(doc => doc.data());
-                } else {
-                    console.log("Migrating default translations to Firebase...");
-                    for (const t of defaultTranslations) {
-                        await db.collection('translations').doc(t.id).set(t);
-                    }
+                if (!transSnapshot.empty) { translations = transSnapshot.docs.map(doc => doc.data()); }
+                else {
+                    for (const t of defaultTranslations) await db.collection('translations').doc(t.id).set(t);
                     translations = defaultTranslations;
                 }
 
-                // 資料載入完成後，更新 UI
-                renderProjects();
-                renderTranslations();
-                renderAbout();
-                
+                renderProjects(); renderTranslations(); renderAbout();
             } catch (error) {
-                console.error("Error fetching from Firebase:", error);
-                showToast("無法連接到雲端資料庫，目前顯示本機快取資料。", "error");
-                // Fallback to local variables if offline
-                projects = defaultProjects;
-                translations = defaultTranslations;
-                aboutData = defaultAbout;
-                renderProjects();
-                renderTranslations();
-                renderAbout();
+                console.error("Firebase Error:", error);
+                showToast("無法連接資料庫，顯示本機快取。", "error");
+                projects = defaultProjects; translations = defaultTranslations; aboutData = defaultAbout;
+                renderProjects(); renderTranslations(); renderAbout();
             }
         }
 
-        // ==========================================
-        // UI & 互動邏輯 (完全保留，改為呼叫 Firestore API)
-        // ==========================================
-        
         const ADMIN_PASSWORD = 'johnson2026';
         let currentLangIndex = 0; 
         const langs = ['zh', 'en', 'ja'];
@@ -685,25 +606,13 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'custom-toast';
-            let icon = type === 'success' ? '<i class="fa-solid fa-circle-check text-green-400"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+            let icon = type === 'success' ? '<i class="fa-solid fa-check text-green-500"></i>' : '<i class="fa-solid fa-xmark text-red-500"></i>';
             toast.innerHTML = `${icon} <span>${message}</span>`;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('toast-leave');
-                setTimeout(() => toast.remove(), 400);
-            }, 3000);
+            setTimeout(() => { toast.classList.add('toast-leave'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        const categoryMap = {
-            '字體設計': { en: 'Typeface', ja: 'タイポグラフィ' },
-            '展覽': { en: 'Exhibition', ja: '展覧会' },
-            '快閃店': { en: 'Pop-up Store', ja: 'ポップアップストア' },
-            '包裝設計': { en: 'Packaging Design', ja: 'パッケージ設計' },
-            '周邊設計': { en: 'Merchandise', ja: 'グッズ設計' },
-            '影片剪接': { en: 'Video Editing', ja: 'ビデオ編集' },
-            '其他': { en: 'Others', ja: 'その他' }
-        };
-
+        const categoryMap = { '字體設計': {en:'Typeface', ja:'タイポグラフィ'}, '展覽': {en:'Exhibition', ja:'展覧会'}, '快閃店': {en:'Pop-up Store', ja:'ポップアップストア'}, '包裝設計': {en:'Packaging Design', ja:'パッケージ設計'}, '周邊設計': {en:'Merchandise', ja:'グッズ設計'}, '影片剪接': {en:'Video Editing', ja:'ビデオ編集'}, '其他': {en:'Others', ja:'その他'} };
         function onCategorySelectChange() {
             const zhVal = document.getElementById('edit-cat-zh').value;
             const mapped = categoryMap[zhVal] || { en: 'Others', ja: 'その他' };
@@ -716,35 +625,25 @@
             const imgEl = document.getElementById(imgId);
             const iconEl = document.getElementById(imgId + '-icon');
             if (url && url.length > 5) {
-                imgEl.src = url;
-                imgEl.classList.remove('hidden');
-                if(iconEl) iconEl.classList.add('hidden');
-                imgEl.onerror = () => {
-                    imgEl.classList.add('hidden');
-                    if(iconEl) iconEl.classList.remove('hidden');
-                };
-            } else {
-                imgEl.classList.add('hidden');
-                if(iconEl) iconEl.classList.remove('hidden');
-            }
+                imgEl.src = url; imgEl.classList.remove('hidden'); if(iconEl) iconEl.classList.add('hidden');
+                imgEl.onerror = () => { imgEl.classList.add('hidden'); if(iconEl) iconEl.classList.remove('hidden'); };
+            } else { imgEl.classList.add('hidden'); if(iconEl) iconEl.classList.remove('hidden'); }
         }
 
         const translationsDict = {
             zh: {
                 navWorks: "精選專案", navTrans: "電影翻譯紀錄", navAbout: "關於我",
-                heroTag: "Multimedia Design & IP Localization",
-                heroTitle: "簡約日式美學，<br><span class='text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray'>精準視覺敘事。</span>",
+                heroTag: "Multimedia Design & IP Localization", heroTitle: "簡約日式美學，<br><span class='text-minimal-gray'>精準視覺敘事。</span>",
                 heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class='hidden md:inline'>Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
                 btnWorks: "探索作品集", btnTrans: "電影翻譯紀錄",
-                worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
+                worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
                 filterFeatured: "精選作品", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "快閃店", filterPkg: "包裝設計", filterMerch: "周邊設計", filterVideo: "影片剪接", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
-                heroTag: "Multimedia Design & IP Localization",
-                heroTitle: "Minimalist Japanese Aesthetics, <br><span class='text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray'>Precise Visual Storytelling.</span>",
+                heroTag: "Multimedia Design & IP Localization", heroTitle: "Minimalist Aesthetics, <br><span class='text-minimal-gray'>Visual Storytelling.</span>",
                 heroDesc: "Specializing in Japanese anime IP licensing promotional materials, Typeface localization, <br class='hidden md:inline'>Pop-up store planning, physical packaging, and Japanese-to-Chinese film subtitle translation.",
                 btnWorks: "Explore Works", btnTrans: "Translation Works",
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
@@ -754,8 +653,7 @@
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
-                heroTag: "マルチメディアデザイン & IPローカライズ",
-                heroTitle: "洗練された日本的美学、<br><span class='text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray'>精確なビジュアルストーリー。</span>",
+                heroTag: "マルチメディアデザイン & IPローカライズ", heroTitle: "洗練された日本的美学、<br><span class='text-minimal-gray'>精確なビジュアルストーリー。</span>",
                 heroDesc: "日本アニメIPライセンス販促物、タイポグラフィローカライズ、<br class='hidden md:inline'>ポップアップストア空間設計、パッケージ開発、日本語字幕・映画翻訳に特化。",
                 btnWorks: "作品集を見る", btnTrans: "翻訳実績を見る",
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
@@ -765,136 +663,76 @@
             }
         };
 
-        let currentFilterCategory = 'featured';
-        let currentPageIndex = 0;
-        let itemsPerPage = 4;
-        let autoPlayTimer = null;
+        function exportDataJS() {
+            const dataObj = { projects, translations, aboutData };
+            const jsContent = `// Johnson Yau 作品集全球資料庫\nwindow.PORTFOLIO_DATA = ${JSON.stringify(dataObj, null, 4)};`;
+            const blob = new Blob([jsContent], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'data.js';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            showToast('✅ 資料庫檔案 (data.js) 已成功下載！');
+        }
 
-        let transPageIndex = 0;
-        let transItemsPerPage = 8;
-        let transAutoPlayTimer = null;
-
-        let adminProjPageIndex = 0;
-        let adminProjPerPage = 10;
-        let adminTransPageIndex = 0;
-        let adminTransPerPage = 10;
+        let currentFilterCategory = 'featured'; let currentPageIndex = 0; let itemsPerPage = 4; let autoPlayTimer = null;
+        let transPageIndex = 0; let transItemsPerPage = 8; let transAutoPlayTimer = null;
+        let adminProjPageIndex = 0; let adminProjPerPage = 10; let adminTransPageIndex = 0; let adminTransPerPage = 10;
 
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
-            if (window.scrollY > 300) {
-                btn.classList.add('show');
-            } else {
-                btn.classList.remove('show');
-            }
+            if (window.scrollY > 300) btn.classList.add('show'); else btn.classList.remove('show');
         });
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
         function filterProjects(category, btnElement) {
-            currentFilterCategory = category;
-            currentPageIndex = 0;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border text-xs";
-            });
-            if (btnElement) {
-                btnElement.className = "filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm text-xs";
-            }
+            currentFilterCategory = category; currentPageIndex = 0;
+            document.querySelectorAll('.filter-btn').forEach(btn => { btn.className = "filter-btn px-5 py-2.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent transition font-medium border border-minimal-border shadow-sm text-xs"; });
+            if (btnElement) btnElement.className = "filter-btn active px-5 py-2.5 rounded-full bg-minimal-accent text-white transition font-medium shadow-sm text-xs";
             renderProjects();
         }
 
         function getFilteredProjects() {
-            if (currentFilterCategory === 'featured') {
-                return [...projects].sort(() => 0.5 - Math.random());
-            } else {
-                return projects.filter(p => {
-                    let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
-                    return cat === currentFilterCategory;
-                });
-            }
+            if (currentFilterCategory === 'featured') return [...projects].sort(() => 0.5 - Math.random());
+            return projects.filter(p => { let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; return cat === currentFilterCategory; });
         }
 
         function renderProjects() {
             const grid = document.getElementById('project-grid');
             const paginationControls = document.getElementById('pagination-controls');
-            if (!grid) return;
-            const langKey = langs[currentLangIndex];
-
-            const allFiltered = getFilteredProjects();
-            const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1;
-
-            if (currentPageIndex >= totalPages) currentPageIndex = 0;
-            if (currentPageIndex < 0) currentPageIndex = totalPages - 1;
-
-            if (allFiltered.length > itemsPerPage) {
-                paginationControls.classList.remove('hidden');
-                paginationControls.classList.add('flex');
-            } else {
-                paginationControls.classList.add('hidden');
-                paginationControls.classList.remove('flex');
-            }
-
-            const startIdx = currentPageIndex * itemsPerPage;
-            const pageItems = allFiltered.slice(startIdx, startIdx + itemsPerPage);
+            if (!grid) return; const langKey = langs[currentLangIndex];
+            const allFiltered = getFilteredProjects(); const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1;
+            if (currentPageIndex >= totalPages) currentPageIndex = 0; if (currentPageIndex < 0) currentPageIndex = totalPages - 1;
+            if (allFiltered.length > itemsPerPage) { paginationControls.classList.remove('hidden'); paginationControls.classList.add('flex'); } else { paginationControls.classList.add('hidden'); paginationControls.classList.remove('flex'); }
             
+            const startIdx = currentPageIndex * itemsPerPage; const pageItems = allFiltered.slice(startIdx, startIdx + itemsPerPage);
             grid.innerHTML = pageItems.map((p) => {
                 let pTitle = typeof p.title === 'object' ? (p.title[langKey] || p.title.zh) : p.title;
                 let pCat = typeof p.category === 'object' ? (p.category[langKey] || p.category.zh) : p.category;
                 return `
-                    <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
-                        <div class="overflow-hidden aspect-[16/9] bg-black/60 relative flex items-center justify-center p-6">
-                            <img src="${p.image}" alt="${pTitle}" onerror="this.src='https://via.placeholder.com/800x450?text=No+Image'" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition duration-700 shadow-xl opacity-90 group-hover:opacity-100">
+                    <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer col-span-1 md:col-span-2 flex flex-col justify-between">
+                        <div class="overflow-hidden aspect-[16/9] bg-minimal-lightgray relative flex items-center justify-center p-6 border-b border-minimal-border">
+                            <img src="${p.image}" alt="${pTitle}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition duration-700 shadow-sm opacity-90 group-hover:opacity-100">
                             <div class="absolute inset-0 flex items-center justify-center image-overlay">
-                                <span class="view-btn px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium shadow-2xl">
-                                    檢視專案
-                                </span>
+                                <span class="view-btn px-6 py-2.5 rounded-full text-sm font-medium shadow-lg">檢視專案</span>
                             </div>
                         </div>
-                        <div class="p-8 relative z-10">
-                            <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${pCat}</span>
-                            <h4 class="text-xl font-semibold text-white group-hover:text-stone-300 transition">${pTitle}</h4>
+                        <div class="p-8 relative z-10 bg-white">
+                            <span class="text-[10px] font-semibold tracking-widest uppercase text-minimal-gray mb-2 block">${pCat}</span>
+                            <h4 class="text-xl font-bold text-minimal-accent group-hover:text-gray-600 transition">${pTitle}</h4>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function nextPage() {
-            const allFiltered = getFilteredProjects();
-            const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1;
-            currentPageIndex = (currentPageIndex + 1) % totalPages;
-            renderProjects();
-        }
-
-        function prevPage() {
-            const allFiltered = getFilteredProjects();
-            const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1;
-            currentPageIndex = (currentPageIndex - 1 + totalPages) % totalPages;
-            renderProjects();
-        }
-
-        function startAutoPlay() {
-            if (autoPlayTimer) clearInterval(autoPlayTimer);
-            autoPlayTimer = setInterval(() => {
-                const allFiltered = getFilteredProjects();
-                if (allFiltered.length > itemsPerPage) {
-                    nextPage();
-                }
-            }, 7000);
-        }
-
-        function pauseAutoPlay() {
-            if (autoPlayTimer) clearInterval(autoPlayTimer);
-        }
+        function nextPage() { const allFiltered = getFilteredProjects(); const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1; currentPageIndex = (currentPageIndex + 1) % totalPages; renderProjects(); }
+        function prevPage() { const allFiltered = getFilteredProjects(); const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1; currentPageIndex = (currentPageIndex - 1 + totalPages) % totalPages; renderProjects(); }
+        function startAutoPlay() { if (autoPlayTimer) clearInterval(autoPlayTimer); autoPlayTimer = setInterval(() => { const allFiltered = getFilteredProjects(); if (allFiltered.length > itemsPerPage) nextPage(); }, 7000); }
+        function pauseAutoPlay() { if (autoPlayTimer) clearInterval(autoPlayTimer); }
 
         function getSortedTranslations() {
             return [...translations].sort((a, b) => {
-                const yearA = parseInt(a.year) || 0;
-                const yearB = parseInt(b.year) || 0;
-                if (yearB !== yearA) {
-                    return yearB - yearA;
-                }
+                const yearA = parseInt(a.year) || 0; const yearB = parseInt(b.year) || 0;
+                if (yearB !== yearA) return yearB - yearA;
                 const langKey = langs[currentLangIndex];
                 const titleA = (typeof a.title === 'object' ? (a.title[langKey] || a.title.zh) : a.title) || '';
                 const titleB = (typeof b.title === 'object' ? (b.title[langKey] || b.title.zh) : b.title) || '';
@@ -905,634 +743,246 @@
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
             const transControls = document.getElementById('trans-pagination-controls');
-            if (!grid) return;
-            const langKey = langs[currentLangIndex];
+            if (!grid) return; const langKey = langs[currentLangIndex];
+            const sortedTrs = getSortedTranslations(); const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
+            if (transPageIndex >= totalPages) transPageIndex = 0; if (transPageIndex < 0) transPageIndex = totalPages - 1;
+            if (sortedTrs.length > transItemsPerPage) { transControls.classList.remove('hidden'); transControls.classList.add('flex'); } else { transControls.classList.add('hidden'); transControls.classList.remove('flex'); }
 
-            const sortedTrs = getSortedTranslations();
-            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
-
-            if (transPageIndex >= totalPages) transPageIndex = 0;
-            if (transPageIndex < 0) transPageIndex = totalPages - 1;
-
-            if (sortedTrs.length > transItemsPerPage) {
-                transControls.classList.remove('hidden');
-                transControls.classList.add('flex');
-            } else {
-                transControls.classList.add('hidden');
-                transControls.classList.remove('flex');
-            }
-
-            const startIdx = transPageIndex * transItemsPerPage;
-            const pageTrs = sortedTrs.slice(startIdx, startIdx + transItemsPerPage);
-
+            const startIdx = transPageIndex * transItemsPerPage; const pageTrs = sortedTrs.slice(startIdx, startIdx + transItemsPerPage);
             grid.innerHTML = pageTrs.map(tr => {
-                let displayTitle = '';
-                if (typeof tr.title === 'object') {
-                    displayTitle = tr.title[langKey] || tr.title.zh;
-                } else {
-                    displayTitle = tr.title;
-                }
-
+                let displayTitle = typeof tr.title === 'object' ? (tr.title[langKey] || tr.title.zh) : tr.title;
                 return `
-                    <div class="spotlight-card rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between transition duration-500" onmousemove="handleCardMouseMove(event, this)">
-                        <div class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3">
-                            <img src="${tr.image}" alt="${displayTitle}" onerror="this.src='https://via.placeholder.com/400x600?text=Movie'" class="max-w-full max-h-full object-contain rounded-xl shadow-lg transition duration-500">
-                            <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
+                    <div class="spotlight-card shadow-soft flex flex-col justify-between transition duration-500">
+                        <div class="w-full aspect-[2/3] bg-minimal-lightgray relative flex items-center justify-center p-4 border-b border-minimal-border">
+                            <img src="${tr.image}" alt="${displayTitle}" onerror="this.src='https://via.placeholder.com/400x600?text=Movie'" class="max-w-full max-h-full object-contain rounded-md shadow-sm transition duration-500">
+                            <span class="absolute top-4 left-4 text-[10px] font-bold px-3 py-1 bg-white text-minimal-accent rounded-full border border-minimal-border shadow-sm pointer-events-none">${tr.year}</span>
                         </div>
-                        <div class="p-6 flex items-center justify-center text-center flex-grow">
-                            <h4 class="text-base font-semibold text-white">${displayTitle}</h4>
+                        <div class="p-5 flex items-center justify-center text-center flex-grow bg-white">
+                            <h4 class="text-[13px] font-bold text-minimal-accent leading-snug">${displayTitle}</h4>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function nextTransPage() {
-            const sortedTrs = getSortedTranslations();
-            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
-            transPageIndex = (transPageIndex + 1) % totalPages;
-            renderTranslations();
-        }
-
-        function prevTransPage() {
-            const sortedTrs = getSortedTranslations();
-            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
-            transPageIndex = (transPageIndex - 1 + totalPages) % totalPages;
-            renderTranslations();
-        }
-
-        function startTransAutoPlay() {
-            if (transAutoPlayTimer) clearInterval(transAutoPlayTimer);
-            transAutoPlayTimer = setInterval(() => {
-                const sortedTrs = getSortedTranslations();
-                if (sortedTrs.length > transItemsPerPage) {
-                    nextTransPage();
-                }
-            }, 8000);
-        }
-
-        function pauseTransAutoPlay() {
-            if (transAutoPlayTimer) clearInterval(transAutoPlayTimer);
-        }
-
-        function handleCardMouseMove(e, card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--x', `${x}px`);
-            card.style.setProperty('--y', `${y}px`);
-        }
+        function nextTransPage() { const sortedTrs = getSortedTranslations(); const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1; transPageIndex = (transPageIndex + 1) % totalPages; renderTranslations(); }
+        function prevTransPage() { const sortedTrs = getSortedTranslations(); const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1; transPageIndex = (transPageIndex - 1 + totalPages) % totalPages; renderTranslations(); }
+        function startTransAutoPlay() { if (transAutoPlayTimer) clearInterval(transAutoPlayTimer); transAutoPlayTimer = setInterval(() => { const sortedTrs = getSortedTranslations(); if (sortedTrs.length > transItemsPerPage) nextTransPage(); }, 8000); }
+        function pauseTransAutoPlay() { if (transAutoPlayTimer) clearInterval(transAutoPlayTimer); }
 
         function renderAbout() {
             const aboutContainer = document.getElementById('about-desc');
-            if (!aboutContainer) return;
-            const langKey = langs[currentLangIndex];
+            if (!aboutContainer) return; const langKey = langs[currentLangIndex];
             aboutContainer.innerHTML = aboutData[langKey] || aboutData.zh;
         }
 
         function switchLanguage() {
-            currentLangIndex = (currentLangIndex + 1) % langs.length;
-            const langKey = langs[currentLangIndex];
+            currentLangIndex = (currentLangIndex + 1) % langs.length; const langKey = langs[currentLangIndex];
             document.getElementById('lang-btn').textContent = langNames[langKey];
-            
             const t = translationsDict[langKey];
-            document.querySelector('.nav-works').textContent = t.navWorks;
-            document.querySelector('.nav-trans').textContent = t.navTrans;
-            document.querySelector('.nav-about').textContent = t.navAbout;
-            document.querySelector('.hero-tag').textContent = t.heroTag;
-            document.querySelector('.hero-title').innerHTML = t.heroTitle;
-            document.querySelector('.hero-desc').innerHTML = t.heroDesc;
-            document.querySelector('.btn-works').textContent = t.btnWorks;
-            document.querySelector('.btn-trans').textContent = t.btnTrans;
-            document.getElementById('works-heading').textContent = t.worksHeading;
-            document.getElementById('trans-heading').textContent = t.transHeading;
-            document.getElementById('trans-sub').textContent = t.transSub;
-            document.getElementById('about-title').textContent = t.aboutTitle;
-
-            document.getElementById('btn-featured').textContent = t.filterFeatured;
-            document.getElementById('btn-type').textContent = t.filterType;
-            document.getElementById('btn-exhibition').textContent = t.filterExhibition;
-            document.getElementById('btn-popup').textContent = t.filterPopup;
-            document.getElementById('btn-pkg').textContent = t.filterPkg;
-            document.getElementById('btn-merch').textContent = t.filterMerch;
-            document.getElementById('btn-video').textContent = t.filterVideo;
-            document.getElementById('btn-other').textContent = t.filterOther;
-
-            renderProjects();
-            renderTranslations();
-            renderAbout();
+            document.querySelector('.nav-works').textContent = t.navWorks; document.querySelector('.nav-trans').textContent = t.navTrans; document.querySelector('.nav-about').textContent = t.navAbout;
+            document.querySelector('.hero-tag').textContent = t.heroTag; document.querySelector('.hero-title').innerHTML = t.heroTitle; document.querySelector('.hero-desc').innerHTML = t.heroDesc;
+            document.querySelector('.btn-works').textContent = t.btnWorks; document.querySelector('.btn-trans').textContent = t.btnTrans;
+            document.getElementById('works-heading').textContent = t.worksHeading; document.getElementById('trans-heading').textContent = t.transHeading; document.getElementById('trans-sub').textContent = t.transSub; document.getElementById('about-title').textContent = t.aboutTitle;
+            document.getElementById('btn-featured').textContent = t.filterFeatured; document.getElementById('btn-type').textContent = t.filterType; document.getElementById('btn-exhibition').textContent = t.filterExhibition; document.getElementById('btn-popup').textContent = t.filterPopup; document.getElementById('btn-pkg').textContent = t.filterPkg; document.getElementById('btn-merch').textContent = t.filterMerch; document.getElementById('btn-video').textContent = t.filterVideo; document.getElementById('btn-other').textContent = t.filterOther;
+            renderProjects(); renderTranslations(); renderAbout();
         }
 
         document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
-                e.preventDefault();
-                openPasswordModal();
-            }
-            if (e.key === 'Escape') {
-                closePasswordModal();
-                toggleAdminModal(false);
-                closeEditModal();
-                closeTransEditModal();
-            }
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') { e.preventDefault(); openPasswordModal(); }
+            if (e.key === 'Escape') { closePasswordModal(); toggleAdminModal(false); closeEditModal(); closeTransEditModal(); }
         });
 
-        function openPasswordModal() {
-            document.getElementById('admin-password-input').value = '';
-            document.getElementById('password-modal').classList.remove('hidden');
-            document.getElementById('password-modal').classList.add('flex');
-            document.getElementById('admin-password-input').focus();
-        }
-
-        function closePasswordModal() {
-            document.getElementById('password-modal').classList.add('hidden');
-            document.getElementById('password-modal').classList.remove('flex');
-        }
-
-        function verifyPassword(e) {
-            e.preventDefault();
-            const inputVal = document.getElementById('admin-password-input').value;
-            if (inputVal === ADMIN_PASSWORD) {
-                closePasswordModal();
-                toggleAdminModal(true);
-            } else {
-                showToast('密碼錯誤！', 'error');
-                document.getElementById('admin-password-input').value = '';
-            }
-        }
+        function openPasswordModal() { document.getElementById('admin-password-input').value = ''; document.getElementById('password-modal').classList.remove('hidden'); document.getElementById('password-modal').classList.add('flex'); document.getElementById('admin-password-input').focus(); }
+        function closePasswordModal() { document.getElementById('password-modal').classList.add('hidden'); document.getElementById('password-modal').classList.remove('flex'); }
+        function verifyPassword(e) { e.preventDefault(); const inputVal = document.getElementById('admin-password-input').value; if (inputVal === ADMIN_PASSWORD) { closePasswordModal(); toggleAdminModal(true); } else { showToast('密碼錯誤！', 'error'); document.getElementById('admin-password-input').value = ''; } }
 
         function toggleAdminModal(show = null) {
-            const modal = document.getElementById('admin-modal');
-            const isHidden = show !== null ? !show : modal.classList.contains('hidden');
-            if (isHidden) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                renderProjects();
-                renderTranslations();
-            } else {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                adminProjPageIndex = 0;
-                adminTransPageIndex = 0;
-                renderAdminLists('all');
-                renderAdminTransLists();
-                loadYearFilterOptions();
-                loadAboutForm();
-            }
+            const modal = document.getElementById('admin-modal'); const isHidden = show !== null ? !show : modal.classList.contains('hidden');
+            if (isHidden) { modal.classList.add('hidden'); modal.classList.remove('flex'); renderProjects(); renderTranslations(); } 
+            else { modal.classList.remove('hidden'); modal.classList.add('flex'); adminProjPageIndex = 0; adminTransPageIndex = 0; renderAdminLists('all'); renderAdminTransLists(); loadYearFilterOptions(); loadAboutForm(); }
         }
 
         function switchAdminTab(tab) {
-            const pPanel = document.getElementById('admin-projects-panel');
-            const tPanel = document.getElementById('admin-trans-panel');
-            const aPanel = document.getElementById('admin-about-panel');
-            const pBtn = document.getElementById('tab-projects-btn');
-            const tBtn = document.getElementById('tab-trans-btn');
-            const aBtn = document.getElementById('tab-about-btn');
-
-            pPanel.classList.add('hidden');
-            tPanel.classList.add('hidden');
-            aPanel.classList.add('hidden');
-            pBtn.className = "px-3.5 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
-            tBtn.className = "px-3.5 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
-            aBtn.className = "px-3.5 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
-
-            if (tab === 'projects') {
-                pPanel.classList.remove('hidden');
-                pBtn.className = "px-3.5 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
-            } else if (tab === 'translations') {
-                tPanel.classList.remove('hidden');
-                tBtn.className = "px-3.5 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
-            } else if (tab === 'about') {
-                aPanel.classList.remove('hidden');
-                aBtn.className = "px-3.5 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
-                loadAboutForm();
-            }
+            const pPanel = document.getElementById('admin-projects-panel'); const tPanel = document.getElementById('admin-trans-panel'); const aPanel = document.getElementById('admin-about-panel');
+            const pBtn = document.getElementById('tab-projects-btn'); const tBtn = document.getElementById('tab-trans-btn'); const aBtn = document.getElementById('tab-about-btn');
+            pPanel.classList.add('hidden'); tPanel.classList.add('hidden'); aPanel.classList.add('hidden');
+            pBtn.className = tBtn.className = aBtn.className = "px-4 py-2 bg-white text-minimal-gray border border-minimal-border rounded-full text-xs font-medium hover:text-minimal-accent transition shadow-sm";
+            if (tab === 'projects') { pPanel.classList.remove('hidden'); pBtn.className = "px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium transition shadow-sm"; } 
+            else if (tab === 'translations') { tPanel.classList.remove('hidden'); tBtn.className = "px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium transition shadow-sm"; } 
+            else if (tab === 'about') { aPanel.classList.remove('hidden'); aBtn.className = "px-4 py-2 bg-minimal-accent text-white rounded-full text-xs font-medium transition shadow-sm"; loadAboutForm(); }
         }
 
-        let adminProjFilter = 'all';
         function filterAdminProjects(category, btnElement) {
-            adminProjFilter = category;
-            adminProjPageIndex = 0;
-            document.querySelectorAll('.admin-filter-btn').forEach(btn => {
-                btn.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition";
-            });
-            if (btnElement) {
-                btnElement.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition";
-            }
+            adminProjFilter = category; adminProjPageIndex = 0;
+            document.querySelectorAll('.admin-filter-btn').forEach(btn => { btn.className = "admin-filter-btn px-4 py-1.5 rounded-full bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border transition"; });
+            if (btnElement) btnElement.className = "admin-filter-btn px-4 py-1.5 rounded-full bg-minimal-accent text-white font-medium transition";
             renderAdminLists(category);
         }
 
         function renderAdminLists(filter = 'all') {
-            const filtered = filter === 'all' ? projects : projects.filter(p => {
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
-                return cat === filter;
-            });
-
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
-            if (adminProjPageIndex >= totalPages) adminProjPageIndex = totalPages - 1;
-            if (adminProjPageIndex < 0) adminProjPageIndex = 0;
-
-            const startIdx = adminProjPageIndex * adminProjPerPage;
-            const pageItems = filtered.slice(startIdx, startIdx + adminProjPerPage);
-
+            const filtered = filter === 'all' ? projects : projects.filter(p => { let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; return cat === filter; });
+            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; if (adminProjPageIndex >= totalPages) adminProjPageIndex = totalPages - 1; if (adminProjPageIndex < 0) adminProjPageIndex = 0;
+            const startIdx = adminProjPageIndex * adminProjPerPage; const pageItems = filtered.slice(startIdx, startIdx + adminProjPerPage);
             document.getElementById('admin-project-page-indicator').textContent = `${adminProjPageIndex + 1} / ${totalPages}`;
-
             document.getElementById('admin-project-list').innerHTML = pageItems.map(p => `
-                <div class="py-3 flex items-center justify-between text-xs hover:bg-white/5 px-2 rounded-lg transition">
-                    <div class="flex items-center space-x-3">
-                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/50'" class="w-10 h-10 object-cover rounded-lg bg-apple-lightgray border border-apple-border shadow-sm">
-                        <span class="font-medium text-white">${typeof p.title === 'object' ? (p.title.zh || p.title) : p.title}</span>
+                <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 rounded-xl transition">
+                    <div class="flex items-center space-x-4">
+                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/50'" class="w-12 h-12 object-cover rounded-md bg-white border border-minimal-border shadow-sm">
+                        <span class="font-bold text-minimal-accent">${typeof p.title === 'object' ? (p.title.zh || p.title) : p.title}</span>
                     </div>
                     <div class="space-x-1.5 flex shrink-0">
-                        <button type="button" onclick="openEditModal('${p.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
-                        <button type="button" onclick="duplicateProject('${p.id}')" class="px-3.5 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg font-medium hover:bg-blue-500/30 transition border border-blue-500/30">複製</button>
-                        <button type="button" onclick="deleteProject('${p.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
+                        <button type="button" onclick="openEditModal('${p.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border rounded-full font-medium hover:bg-minimal-lightgray transition shadow-sm">編輯</button>
+                        <button type="button" onclick="duplicateProject('${p.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border rounded-full font-medium hover:bg-minimal-lightgray transition shadow-sm">複製</button>
+                        <button type="button" onclick="deleteProject('${p.id}')" class="px-4 py-1.5 bg-red-50 text-red-500 border border-red-100 rounded-full font-medium hover:bg-red-100 transition shadow-sm">刪除</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function nextAdminProjPage() {
-            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => {
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
-                return cat === adminProjFilter;
-            });
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
-            adminProjPageIndex = (adminProjPageIndex + 1) % totalPages;
-            renderAdminLists(adminProjFilter);
-        }
-
-        function prevAdminProjPage() {
-            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => {
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
-                return cat === adminProjFilter;
-            });
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
-            adminProjPageIndex = (adminProjPageIndex - 1 + totalPages) % totalPages;
-            renderAdminLists(adminProjFilter);
-        }
+        function nextAdminProjPage() { const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => { let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; return cat === adminProjFilter; }); const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; adminProjPageIndex = (adminProjPageIndex + 1) % totalPages; renderAdminLists(adminProjFilter); }
+        function prevAdminProjPage() { const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => { let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; return cat === adminProjFilter; }); const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; adminProjPageIndex = (adminProjPageIndex - 1 + totalPages) % totalPages; renderAdminLists(adminProjFilter); }
 
         function loadYearFilterOptions() {
             const years = [...new Set(translations.map(t => t.year))].sort((a, b) => parseInt(b) - parseInt(a));
-            const select = document.getElementById('admin-year-filter');
-            const currentVal = select.value;
+            const select = document.getElementById('admin-year-filter'); const currentVal = select.value;
             select.innerHTML = `<option value="all">全部年份</option>` + years.map(y => `<option value="${y}">${y}年</option>`).join('');
             select.value = currentVal;
         }
 
         function renderAdminTransLists() {
-            loadYearFilterOptions();
-            const yearFilter = document.getElementById('admin-year-filter').value;
-            
-            const sortedTrs = [...translations].sort((a, b) => {
-                const yearA = parseInt(a.year) || 0;
-                const yearB = parseInt(b.year) || 0;
-                if (yearB !== yearA) {
-                    return yearB - yearA;
-                }
-                const titleA = (typeof a.title === 'object' ? (a.title.zh || a.title) : a.title) || '';
-                const titleB = (typeof b.title === 'object' ? (b.title.zh || b.title) : b.title) || '';
-                return titleA.localeCompare(titleB, 'zh-HK');
-            });
-
+            loadYearFilterOptions(); const yearFilter = document.getElementById('admin-year-filter').value;
+            const sortedTrs = [...translations].sort((a, b) => { const yearA = parseInt(a.year) || 0; const yearB = parseInt(b.year) || 0; if (yearB !== yearA) return yearB - yearA; const titleA = (typeof a.title === 'object' ? (a.title.zh || a.title) : a.title) || ''; const titleB = (typeof b.title === 'object' ? (b.title.zh || b.title) : b.title) || ''; return titleA.localeCompare(titleB, 'zh-HK'); });
             const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
-
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
-            if (adminTransPageIndex >= totalPages) adminTransPageIndex = totalPages - 1;
-            if (adminTransPageIndex < 0) adminTransPageIndex = 0;
-
-            const startIdx = adminTransPageIndex * adminTransPerPage;
-            const pageTrs = filteredTrs.slice(startIdx, startIdx + adminTransPerPage);
-
+            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; if (adminTransPageIndex >= totalPages) adminTransPageIndex = totalPages - 1; if (adminTransPageIndex < 0) adminTransPageIndex = 0;
+            const startIdx = adminTransPageIndex * adminTransPerPage; const pageTrs = filteredTrs.slice(startIdx, startIdx + adminTransPerPage);
             document.getElementById('admin-trans-page-indicator').textContent = `${adminTransPageIndex + 1} / ${totalPages}`;
-
             document.getElementById('admin-trans-list').innerHTML = pageTrs.map(tr => {
                 let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
                 return `
-                    <div class="py-3 flex items-center justify-between text-xs hover:bg-white/5 px-2 rounded-lg transition">
-                        <div class="flex items-center space-x-3">
-                            <img src="${tr.image}" onerror="this.src='https://via.placeholder.com/50x70'" class="w-9 h-12 object-cover rounded-lg bg-apple-lightgray border border-apple-border shadow-sm">
+                    <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 rounded-xl transition">
+                        <div class="flex items-center space-x-4">
+                            <img src="${tr.image}" onerror="this.src='https://via.placeholder.com/50x70'" class="w-10 h-14 object-cover rounded-md bg-white border border-minimal-border shadow-sm">
                             <div>
-                                <span class="font-medium text-white block">${titleZh}</span>
-                                <span class="text-[10px] text-apple-accent">${tr.year}</span>
+                                <span class="font-bold text-minimal-accent block mb-1">${titleZh}</span>
+                                <span class="text-[10px] bg-white px-2 py-0.5 rounded border border-minimal-border">${tr.year}</span>
                             </div>
                         </div>
                         <div class="space-x-1.5 flex shrink-0">
-                            <button type="button" onclick="openTransEditModal('${tr.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
-                            <button type="button" onclick="duplicateTranslation('${tr.id}')" class="px-3.5 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg font-medium hover:bg-blue-500/30 transition border border-blue-500/30">複製</button>
-                            <button type="button" onclick="deleteTranslation('${tr.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
+                            <button type="button" onclick="openTransEditModal('${tr.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border rounded-full font-medium hover:bg-minimal-lightgray transition shadow-sm">編輯</button>
+                            <button type="button" onclick="duplicateTranslation('${tr.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border rounded-full font-medium hover:bg-minimal-lightgray transition shadow-sm">複製</button>
+                            <button type="button" onclick="deleteTranslation('${tr.id}')" class="px-4 py-1.5 bg-red-50 text-red-500 border border-red-100 rounded-full font-medium hover:bg-red-100 transition shadow-sm">刪除</button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function nextAdminTransPage() {
-            const yearFilter = document.getElementById('admin-year-filter').value;
-            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a));
-            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
-            adminTransPageIndex = (adminTransPageIndex + 1) % totalPages;
-            renderAdminTransLists();
-        }
+        function nextAdminTransPage() { const yearFilter = document.getElementById('admin-year-filter').value; const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a)); const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter); const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; adminTransPageIndex = (adminTransPageIndex + 1) % totalPages; renderAdminTransLists(); }
+        function prevAdminTransPage() { const yearFilter = document.getElementById('admin-year-filter').value; const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a)); const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter); const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; adminTransPageIndex = (adminTransPageIndex - 1 + totalPages) % totalPages; renderAdminTransLists(); }
 
-        function prevAdminTransPage() {
-            const yearFilter = document.getElementById('admin-year-filter').value;
-            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a));
-            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
-            adminTransPageIndex = (adminTransPageIndex - 1 + totalPages) % totalPages;
-            renderAdminTransLists();
-        }
+        function loadAboutForm() { document.getElementById('about-zh').value = aboutData.zh || ''; document.getElementById('about-en').value = aboutData.en || ''; document.getElementById('about-ja').value = aboutData.ja || ''; }
 
-        // ==================================================
-        // Firebase Cloud Save Functions
-        // ==================================================
-        
         async function saveAbout(e) {
             e.preventDefault();
-            aboutData = {
-                zh: document.getElementById('about-zh').value,
-                en: document.getElementById('about-en').value,
-                ja: document.getElementById('about-ja').value
-            };
-            
-            try {
-                await db.collection('portfolio').doc('about').set(aboutData);
-                showToast('「關於我」已成功同步至 Firebase！', 'success');
-            } catch (err) {
-                console.error(err);
-                showToast('雲端儲存失敗，請檢查網路連線', 'error');
-            }
+            aboutData = { zh: document.getElementById('about-zh').value, en: document.getElementById('about-en').value, ja: document.getElementById('about-ja').value };
+            try { await db.collection('portfolio').doc('about').set(aboutData); showToast('「關於我」已成功同步至 Firebase！', 'success'); } catch (err) { console.error(err); showToast('雲端儲存失敗，請檢查網路連線', 'error'); }
         }
 
         function openNewProjectModal() {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('edit-title-zh').value = '';
-            document.getElementById('edit-title-en').value = '';
-            document.getElementById('edit-title-ja').value = '';
-            document.getElementById('edit-cat-zh').value = '字體設計';
-            onCategorySelectChange();
-            document.getElementById('edit-image').value = 'image/';
-            document.getElementById('edit-gallery').value = '';
-            document.getElementById('edit-youtube').value = '';
-            document.getElementById('edit-desc-zh').value = '';
-            document.getElementById('edit-desc-en').value = '';
-            document.getElementById('edit-desc-ja').value = '';
-            document.getElementById('preview-main').classList.add('hidden');
-            document.getElementById('preview-main-icon').classList.remove('hidden');
-            
-            document.getElementById('edit-modal-title').innerHTML = '<i class="fa-solid fa-plus mr-2 text-apple-accent"></i> 新增專案';
-            toggleAdminModal(false);
-            document.getElementById('edit-modal').classList.remove('hidden');
-            document.getElementById('edit-modal').classList.add('flex');
+            document.getElementById('edit-id').value = ''; document.getElementById('edit-title-zh').value = ''; document.getElementById('edit-title-en').value = ''; document.getElementById('edit-title-ja').value = '';
+            document.getElementById('edit-cat-zh').value = '字體設計'; onCategorySelectChange();
+            document.getElementById('edit-image').value = 'image/'; document.getElementById('edit-gallery').value = ''; document.getElementById('edit-youtube').value = '';
+            document.getElementById('edit-desc-zh').value = ''; document.getElementById('edit-desc-en').value = ''; document.getElementById('edit-desc-ja').value = '';
+            document.getElementById('preview-main').classList.add('hidden'); document.getElementById('preview-main-icon').classList.remove('hidden');
+            document.getElementById('edit-modal-title').innerHTML = '新增專案'; toggleAdminModal(false); document.getElementById('edit-modal').classList.remove('hidden'); document.getElementById('edit-modal').classList.add('flex');
         }
 
         function openEditModal(id) {
-            const project = projects.find(p => p.id === id);
-            if (!project) return;
+            const project = projects.find(p => p.id === id); if (!project) return;
             document.getElementById('edit-id').value = project.id;
-            document.getElementById('edit-title-zh').value = typeof project.title === 'object' ? (project.title.zh || '') : project.title;
-            document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : project.title;
-            document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : project.title;
-            
+            document.getElementById('edit-title-zh').value = typeof project.title === 'object' ? (project.title.zh || '') : project.title; document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : project.title; document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : project.title;
             let catZh = typeof project.category === 'object' ? (project.category.zh || '字體設計') : project.category;
-            const selectEl = document.getElementById('edit-cat-zh');
-            if ([...selectEl.options].some(o => o.value === catZh)) {
-                selectEl.value = catZh;
-            } else {
-                selectEl.value = '其他';
-            }
-            onCategorySelectChange();
-
-            document.getElementById('edit-image').value = project.image || '';
-            previewAdminImage('edit-image', 'preview-main');
-            
-            document.getElementById('edit-gallery').value = project.gallery || '';
-            document.getElementById('edit-youtube').value = project.youtube || '';
-
-            document.getElementById('edit-desc-zh').value = typeof project.description === 'object' ? (project.description.zh || '') : project.description;
-            document.getElementById('edit-desc-en').value = typeof project.description === 'object' ? (project.description.en || '') : project.description;
-            document.getElementById('edit-desc-ja').value = typeof project.description === 'object' ? (project.description.ja || '') : project.description;
-
-            document.getElementById('edit-modal-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2 text-apple-accent"></i> 編輯專案資料';
-            toggleAdminModal(false);
-            document.getElementById('edit-modal').classList.remove('hidden');
-            document.getElementById('edit-modal').classList.add('flex');
+            const selectEl = document.getElementById('edit-cat-zh'); if ([...selectEl.options].some(o => o.value === catZh)) selectEl.value = catZh; else selectEl.value = '其他'; onCategorySelectChange();
+            document.getElementById('edit-image').value = project.image || ''; previewAdminImage('edit-image', 'preview-main');
+            document.getElementById('edit-gallery').value = project.gallery || ''; document.getElementById('edit-youtube').value = project.youtube || '';
+            document.getElementById('edit-desc-zh').value = typeof project.description === 'object' ? (project.description.zh || '') : project.description; document.getElementById('edit-desc-en').value = typeof project.description === 'object' ? (project.description.en || '') : project.description; document.getElementById('edit-desc-ja').value = typeof project.description === 'object' ? (project.description.ja || '') : project.description;
+            document.getElementById('edit-modal-title').innerHTML = '編輯專案資料'; toggleAdminModal(false); document.getElementById('edit-modal').classList.remove('hidden'); document.getElementById('edit-modal').classList.add('flex');
         }
 
-        function closeEditModal() {
-            document.getElementById('edit-modal').classList.add('hidden');
-            document.getElementById('edit-modal').classList.remove('flex');
-            toggleAdminModal(true);
-        }
+        function closeEditModal() { document.getElementById('edit-modal').classList.add('hidden'); document.getElementById('edit-modal').classList.remove('flex'); toggleAdminModal(true); }
 
         async function saveProject(e) {
             e.preventDefault();
-            const id = document.getElementById('edit-id').value;
-            const tZh = document.getElementById('edit-title-zh').value;
-            const tEn = document.getElementById('edit-title-en').value;
-            const tJa = document.getElementById('edit-title-ja').value;
-            
-            const cZh = document.getElementById('edit-cat-zh').value;
-            const cEn = document.getElementById('edit-cat-en').value;
-            const cJa = document.getElementById('edit-cat-ja').value;
-
-            const image = document.getElementById('edit-image').value;
-            const gallery = document.getElementById('edit-gallery').value;
-            const youtube = document.getElementById('edit-youtube').value;
-            const dZh = document.getElementById('edit-desc-zh').value;
-            const dEn = document.getElementById('edit-desc-en').value;
-            const dJa = document.getElementById('edit-desc-ja').value;
-
-            let targetId = id || String(Date.now());
-
+            const id = document.getElementById('edit-id').value; let targetId = id || String(Date.now());
             const projectData = {
                 id: targetId,
-                title: { zh: tZh, en: tEn, ja: tJa },
-                category: { zh: cZh, en: cEn, ja: cJa },
-                image: image,
-                gallery: gallery,
-                youtube: youtube,
-                description: { zh: dZh, en: dEn, ja: dJa }
+                title: { zh: document.getElementById('edit-title-zh').value, en: document.getElementById('edit-title-en').value, ja: document.getElementById('edit-title-ja').value },
+                category: { zh: document.getElementById('edit-cat-zh').value, en: document.getElementById('edit-cat-en').value, ja: document.getElementById('edit-cat-ja').value },
+                image: document.getElementById('edit-image').value, gallery: document.getElementById('edit-gallery').value, youtube: document.getElementById('edit-youtube').value,
+                description: { zh: document.getElementById('edit-desc-zh').value, en: document.getElementById('edit-desc-en').value, ja: document.getElementById('edit-desc-ja').value }
             };
-
-            try {
-                await db.collection('projects').doc(targetId).set(projectData);
-                
-                // 更新 Local 變數以即時刷新 UI
-                if (id) {
-                    const idx = projects.findIndex(p => p.id === id);
-                    if(idx !== -1) projects[idx] = projectData;
-                } else {
-                    projects.unshift(projectData);
-                }
-
-                closeEditModal();
-                renderAdminLists(adminProjFilter);
-                showToast('專案資料已成功儲存並同步至 Firebase！', 'success');
-            } catch (err) {
-                console.error(err);
-                showToast('儲存失敗，請確認網路連線。', 'error');
-            }
+            try { await db.collection('projects').doc(targetId).set(projectData);
+                if (id) { const idx = projects.findIndex(p => p.id === id); if(idx !== -1) projects[idx] = projectData; } else projects.unshift(projectData);
+                closeEditModal(); renderAdminLists(adminProjFilter); showToast('專案資料已成功儲存並同步至 Firebase！', 'success');
+            } catch (err) { console.error(err); showToast('儲存失敗，請確認網路連線。', 'error'); }
         }
 
         async function deleteProject(id) {
             if (confirm('確定要從雲端刪除這個專案嗎？此動作無法復原！')) {
-                try {
-                    await db.collection('projects').doc(id).delete();
-                    projects = projects.filter(p => p.id !== id);
-                    renderAdminLists(adminProjFilter);
-                    showToast('專案已從 Firebase 成功刪除！', 'success');
-                } catch(err) {
-                    console.error(err);
-                    showToast('刪除失敗。', 'error');
-                }
+                try { await db.collection('projects').doc(id).delete(); projects = projects.filter(p => p.id !== id); renderAdminLists(adminProjFilter); showToast('專案已成功刪除！', 'success'); } catch(err) { console.error(err); showToast('刪除失敗。', 'error'); }
             }
         }
 
         async function duplicateProject(id) {
-            const project = projects.find(p => p.id === id);
-            if (!project) return;
+            const project = projects.find(p => p.id === id); if (!project) return;
             const newId = String(Date.now());
-            const clonedTitle = typeof project.title === 'object' 
-                ? { zh: (project.title.zh || '') + ' (複製)', en: (project.title.en || '') + ' (Copy)', ja: (project.title.ja || '') + ' (コピー)' }
-                : project.title + ' (複製)';
-            
+            const clonedTitle = typeof project.title === 'object' ? { zh: (project.title.zh || '') + ' (複製)', en: (project.title.en || '') + ' (Copy)', ja: (project.title.ja || '') + ' (コピー)' } : project.title + ' (複製)';
             const newProject = { ...project, id: newId, title: clonedTitle };
-            
-            try {
-                await db.collection('projects').doc(newId).set(newProject);
-                projects.unshift(newProject);
-                renderAdminLists(adminProjFilter);
-                showToast('專案已複製並同步至 Firebase！', 'success');
-            } catch(err) {
-                console.error(err);
-                showToast('複製失敗。', 'error');
-            }
+            try { await db.collection('projects').doc(newId).set(newProject); projects.unshift(newProject); renderAdminLists(adminProjFilter); showToast('專案已複製並同步！', 'success'); } catch(err) { console.error(err); showToast('複製失敗。', 'error'); }
         }
 
         function openNewTransModal() {
-            document.getElementById('trans-edit-id').value = '';
-            document.getElementById('trans-title-zh').value = '';
-            document.getElementById('trans-title-en').value = '';
-            document.getElementById('trans-title-ja').value = '';
-            document.getElementById('trans-edit-year').value = '2026';
-            document.getElementById('trans-edit-image').value = 'image/';
-            document.getElementById('preview-trans').classList.add('hidden');
-            document.getElementById('preview-trans-icon').classList.remove('hidden');
-
-            document.getElementById('trans-modal-title').innerHTML = '<i class="fa-solid fa-plus mr-2 text-apple-accent"></i> 新增電影翻譯';
-            toggleAdminModal(false);
-            document.getElementById('trans-edit-modal').classList.remove('hidden');
-            document.getElementById('trans-edit-modal').classList.add('flex');
+            document.getElementById('trans-edit-id').value = ''; document.getElementById('trans-title-zh').value = ''; document.getElementById('trans-title-en').value = ''; document.getElementById('trans-title-ja').value = ''; document.getElementById('trans-edit-year').value = '2026'; document.getElementById('trans-edit-image').value = 'image/';
+            document.getElementById('preview-trans').classList.add('hidden'); document.getElementById('preview-trans-icon').classList.remove('hidden');
+            document.getElementById('trans-modal-title').innerHTML = '新增電影翻譯'; toggleAdminModal(false); document.getElementById('trans-edit-modal').classList.remove('hidden'); document.getElementById('trans-edit-modal').classList.add('flex');
         }
 
         function openTransEditModal(id) {
-            const tr = translations.find(t => t.id === id);
-            if (!tr) return;
-            document.getElementById('trans-edit-id').value = tr.id;
-            document.getElementById('trans-title-zh').value = typeof tr.title === 'object' ? (tr.title.zh || '') : tr.title;
-            document.getElementById('trans-title-en').value = typeof tr.title === 'object' ? (tr.title.en || '') : tr.title;
-            document.getElementById('trans-title-ja').value = typeof tr.title === 'object' ? (tr.title.ja || '') : tr.title;
-            document.getElementById('trans-edit-year').value = tr.year;
-            document.getElementById('trans-edit-image').value = tr.image;
-            previewAdminImage('trans-edit-image', 'preview-trans');
-
-            document.getElementById('trans-modal-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2 text-apple-accent"></i> 編輯電影翻譯';
-            toggleAdminModal(false);
-            document.getElementById('trans-edit-modal').classList.remove('hidden');
-            document.getElementById('trans-edit-modal').classList.add('flex');
+            const tr = translations.find(t => t.id === id); if (!tr) return;
+            document.getElementById('trans-edit-id').value = tr.id; document.getElementById('trans-title-zh').value = typeof tr.title === 'object' ? (tr.title.zh || '') : tr.title; document.getElementById('trans-title-en').value = typeof tr.title === 'object' ? (tr.title.en || '') : tr.title; document.getElementById('trans-title-ja').value = typeof tr.title === 'object' ? (tr.title.ja || '') : tr.title; document.getElementById('trans-edit-year').value = tr.year; document.getElementById('trans-edit-image').value = tr.image; previewAdminImage('trans-edit-image', 'preview-trans');
+            document.getElementById('trans-modal-title').innerHTML = '編輯電影翻譯'; toggleAdminModal(false); document.getElementById('trans-edit-modal').classList.remove('hidden'); document.getElementById('trans-edit-modal').classList.add('flex');
         }
 
-        function closeTransEditModal() {
-            document.getElementById('trans-edit-modal').classList.add('hidden');
-            document.getElementById('trans-edit-modal').classList.remove('flex');
-            toggleAdminModal(true);
-        }
+        function closeTransEditModal() { document.getElementById('trans-edit-modal').classList.add('hidden'); document.getElementById('trans-edit-modal').classList.remove('flex'); toggleAdminModal(true); }
 
         async function saveTranslation(e) {
             e.preventDefault();
-            const id = document.getElementById('trans-edit-id').value;
-            const tZh = document.getElementById('trans-title-zh').value;
-            const tEn = document.getElementById('trans-title-en').value;
-            const tJa = document.getElementById('trans-title-ja').value;
-            const year = document.getElementById('trans-edit-year').value;
-            const image = document.getElementById('trans-edit-image').value;
-
-            let targetId = id || 't_' + Date.now();
-            const transData = {
-                id: targetId,
-                title: { zh: tZh, en: tEn, ja: tJa },
-                year: year,
-                image: image
-            };
-
-            try {
-                await db.collection('translations').doc(targetId).set(transData);
-                
-                if (id) {
-                    const idx = translations.findIndex(t => t.id === id);
-                    if(idx !== -1) translations[idx] = transData;
-                } else {
-                    translations.unshift(transData);
-                }
-
-                closeTransEditModal();
-                renderAdminTransLists();
-                showToast('電影翻譯紀錄已同步至 Firebase！', 'success');
-            } catch(err) {
-                console.error(err);
-                showToast('儲存失敗', 'error');
-            }
+            const id = document.getElementById('trans-edit-id').value; let targetId = id || 't_' + Date.now();
+            const transData = { id: targetId, title: { zh: document.getElementById('trans-title-zh').value, en: document.getElementById('trans-title-en').value, ja: document.getElementById('trans-title-ja').value }, year: document.getElementById('trans-edit-year').value, image: document.getElementById('trans-edit-image').value };
+            try { await db.collection('translations').doc(targetId).set(transData);
+                if (id) { const idx = translations.findIndex(t => t.id === id); if(idx !== -1) translations[idx] = transData; } else translations.unshift(transData);
+                closeTransEditModal(); renderAdminTransLists(); showToast('紀錄已同步至 Firebase！', 'success');
+            } catch(err) { console.error(err); showToast('儲存失敗', 'error'); }
         }
 
         async function deleteTranslation(id) {
             if (confirm('確定要從雲端刪除這筆紀錄嗎？')) {
-                try {
-                    await db.collection('translations').doc(id).delete();
-                    translations = translations.filter(t => t.id !== id);
-                    renderAdminTransLists();
-                    showToast('紀錄已刪除！', 'success');
-                } catch(err) {
-                    console.error(err);
-                    showToast('刪除失敗', 'error');
-                }
+                try { await db.collection('translations').doc(id).delete(); translations = translations.filter(t => t.id !== id); renderAdminTransLists(); showToast('紀錄已刪除！', 'success'); } catch(err) { console.error(err); showToast('刪除失敗', 'error'); }
             }
         }
 
         async function duplicateTranslation(id) {
-            const tr = translations.find(t => t.id === id);
-            if (!tr) return;
+            const tr = translations.find(t => t.id === id); if (!tr) return;
             const newId = 't_' + Date.now();
-            const clonedTitle = typeof tr.title === 'object'
-                ? { zh: (tr.title.zh || '') + ' (複製)', en: (tr.title.en || '') + ' (Copy)', ja: (tr.title.ja || '') + ' (コピー)' }
-                : tr.title + ' (複製)';
-            
+            const clonedTitle = typeof tr.title === 'object' ? { zh: (tr.title.zh || '') + ' (複製)', en: (tr.title.en || '') + ' (Copy)', ja: (tr.title.ja || '') + ' (コピー)' } : tr.title + ' (複製)';
             const newTr = { ...tr, id: newId, title: clonedTitle };
-            
-            try {
-                await db.collection('translations').doc(newId).set(newTr);
-                translations.unshift(newTr);
-                renderAdminTransLists();
-                showToast('紀錄已複製並同步！', 'success');
-            } catch(err) {
-                console.error(err);
-                showToast('複製失敗', 'error');
-            }
+            try { await db.collection('translations').doc(newId).set(newTr); translations.unshift(newTr); renderAdminTransLists(); showToast('紀錄已複製並同步！', 'success'); } catch(err) { console.error(err); showToast('複製失敗', 'error'); }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // 一進入網頁立即從 Firebase 拉取資料
-            fetchCloudData();
-
-            startAutoPlay();
-            startTransAutoPlay();
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('active');
-                });
-            }, { threshold: 0.15 });
+            fetchCloudData(); startAutoPlay(); startTransAutoPlay();
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.15 });
             document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
         });
     </script>
