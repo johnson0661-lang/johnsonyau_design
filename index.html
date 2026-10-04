@@ -29,7 +29,6 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Apple 旗艦級純淨藍調呼吸燈光背景 + 幼細製圖網格 */
         body {
             background-color: #020205;
             background-image: 
@@ -62,7 +61,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* 頂級純淨冷色流光邊框與互動卡片 */
         .spotlight-card {
             position: relative;
             background: rgba(18, 18, 22, 0.75);
@@ -143,7 +141,7 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
 
-    <!-- Header (完美置中導覽列) -->
+    <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
@@ -192,7 +190,6 @@
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
-            <!-- 上一頁 / 下一頁 按鈕獨立置於右下方一行 -->
             <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
                 <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -202,7 +199,6 @@
                 </button>
             </div>
         </div>
-        <!-- 獨立一行的分類篩選按鈕列 -->
         <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs mb-12">
             <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
             <button onclick="filterProjects('字體設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
@@ -224,7 +220,6 @@
                 <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
                 <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
             </div>
-            <!-- 電影翻譯分頁按鈕獨立置於右下方 -->
             <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
                 <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -250,9 +245,7 @@
                     <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">About Me & Contact</h2>
                     <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">專業背景與聯絡方式</h3>
                 </div>
-                <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4">
-                    <!-- 關於我動態渲染區塊 -->
-                </div>
+                <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
                 <div class="pt-4 flex items-center space-x-4">
                     <a href="mailto:johnson0661@gmail.com" class="px-6 py-3.5 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow-xl flex items-center hover:scale-105 transform duration-300">
                         <i class="fa-solid fa-envelope mr-2 text-sm"></i> johnson0661@gmail.com
@@ -286,7 +279,7 @@
         </div>
     </div>
 
-    <!-- Admin Modal (綜合後台管理) -->
+    <!-- Admin Modal -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-4xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-apple-border pb-4 gap-4 pr-12">
@@ -319,7 +312,6 @@
                     </button>
                 </div>
                 <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px]"></div>
-                <!-- 後台專案分頁控制 -->
                 <div id="admin-project-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
                     <button onclick="prevAdminProjPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
                     <span id="admin-project-page-indicator">1 / 1</span>
@@ -341,7 +333,6 @@
                     </button>
                 </div>
                 <div id="admin-trans-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px]"></div>
-                <!-- 後台電影翻譯分頁控制 -->
                 <div id="admin-trans-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
                     <button onclick="prevAdminTransPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
                     <span id="admin-trans-page-indicator">1 / 1</span>
@@ -375,7 +366,7 @@
         </div>
     </div>
 
-    <!-- Edit Project Modal -->
+    <!-- Edit Project Modal (分類改為選單並自動聯動英日文) -->
     <div id="edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <button onclick="closeEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
@@ -398,20 +389,31 @@
                         <input type="text" id="edit-title-ja" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
                     </div>
                 </div>
+
+                <!-- 分類改為三語自動聯動選單 -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <label class="block text-apple-gray mb-1 font-semibold">分類 (繁體)</label>
-                        <input type="text" id="edit-cat-zh" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                        <select id="edit-cat-zh" onchange="onCategorySelectChange()" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                            <option value="字體設計">字體設計</option>
+                            <option value="展覽">展覽</option>
+                            <option value="快閃店">快閃店</option>
+                            <option value="包裝設計">包裝設計</option>
+                            <option value="周邊設計">周邊設計</option>
+                            <option value="影片剪接">影片剪接</option>
+                            <option value="其他">其他</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-apple-gray mb-1 font-semibold">Category (EN)</label>
-                        <input type="text" id="edit-cat-en" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                        <input type="text" id="edit-cat-en" readonly required class="w-full px-3 py-2 bg-black/40 border border-apple-border rounded-xl text-apple-gray text-xs outline-none cursor-not-allowed">
                     </div>
                     <div>
                         <label class="block text-apple-gray mb-1 font-semibold">カテゴリ (JA)</label>
-                        <input type="text" id="edit-cat-ja" required class="w-full px-3 py-2 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                        <input type="text" id="edit-cat-ja" readonly required class="w-full px-3 py-2 bg-black/40 border border-apple-border rounded-xl text-apple-gray text-xs outline-none cursor-not-allowed">
                     </div>
                 </div>
+
                 <div>
                     <label class="block text-apple-gray mb-1 font-semibold">主圖圖片路徑 (例如: image/Digimon/...)</label>
                     <input type="text" id="edit-image" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
@@ -490,6 +492,24 @@
         let currentLangIndex = 0; 
         const langs = ['zh', 'en', 'ja'];
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
+
+        // 分類三語映射字典
+        const categoryMap = {
+            '字體設計': { en: 'Typeface', ja: 'タイポグラフィ' },
+            '展覽': { en: 'Exhibition', ja: '展覧会' },
+            '快閃店': { en: 'Pop-up Store', ja: 'ポップアップストア' },
+            '包裝設計': { en: 'Packaging Design', ja: 'パッケージ設計' },
+            '周邊設計': { en: 'Merchandise', ja: 'グッズ設計' },
+            '影片剪接': { en: 'Video Editing', ja: 'ビデオ編集' },
+            '其他': { en: 'Others', ja: 'その他' }
+        };
+
+        function onCategorySelectChange() {
+            const zhVal = document.getElementById('edit-cat-zh').value;
+            const mapped = categoryMap[zhVal] || { en: 'Others', ja: 'その他' };
+            document.getElementById('edit-cat-en').value = mapped.en;
+            document.getElementById('edit-cat-ja').value = mapped.ja;
+        }
 
         const translationsDict = {
             zh: {
@@ -632,7 +652,6 @@
         let transItemsPerPage = 8;
         let transAutoPlayTimer = null;
 
-        // 後台分頁變數
         let adminProjPageIndex = 0;
         let adminProjPerPage = 10;
         let adminTransPageIndex = 0;
@@ -964,7 +983,7 @@
         let adminProjFilter = 'all';
         function filterAdminProjects(category, btnElement) {
             adminProjFilter = category;
-            adminProjPageIndex = 0; // 重設回第一頁
+            adminProjPageIndex = 0;
             document.querySelectorAll('.admin-filter-btn').forEach(btn => {
                 btn.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition";
             });
@@ -1121,9 +1140,11 @@
             document.getElementById('edit-title-zh').value = '';
             document.getElementById('edit-title-en').value = '';
             document.getElementById('edit-title-ja').value = '';
-            document.getElementById('edit-cat-zh').value = '周邊設計';
-            document.getElementById('edit-cat-en').value = 'Merchandise';
-            document.getElementById('edit-cat-ja').value = 'グッズ設計';
+            
+            // 預設選擇第一項並觸發聯動
+            document.getElementById('edit-cat-zh').value = '字體設計';
+            onCategorySelectChange();
+
             document.getElementById('edit-image').value = 'image/';
             document.getElementById('edit-gallery').value = '';
             document.getElementById('edit-youtube').value = '';
@@ -1144,9 +1165,15 @@
             document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : project.title;
             document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : project.title;
             
-            document.getElementById('edit-cat-zh').value = typeof project.category === 'object' ? (project.category.zh || '') : project.category;
-            document.getElementById('edit-cat-en').value = typeof project.category === 'object' ? (project.category.en || '') : project.category;
-            document.getElementById('edit-cat-ja').value = typeof project.category === 'object' ? (project.category.ja || '') : project.category;
+            // 設置繁體分類選單
+            let catZh = typeof project.category === 'object' ? (project.category.zh || '字體設計') : project.category;
+            const selectEl = document.getElementById('edit-cat-zh');
+            if ([...selectEl.options].some(o => o.value === catZh)) {
+                selectEl.value = catZh;
+            } else {
+                selectEl.value = '其他';
+            }
+            onCategorySelectChange();
 
             document.getElementById('edit-image').value = project.image || '';
             document.getElementById('edit-gallery').value = project.gallery || '';
@@ -1174,9 +1201,11 @@
             const tZh = document.getElementById('edit-title-zh').value;
             const tEn = document.getElementById('edit-title-en').value;
             const tJa = document.getElementById('edit-title-ja').value;
+            
             const cZh = document.getElementById('edit-cat-zh').value;
             const cEn = document.getElementById('edit-cat-en').value;
             const cJa = document.getElementById('edit-cat-ja').value;
+
             const image = document.getElementById('edit-image').value;
             const gallery = document.getElementById('edit-gallery').value;
             const youtube = document.getElementById('edit-youtube').value;
