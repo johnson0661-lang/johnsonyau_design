@@ -74,13 +74,14 @@
             opacity: 0;
             transform: scale(1.06);
         }
- /* 開場 Loading：柔和呼吸閃爍 (Breathing Effect) */
+/* 開場 Loading：柔和呼吸閃爍 */
     .intro-loading-text {
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
         animation: introBreathe 2s infinite ease-in-out !important;
         will-change: opacity;
     }
-  @keyframes introBreathe {
+
+    @keyframes introBreathe {
         0% {
             opacity: 0.15;
             filter: blur(0.2px);
@@ -94,13 +95,15 @@
             filter: blur(0.2px);
         }
     }
-        body {
-            background-color: #FAFAFA;
-            color: #222222;
-            background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-            background-size: 80px 80px;
-            background-attachment: fixed;
-        }
+
+    /* 檢查這裡的 body 是否完整存在 */
+    body {
+        background-color: #FAFAFA;
+        color: #222222;
+        background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+        background-size: 80px 80px;
+        background-attachment: fixed;
+    }
 
         .glass-header { 
             background: rgba(250, 250, 250, 0.9); 
@@ -145,7 +148,7 @@
         .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
 
-        .logo-invert { filter: invert(1) grayscale(1); }
+       .logo-invert { filter: none; }
 
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { background: #111; color: #FAFAFA; padding: 12px 24px; border: 1px solid #111; font-size: 13px; font-weight: 500; box-shadow: 2px 2px 0 0 rgba(0,0,0,0.2); animation: toastEnter 0.4s ease forwards; display: flex; align-items: center; gap: 8px; }
@@ -165,7 +168,8 @@
             <div class="crop-mark crop-mark-br"></div>
             
             <div class="p-10 flex flex-col items-center gap-4">
-                <img id="intro-logo" src="logo.png" alt="Johnson Yau" class="logo-invert h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
+<!-- 把 class="logo-invert ..." 改成不帶 logo-invert -->
+<img id="intro-logo" src="logo.png" alt="Johnson Yau" class="h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
                 <!-- ✅ 加入 Loading 閃爍小字 -->
                 <span class="intro-loading-text text-[9px] font-bold text-[#888888] uppercase block text-center" style="letter-spacing: 0.85em !important; text-indent: 0.85em !important; margin-top: 18px;">LOADING...</span>
             </div>
