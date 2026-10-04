@@ -67,20 +67,26 @@
 </head>
 <body class="bg-apple-bg text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
 
-    <!-- Header with Custom Logo -->
+    <!-- Header with Centered Logo -->
     <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
-        <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between text-xs tracking-wide">
-            <a href="#" class="flex items-center space-x-3 group">
-                <!-- 這裡的 src 可以換成你上載到 GitHub 的 logo 檔案名稱或圖片網址 -->
-                <img src="logo.png" alt="Johnson Yau Logo" class="w-8 h-8 rounded-full object-cover border border-apple-border group-hover:scale-105 transition">
-                <span class="font-medium text-white hover:opacity-80 transition text-sm">Johnson Yau</span>
-            </a>
-            <nav class="hidden md:flex items-center space-x-8 text-apple-gray">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
+            <!-- Left empty spacing for balance -->
+            <div class="w-24 hidden md:block"></div>
+
+            <!-- Centered Logo -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                <a href="#" class="group">
+                    <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
+                </a>
+            </div>
+
+            <!-- Right Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-apple-gray ml-auto">
                 <a href="#works" class="hover:text-white transition">作品集</a>
                 <a href="#translation" class="hover:text-white transition">電影翻譯</a>
                 <a href="#about" class="hover:text-white transition">關於</a>
             </nav>
-            <div class="text-apple-gray text-[10px]"></div>
+            <div class="md:hidden"></div>
         </div>
     </header>
 
