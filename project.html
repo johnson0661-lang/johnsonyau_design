@@ -11,7 +11,7 @@
                 extend: {
                     colors: {
                         minimal: {
-                            bg: '#fafafa',
+                            bg: '#fbfbfb',
                             card: '#ffffff',
                             text: '#222222',
                             gray: '#888888',
@@ -37,8 +37,16 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
+        /* 注入靈魂的極簡網格背景 */
         body {
-            background-color: #fafafa;
+            background-color: #fbfbfb;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 0, 0, 0.015) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 0, 0, 0.01) 0%, transparent 50%),
+                linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+            background-attachment: fixed;
             color: #222222;
         }
 
@@ -82,7 +90,7 @@
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
             <a href="index.html" class="group flex items-center">
-                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain group-hover:opacity-60 transition duration-300">
+                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain group-hover:opacity-60 transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
 
             <div class="flex items-center space-x-6">
@@ -107,11 +115,11 @@
 
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
         <div class="mb-10 text-center">
-            <span id="project-category" class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-minimal-gray mb-3 px-3 py-1 bg-white border border-minimal-border rounded-full"></span>
+            <span id="project-category" class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-minimal-gray mb-3 px-3 py-1 bg-white border border-minimal-border rounded-full shadow-sm"></span>
             <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
         </div>
 
-        <div id="media-container" class="card-light rounded-3xl overflow-hidden mb-12 p-4 md:p-8 flex items-center justify-center bg-minimal-lightgray border border-minimal-border shadow-soft relative">
+        <div id="media-container" class="card-light rounded-3xl overflow-hidden mb-12 p-4 md:p-8 flex items-center justify-center bg-white border border-minimal-border shadow-soft relative">
             <!-- 動態填入圖片或 YouTube iframe -->
         </div>
 
@@ -270,7 +278,7 @@
                 mediaContainer.className = "card-light rounded-3xl overflow-hidden mb-12 p-4 md:p-8 bg-white border border-minimal-border shadow-soft relative";
             } else {
                 mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-xl shadow-sm transition group-hover:scale-[1.02]">
+                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-xl shadow-sm transition group-hover:scale-[1.01]">
                     <div class="absolute bottom-6 right-6 px-4 py-2 rounded-full bg-white/90 text-minimal-accent text-[11px] font-medium backdrop-blur-sm border border-minimal-border opacity-0 group-hover:opacity-100 transition shadow-sm pointer-events-none">
                         <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
                     </div>
