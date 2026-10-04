@@ -11,12 +11,12 @@
                 extend: {
                     colors: {
                         minimal: {
-                            bg: '#F5F4ED',
+                            bg: '#FAFAFA',
                             card: '#FFFFFF',
-                            text: '#111111',
-                            gray: '#666666',
-                            lightgray: '#EBE9DF',
-                            border: '#111111',
+                            text: '#222222',
+                            gray: '#888888',
+                            lightgray: '#F5F5F5',
+                            border: '#E5E5E5',
                             accent: '#111111'
                         }
                     },
@@ -24,8 +24,8 @@
                         sans: ['-apple-system', 'BlinkMacSystemFont', "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", 'sans-serif'],
                     },
                     boxShadow: {
-                        'hard': '4px 4px 0px 0px rgba(17,17,17,1)',
-                        'hard-hover': '8px 8px 0px 0px rgba(17,17,17,1)',
+                        'hard': '2px 2px 0px 0px rgba(17,17,17,0.7)',
+                        'hard-hover': '4px 4px 0px 0px rgba(17,17,17,0.85)',
                     }
                 }
             }
@@ -38,27 +38,33 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-        /* 注入靈魂的極簡網格背景 */
         body {
-            background-color: #F5F4ED;
-            color: #111111;
-            background-image: linear-gradient(#e5e3d8 1px, transparent 1px), linear-gradient(90deg, #e5e3d8 1px, transparent 1px);
+            background-color: #FAFAFA;
+            color: #222222;
+            background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
             background-size: 80px 80px;
             background-attachment: fixed;
         }
 
         .glass-header { 
-            background: rgba(245, 244, 237, 0.9); 
+            background: rgba(250, 250, 250, 0.9); 
             backdrop-filter: blur(10px); 
-            border-bottom: 2px solid #111;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        /* 輕量級雜誌卡片 */
+        .card-light { 
+            background: #ffffff; 
+            border: 1px solid #111;
+            box-shadow: 2px 2px 0px 0px rgba(17,17,17,0.7);
         }
 
         /* 裝飾性裁切角標 (Crop Marks) */
-        .crop-mark { position: absolute; width: 15px; height: 15px; border-color: #aaa; border-style: solid; pointer-events: none; }
-        .crop-mark-tl { top: -8px; left: -8px; border-width: 1px 0 0 1px; }
-        .crop-mark-tr { top: -8px; right: -8px; border-width: 1px 1px 0 0; }
-        .crop-mark-bl { bottom: -8px; left: -8px; border-width: 0 0 1px 1px; }
-        .crop-mark-br { bottom: -8px; right: -8px; border-width: 0 1px 1px 0; }
+        .crop-mark { position: absolute; width: 10px; height: 10px; border-color: #d1d5db; border-style: solid; pointer-events: none; }
+        .crop-mark-tl { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
+        .crop-mark-tr { top: -6px; right: -6px; border-width: 1px 1px 0 0; }
+        .crop-mark-bl { bottom: -6px; left: -6px; border-width: 0 0 1px 1px; }
+        .crop-mark-br { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
 
         .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
@@ -77,12 +83,12 @@
                 <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
 
-            <div class="flex items-center space-x-6 font-bold">
-                <div class="flex items-center space-x-3 border-r-2 border-minimal-border pr-6">
-                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 bg-white text-minimal-accent hover:bg-minimal-accent hover:text-white border-2 border-minimal-border transition flex items-center justify-center shadow-hard">
+            <div class="flex items-center space-x-6 font-medium">
+                <div class="flex items-center space-x-3 border-r border-minimal-border pr-6">
+                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-hard">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 bg-white text-minimal-accent hover:bg-minimal-accent hover:text-white border-2 border-minimal-border transition flex items-center justify-center shadow-hard">
+                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-hard">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
@@ -90,7 +96,7 @@
                 <a href="index.html#works" class="text-minimal-gray hover:text-minimal-accent transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text" class="tracking-widest uppercase">返回作品列表</span>
                 </a>
-                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-4 py-1.5 bg-transparent text-minimal-accent border-2 border-minimal-border hover:bg-minimal-accent hover:text-white transition shadow-hard">
+                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-4 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition shadow-hard">
                     EN
                 </button>
             </div>
@@ -99,33 +105,33 @@
 
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
         <div class="mb-10 text-center">
-            <span id="project-category" class="inline-block text-[11px] font-bold tracking-[0.2em] uppercase text-minimal-accent mb-4 px-4 py-1.5 bg-white border-2 border-minimal-border shadow-hard"></span>
+            <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-4 px-4 py-1.5 bg-white border border-minimal-border shadow-hard"></span>
             <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
         </div>
 
-        <!-- 主媒體容器 (移除雙重框，加入 Crop Marks) -->
+        <!-- 主媒體容器 (極簡框線與角標) -->
         <div class="relative w-full mb-16">
             <div class="crop-mark crop-mark-tl"></div><div class="crop-mark crop-mark-tr"></div>
             <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
             
-            <div id="media-container" class="relative z-10 w-full bg-white border-2 border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden">
+            <div id="media-container" class="relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden">
                 <!-- 動態填入圖片或 YouTube iframe -->
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div class="lg:col-span-7 space-y-6">
-                <div class="bg-white border-2 border-minimal-accent flex items-center justify-center aspect-[16/10] relative group shadow-hard">
-                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer">
+                <div class="bg-white border border-minimal-accent flex items-center justify-center aspect-[16/10] relative group shadow-hard">
+                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer p-1">
                     
-                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-bold border-2 border-minimal-accent opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
+                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium border border-minimal-accent opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
 
-                    <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border-2 border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
+                    <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextGalleryImage(event)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border-2 border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
+                    <button onclick="nextGalleryImage(event)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
@@ -133,20 +139,20 @@
             </div>
 
             <div class="lg:col-span-5 space-y-6 pt-2">
-                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-bold border-b-2 border-minimal-border pb-3">Design Concept & Case Study</h3>
-                <div id="project-description" class="text-[#333] font-medium leading-relaxed text-sm space-y-4"></div>
+                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">Design Concept & Case Study</h3>
+                <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
             </div>
         </div>
     </main>
 
-    <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-[#F5F4ED]/95 backdrop-blur-sm flex items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-minimal-accent w-12 h-12 bg-white border-2 border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white z-10">
+    <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-minimal-accent w-12 h-12 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white z-10">
             <i class="fa-solid fa-xmark text-sm"></i>
         </button>
-        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain border-4 border-minimal-accent shadow-hard" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain border border-minimal-accent shadow-hard" onclick="event.stopPropagation()">
     </div>
 
-    <footer class="py-12 text-center text-[11px] text-minimal-gray border-t-2 border-minimal-border bg-[#EBE9DF] mt-12 font-bold tracking-widest">
+    <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-[#F5F5F5] mt-12 font-medium tracking-widest">
         <p>&copy; 2026 JOHNSON YAU. ALL RIGHTS RESERVED.</p>
     </footer>
 
@@ -218,7 +224,7 @@
             } else {
                 mediaContainer.innerHTML = `
                     <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[70vh] w-auto object-contain cursor-pointer transition hover:opacity-90">
-                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-bold opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
+                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
                         <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
                     </div>
                 `;
@@ -235,7 +241,7 @@
         function updateGalleryDisplay() {
             if (galleryImages.length === 0) return; document.getElementById('gallery-active-img').src = galleryImages[activeGalleryIndex];
             const dotsContainer = document.getElementById('pagination-dots');
-            dotsContainer.innerHTML = galleryImages.map((_, idx) => `<button onclick="setGalleryIndex(event, ${idx})" class="w-3 h-3 rounded-none transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-minimal-accent border-2 border-minimal-accent' : 'bg-transparent border-2 border-minimal-border hover:bg-minimal-gray'}"></button>`).join('');
+            dotsContainer.innerHTML = galleryImages.map((_, idx) => `<button onclick="setGalleryIndex(event, ${idx})" class="w-2.5 h-2.5 rounded-none transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-minimal-accent border border-minimal-accent' : 'bg-transparent border border-minimal-border hover:bg-minimal-gray'}"></button>`).join('');
         }
 
         function setGalleryIndex(event, idx) { event.stopPropagation(); activeGalleryIndex = idx; updateGalleryDisplay(); }
