@@ -197,6 +197,7 @@
                 <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface</button>
                 <button onclick="filterProjects('Pop-up Store 與展覽', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up</button>
                 <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
+                <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
             </div>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
@@ -446,7 +447,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                filterAll: "全部專案", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計"
+                filterAll: "全部專案", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -457,7 +458,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                filterAll: "All Projects", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "Packaging"
+                filterAll: "All Projects", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "Packaging", filterOther: "Others"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -468,7 +469,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterPopup: "ポップアップ", filterPkg: "パッケージ"
+                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterPopup: "ポップアップ", filterPkg: "パッケージ", filterOther: "その他"
             }
         };
 
@@ -582,14 +583,17 @@
             const grid = document.getElementById('project-grid');
             if (!grid) return;
             const langKey = langs[currentLangIndex];
-            const filtered = filter === 'all' ? projects : projects.filter(p => p.category.zh === filter || p.category.en === filter);
+            const filtered = filter === 'all' ? projects : projects.filter(p => {
+                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
+                return cat === filter;
+            });
             
             grid.innerHTML = filtered.map((p) => {
                 let pTitle = typeof p.title === 'object' ? (p.title[langKey] || p.title.zh) : p.title;
                 let pCat = typeof p.category === 'object' ? (p.category[langKey] || p.category.zh) : p.category;
                 return `
                     <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
-                        <div class="overflow-hidden aspect-[16/10] bg-black/60 relative flex items-center justify-center p-12">
+                        <div class="overflow-hidden aspect-[16/9] bg-black/60 relative flex items-center justify-center p-6">
                             <img src="${p.image}" alt="${pTitle}" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition duration-700 shadow-xl opacity-90 group-hover:opacity-100">
                         </div>
                         <div class="p-8">
@@ -677,6 +681,7 @@
             document.getElementById('btn-type').textContent = t.filterType;
             document.getElementById('btn-popup').textContent = t.filterPopup;
             document.getElementById('btn-pkg').textContent = t.filterPkg;
+            document.getElementById('btn-other').textContent = t.filterOther;
 
             localStorage.setItem('portfolio_lang', langKey);
             renderProjects(currentFilterCategory);
@@ -851,9 +856,9 @@
             document.getElementById('edit-title-zh').value = '';
             document.getElementById('edit-title-en').value = '';
             document.getElementById('edit-title-ja').value = '';
-            document.getElementById('edit-cat-zh').value = '';
-            document.getElementById('edit-cat-en').value = '';
-            document.getElementById('edit-cat-ja').value = '';
+            document.getElementById('edit-cat-zh').value = '其他';
+            document.getElementById('edit-cat-en').value = 'Others';
+            document.getElementById('edit-cat-ja').value = 'その他';
             document.getElementById('edit-image').value = 'image/';
             document.getElementById('edit-gallery').value = '';
             document.getElementById('edit-desc-zh').value = '';
