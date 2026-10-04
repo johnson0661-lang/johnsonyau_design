@@ -39,71 +39,51 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-/* 開場動畫遮罩與 Logo 特效 (延長優雅版) */
-    #intro-overlay {
-        position: fixed;
-        inset: 0;
-        background-color: #FAFAFA;
-        z-index: 99999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
-    }
+        /* 開場動畫遮罩與 Logo 特效 (延長優雅版) */
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #FAFAFA;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
+        }
 
-    #intro-logo {
-        opacity: 0;
-        transform: scale(0.9);
-        animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes introFade {
-        0% {
+        #intro-logo {
             opacity: 0;
             transform: scale(0.9);
+            animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        35% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        75% {
-            opacity: 1;
-            transform: scale(1.02);
-        }
-        100% {
-            opacity: 0;
-            transform: scale(1.06);
-        }
-/* 開場 Loading：柔和呼吸閃爍 */
-    .intro-loading-text {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
-        animation: introBreathe 2s infinite ease-in-out !important;
-        will-change: opacity;
-    }
 
-    @keyframes introBreathe {
-        0% {
-            opacity: 0.15;
-            filter: blur(0.2px);
+        @keyframes introFade {
+            0% { opacity: 0; transform: scale(0.9); }
+            35% { opacity: 1; transform: scale(1); }
+            75% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0; transform: scale(1.06); }
         }
-        50% {
-            opacity: 1;
-            filter: blur(0px);
-        }
-        100% {
-            opacity: 0.15;
-            filter: blur(0.2px);
-        }
-    }
 
-    /* 檢查這裡的 body 是否完整存在 */
-    body {
-        background-color: #FAFAFA;
-        color: #222222;
-        background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-        background-size: 80px 80px;
-        background-attachment: fixed;
-    }
+        /* 開場 Loading：柔和呼吸閃爍 (Breathing Effect) */
+        .intro-loading-text {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
+            animation: introBreathe 2s infinite ease-in-out !important;
+            will-change: opacity;
+        }
+
+        @keyframes introBreathe {
+            0% { opacity: 0.15; filter: blur(0.2px); }
+            50% { opacity: 1; filter: blur(0px); }
+            100% { opacity: 0.15; filter: blur(0.2px); }
+        }
+
+        body {
+            background-color: #FAFAFA;
+            color: #222222;
+            background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+            background-size: 80px 80px;
+            background-attachment: fixed;
+        }
 
         .glass-header { 
             background: rgba(250, 250, 250, 0.9); 
@@ -148,7 +128,7 @@
         .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
 
-       .logo-invert { filter: none; }
+        .logo-invert { filter: none !important; }
 
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { background: #111; color: #FAFAFA; padding: 12px 24px; border: 1px solid #111; font-size: 13px; font-weight: 500; box-shadow: 2px 2px 0 0 rgba(0,0,0,0.2); animation: toastEnter 0.4s ease forwards; display: flex; align-items: center; gap: 8px; }
@@ -168,9 +148,7 @@
             <div class="crop-mark crop-mark-br"></div>
             
             <div class="p-10 flex flex-col items-center gap-4">
-<!-- 把 class="logo-invert ..." 改成不帶 logo-invert -->
-<img id="intro-logo" src="logo.png" alt="Johnson Yau" class="h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
-                <!-- ✅ 加入 Loading 閃爍小字 -->
+                <img id="intro-logo" src="logo.png" alt="Johnson Yau" class="h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
                 <span class="intro-loading-text text-[9px] font-bold text-[#888888] uppercase block text-center" style="letter-spacing: 0.85em !important; text-indent: 0.85em !important; margin-top: 18px;">LOADING...</span>
             </div>
         </div>
@@ -182,7 +160,7 @@
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
-                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+                <img src="logo.png" alt="Johnson Yau Logo" class="h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
             <nav class="hidden md:flex items-center space-x-10 text-minimal-gray absolute left-1/2 -translate-x-1/2 font-medium tracking-widest">
                 <a href="index.html#works" class="nav-works hover:text-minimal-accent transition">精選專案</a>
@@ -214,7 +192,7 @@
             </p>
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="#works" class="btn-works px-8 py-3 bg-minimal-accent text-white text-sm font-medium border border-minimal-accent hover:bg-transparent hover:text-minimal-accent transition shadow-hard">
-                    探索作品集
+                    探索作品
                 </a>
                 <a href="#translation" class="btn-trans px-8 py-3 bg-white text-minimal-accent text-sm font-medium border border-minimal-border hover:border-minimal-accent transition shadow-hard">
                     電影翻譯紀錄
@@ -228,7 +206,7 @@
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-minimal-border pb-6">
             <div>
                 <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Selected Projects</h2>
-                <h3 id="works-heading" class="text-3xl md:text-4xl font-bold tracking-tight text-minimal-accent">實戰專案分類</h3>
+                <h3 id="works-heading" class="text-3xl md:text-4xl font-bold tracking-tight text-minimal-accent">專案分類</h3>
             </div>
             <div id="pagination-controls" class="hidden items-center space-x-3 shrink-0 self-end md:self-auto">
                 <button onclick="prevPage()" class="w-10 h-10 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
@@ -286,7 +264,7 @@
             <div class="md:col-span-7 space-y-6">
                 <div class="border-b border-minimal-border pb-4">
                     <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">About Me & Contact</h2>
-                    <h3 id="about-title" class="text-3xl font-bold text-minimal-accent tracking-tight">專業背景與聯絡方式</h3>
+                    <h3 id="about-title" class="text-3xl font-bold text-minimal-accent tracking-tight">自我介紹與聯絡方式</h3>
                 </div>
                 <div id="about-desc" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
                 <div class="pt-4 flex items-center space-x-4">
@@ -961,7 +939,7 @@
                 isAdminAuthenticated = true; 
                 closePasswordModal(); 
                 toggleAdminModal(true); 
-                showToast('登入成功！');
+                showToast('登入成功！'); 
             } else { 
                 showToast('密碼錯誤！請重新輸入', 'error'); 
                 document.getElementById('admin-password-input').value = ''; 
@@ -1390,7 +1368,7 @@
 
             closeTransEditModal(); 
             renderAdminTransLists(); 
-            renderTranslations();
+            renderTranslations(); 
         }
 
         async function deleteTranslation(id) { 
@@ -1453,12 +1431,13 @@
             }
         });
 
-       window.addEventListener('DOMContentLoaded', () => { 
-           // 讀取並套用之前保存的語言（F5 不會跳回預設）
+        window.addEventListener('DOMContentLoaded', () => { 
+            // 讀取並套用之前保存的語言（F5 不會跳回預設）
             const savedLang = localStorage.getItem('portfolio_user_lang') || 'zh';
             const savedIndex = langs.indexOf(savedLang);
             if (savedIndex !== -1) currentLangIndex = savedIndex;
             applyLanguage(savedLang);
+
             // 1. 原本的資料載入與滾動觸發
             fetchCloudData(); 
             const observer = new IntersectionObserver((entries) => { 
