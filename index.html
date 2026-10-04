@@ -74,6 +74,21 @@
             opacity: 0;
             transform: scale(1.06);
         }
+        /* 開場 Loading 閃爍字樣 */
+    .intro-loading-text {
+        font-family: inherit;
+        letter-spacing: 0.35em;
+        font-size: 10px;
+        color: #888888;
+        font-weight: 600;
+        text-transform: uppercase;
+        animation: introBlink 1.4s infinite ease-in-out;
+    }
+
+    @keyframes introBlink {
+        0%, 100% { opacity: 0.25; }
+        50% { opacity: 1; }
+    }
     }
         body {
             background-color: #FAFAFA;
@@ -137,7 +152,7 @@
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-minimal-accent selection:text-white overflow-x-hidden relative">
-    <!-- 開場 Logo 遮罩 -->
+    <!-- 開場 Logo 遮罩 (含 Loading... 呼吸動畫) -->
     <div id="intro-overlay">
         <div class="relative flex flex-col items-center">
             <div class="crop-mark crop-mark-tl"></div>
@@ -145,9 +160,10 @@
             <div class="crop-mark crop-mark-bl"></div>
             <div class="crop-mark crop-mark-br"></div>
             
-            <div class="p-10">
-                <!-- 放大 Logo 尺寸：h-20 md:h-28 -->
+            <div class="p-10 flex flex-col items-center gap-4">
                 <img id="intro-logo" src="logo.png" alt="Johnson Yau" class="logo-invert h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
+                <!-- ✅ 加入 Loading 閃爍小字 -->
+                <span class="intro-loading-text">LOADING...</span>
             </div>
         </div>
     </div>
