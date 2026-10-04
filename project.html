@@ -147,7 +147,7 @@
         </div>
     </div>
 
-    <!-- Project Editor Modal (支援主圖、多張細節圖上載與三語) -->
+    <!-- Project Editor Modal -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
             <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (圖片上載與三語)</h3>
@@ -212,7 +212,7 @@
 
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
-        let projects = [
+        let defaultProjects = [
             { 
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
@@ -254,7 +254,7 @@
                 title: { zh: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', en: 'EVANGELION:3.0+1.11 - Collector Edition Blu-ray Packaging', ja: '『シン・エヴァンゲリオン劇場版』豪華版BDパッケージ' }, 
                 category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
                 image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
                 description: { 
                     zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學。', 
                     en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set.', 
@@ -262,6 +262,9 @@
                 } 
             }
         ];
+
+        // 從 localStorage 讀取最新數據
+        let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
 
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id') || '1';
@@ -368,17 +371,21 @@
             reader.readAsDataURL(file);
         }
 
-        // 批次上載多張細節圖函式（圖庫用）
+        // 嚴格同步的批次圖庫上載函式
         function handleMultipleGalleryUpload(event) {
             const files = event.target.files;
             if (!files || files.length === 0) return;
 
-            let processedCount = 0;
-            const base64Results = [];
             const galleryInput = document.getElementById('edit-gallery');
             let existingUrls = galleryInput.value ? galleryInput.value.split(',').map(u => u.trim()).filter(u => u.length > 0) : [];
+            let fileArray = Array.from(files);
 
-            Array.from(files).forEach((file, index) => {
+            function processNext(index) {
+                if (index >= fileArray.length) {
+                    galleryInput.value = existingUrls.join(', ');
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const img = new Image();
@@ -399,18 +406,15 @@
                         ctx.drawImage(img, 0, 0, width, height);
 
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                        base64Results[index] = dataUrl;
-                        processedCount++;
-
-                        if (processedCount === files.length) {
-                            const combined = [...existingUrls, ...base64Results.filter(Boolean)];
-                            galleryInput.value = combined.join(', ');
-                        }
+                        existingUrls.push(dataUrl);
+                        processNext(index + 1);
                     };
                     img.src = e.target.result;
                 };
-                reader.readAsDataURL(file);
-            });
+                reader.readAsDataURL(fileArray[index]);
+            }
+
+            processNext(0);
         }
 
         document.addEventListener('keydown', (e) => {
@@ -512,6 +516,9 @@
                 projects[idx].description.zh = document.getElementById('edit-desc-zh').value;
                 projects[idx].description.en = document.getElementById('edit-desc-en').value;
                 projects[idx].description.ja = document.getElementById('edit-desc-ja').value;
+                
+                // 同步儲存到 localStorage
+                localStorage.setItem('portfolio_projects', JSON.stringify(projects));
             }
             closeEditor();
             updateProjectContent();
