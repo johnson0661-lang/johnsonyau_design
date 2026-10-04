@@ -202,11 +202,11 @@
                     <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
                     <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
                 </div>
+                <!-- 移除數字，僅保留左右按鈕 -->
                 <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0">
                     <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <span id="page-indicator" class="text-xs text-apple-gray px-2 font-medium">1 / 1</span>
                     <button onclick="nextPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
@@ -224,12 +224,11 @@
                 <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
                 <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
             </div>
-            <!-- 電影翻譯分頁控制按鈕 -->
+            <!-- 電影翻譯分頁控制：移除數字提示 -->
             <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 mt-6 md:mt-0">
                 <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <span id="trans-page-indicator" class="text-xs text-apple-gray px-2 font-medium">1 / 1</span>
                 <button onclick="nextTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
@@ -608,7 +607,6 @@
         let itemsPerPage = 4;
         let autoPlayTimer = null;
 
-        // 電影翻譯分頁變數
         let transPageIndex = 0;
         let transItemsPerPage = 8;
         let transAutoPlayTimer = null;
@@ -652,7 +650,6 @@
         function renderProjects() {
             const grid = document.getElementById('project-grid');
             const paginationControls = document.getElementById('pagination-controls');
-            const indicator = document.getElementById('page-indicator');
             if (!grid) return;
             const langKey = langs[currentLangIndex];
 
@@ -665,7 +662,6 @@
             if (allFiltered.length > itemsPerPage) {
                 paginationControls.classList.remove('hidden');
                 paginationControls.classList.add('flex');
-                indicator.textContent = `${currentPageIndex + 1} / ${totalPages}`;
             } else {
                 paginationControls.classList.add('hidden');
                 paginationControls.classList.remove('flex');
@@ -719,7 +715,6 @@
             if (autoPlayTimer) clearInterval(autoPlayTimer);
         }
 
-        // 電影翻譯分頁與自動輪播
         function getSortedTranslations() {
             return [...translations].sort((a, b) => {
                 const yearA = parseInt(a.year) || 0;
@@ -737,7 +732,6 @@
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
             const transControls = document.getElementById('trans-pagination-controls');
-            const transIndicator = document.getElementById('trans-page-indicator');
             if (!grid) return;
             const langKey = langs[currentLangIndex];
 
@@ -750,7 +744,6 @@
             if (sortedTrs.length > transItemsPerPage) {
                 transControls.classList.remove('hidden');
                 transControls.classList.add('flex');
-                transIndicator.textContent = `${transPageIndex + 1} / ${totalPages}`;
             } else {
                 transControls.classList.add('hidden');
                 transControls.classList.remove('flex');
@@ -802,7 +795,7 @@
                 if (sortedTrs.length > transItemsPerPage) {
                     nextTransPage();
                 }
-            }, 8000); // 電影翻譯每 8 秒自動下一頁
+            }, 8000);
         }
 
         function pauseTransAutoPlay() {
