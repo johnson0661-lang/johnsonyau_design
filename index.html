@@ -57,7 +57,6 @@
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
-                <!-- 語言切換按鈕 -->
                 <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
                     <span id="lang-btn-text">EN</span>
                 </button>
@@ -115,26 +114,23 @@
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </section>
 
-    <!-- About Section (加入大頭相與 Email 聯絡區) -->
+    <!-- About Section -->
     <section id="about" class="bg-[#08080a] py-32 border-t border-apple-border/50 reveal-up">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            <!-- 左側：個人大頭相 -->
             <div class="md:col-span-5 flex justify-center">
                 <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden border border-apple-border shadow-2xl bg-black">
                     <img src="profile.jpg" alt="Johnson Yau" class="w-full h-full object-cover">
                 </div>
             </div>
-            <!-- 右側：自我介紹與 Email 聯絡 -->
             <div class="md:col-span-7 space-y-6">
                 <div>
                     <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">About Me & Contact</h2>
                     <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">專業背景與聯絡方式</h3>
                 </div>
                 <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4">
-                    <p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p>
-                    <p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>
+                    <p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑[cite: 16]。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理）[cite: 16]，擅長結合日式美學與精準的商業視覺傳達。</p>
+                    <p>精通 Typeface 本地化設計[cite: 18]、大型展覽及 Pop-up Store 空間動線規劃[cite: 23, 24]、實體周邊與包裝開發[cite: 21, 22]，並具備日語 N1 實力[cite: 16]。</p>
                 </div>
-                <!-- Email 聯絡按鈕 -->
                 <div class="pt-4 flex items-center space-x-4">
                     <a href="mailto:johnson0661@gmail.com" class="px-6 py-3.5 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow-xl flex items-center">
                         <i class="fa-solid fa-envelope mr-2 text-sm"></i> johnson0661@gmail.com
@@ -210,15 +206,41 @@
         }
 
         let projects = [
-            { id: '1', title: '數碼暴龍 Last Evolution 絆 - 字體在地化', category: 'Typeface 本地化', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。' },
-            { id: '2', title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現。' },
-            { id: '3', title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求。' },
-            { id: '4', title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學。' }
+            { id: '1', title: '數碼暴龍 Last Evolution 絆 - 字體在地化', category: 'Typeface 本地化', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' },
+            { id: '2', title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' },
+            { id: '3', title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' },
+            { id: '4', title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' }
         ];
 
         let translations = [
             { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
-            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
+            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' },
+            { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80', desc: '日文字幕至繁體中文電影翻譯與在地化調整。' }
         ];
 
         function renderProjects(filter = 'all') {
