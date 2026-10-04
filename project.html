@@ -29,6 +29,11 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         body {
             background-color: #020205;
@@ -78,7 +83,6 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
             <a href="index.html" class="group flex items-center">
@@ -95,7 +99,7 @@
                     </button>
                 </div>
 
-                <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
+                <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center font-medium">
                     <i class="fa-solid fa-arrow-left mr-1.5"></i> <span id="back-text">返回作品列表</span>
                 </a>
                 <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
@@ -105,22 +109,17 @@
         </div>
     </header>
 
-    <!-- Main Project Content -->
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
-        
         <div class="mb-8">
             <span id="project-category" class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">Category</span>
             <h1 id="project-title" class="text-3xl md:text-5xl font-semibold tracking-tight text-white leading-tight"></h1>
         </div>
 
-        <!-- 上方：主圖或 YouTube 影片播放區 -->
         <div id="media-container" class="card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl relative">
             <!-- 動態填入圖片或 YouTube iframe -->
         </div>
 
-        <!-- 下方：左右分欄 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            
             <div class="lg:col-span-6 space-y-6">
                 <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10] relative group">
                     <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain rounded-2xl shadow-lg transition duration-500 cursor-pointer">
@@ -136,7 +135,6 @@
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
-
                 <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
             </div>
 
@@ -144,11 +142,9 @@
                 <h3 id="case-study-heading" class="text-xs uppercase tracking-widest text-apple-gray font-semibold">Design Concept & Case Study</h3>
                 <div id="project-description" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
             </div>
-
         </div>
     </main>
 
-    <!-- 燈箱 Modal -->
     <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4">
         <button onclick="closeLightbox()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border z-10 shadow-xl">
             <i class="fa-solid fa-xmark text-sm"></i>
@@ -156,7 +152,6 @@
         <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl" onclick="event.stopPropagation()">
     </div>
 
-    <!-- Footer -->
     <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/40 mt-20">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
@@ -174,31 +169,44 @@
         let galleryImages = [];
         let activeGalleryIndex = 0;
 
-        const defaultProjects = [
-            { 
-                id: '1', 
-                title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
-                category: { zh: '字體設計', en: 'Typeface', ja: 'タイポグラフィ' }, 
-                image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
-                gallery: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
-                youtube: '',
-                description: { 
-                    zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
-                    en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
-                    ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現。' 
-                } 
-            }
-        ];
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM",
+            authDomain: "johnsonportfolio-1262d.firebaseapp.com",
+            projectId: "johnsonportfolio-1262d",
+            storageBucket: "johnsonportfolio-1262d.firebasestorage.app",
+            messagingSenderId: "656225433263",
+            appId: "1:656225433263:web:545e29b1b5ec71c737065a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
         function getProjectIdFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('id') || '1';
         }
 
-        function loadProject() {
-            allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
+        async function loadProject() {
+            try {
+                // 從 Firebase 獲取單一專案 (因為詳情頁只需要顯示一筆，或者獲取全部作分類切換)
+                const snapshot = await db.collection('projects').get();
+                if (!snapshot.empty) {
+                    allProjects = snapshot.docs.map(doc => doc.data());
+                } else {
+                    // 如果雲端無資料，嘗試從 LocalStorage 讀取備援
+                    allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+                }
+            } catch (err) {
+                console.error("Firebase load failed, using local backup", err);
+                allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+            }
+
             const id = getProjectIdFromURL();
-            currentProjectData = allProjects.find(p => p.id === id) || allProjects[0];
+            currentProjectData = allProjects.find(p => p.id === id);
+
+            if (!currentProjectData && allProjects.length > 0) {
+                currentProjectData = allProjects[0];
+            }
 
             const langParam = new URLSearchParams(window.location.search).get('lang');
             if (langParam && langs.includes(langParam)) {
@@ -295,12 +303,10 @@
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
             document.getElementById('back-text').textContent = backTexts[langKey];
 
-            // 檢查是否有填寫 YouTube 連結
             const mediaContainer = document.getElementById('media-container');
             const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
 
             if (ytEmbedUrl) {
-                // 如果有 YouTube 連結，顯示內嵌影片播放器
                 mediaContainer.innerHTML = `
                     <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-xl bg-black">
                         <iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -308,9 +314,8 @@
                 `;
                 mediaContainer.className = "card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 bg-black/60 border border-apple-border shadow-2xl relative";
             } else {
-                // 如果無 YouTube 連結，維持原本的主圖展示並支援點擊放大
                 mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
+                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
                     <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
