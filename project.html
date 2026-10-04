@@ -46,7 +46,12 @@
                     <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain">
                 </a>
             </div>
-            <div class="w-16"></div>
+            <!-- 獨立頁面專屬 3 語切換按鈕 -->
+            <div>
+                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
+                    EN
+                </button>
+            </div>
         </div>
     </header>
 
@@ -170,45 +175,59 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id') || '1';
-        const langKey = urlParams.get('lang') || 'zh';
-        const project = projects.find(p => p.id === projectId) || projects[0];
+        let currentLangKey = urlParams.get('lang') || 'zh';
+        const langs = ['zh', 'en', 'ja'];
+        const langNames = { zh: 'EN', en: '日', ja: '繁' };
+        let currentLangIndex = langs.indexOf(currentLangKey);
+        if (currentLangIndex === -1) currentLangIndex = 0;
 
-        // 3 語獨立頁面文字對應
         const uiDict = {
             zh: { back: "返回主頁", zoom: "點擊放大檢視", tip: "實戰專案主視覺呈現，點擊圖片可放大檢視完整比例。", caseHead: "設計理念與專案拆解 (Case Study)", backWorks: "返回瀏覽其他專案", emailBtn: "聯絡我 (Email)", galleryHead: "更多專案細節與視覺展示", lightboxTip: "點擊任意空白處或按 Esc 鍵即可關閉放大檢視" },
             en: { back: "Back to Home", zoom: "Click to Zoom", tip: "Main visual presentation. Click to view full scale.", caseHead: "Design Concept & Case Study", backWorks: "Back to Projects", emailBtn: "Contact (Email)", galleryHead: "More Visual Details", lightboxTip: "Click anywhere or press Esc to close" },
             ja: { back: "ホームに戻る", zoom: "クリックして拡大", tip: "メインビジュアル。クリックして全画面表示。", caseHead: "デザインコンセプト & ケーススタディ", backWorks: "プロジェクト一覧に戻る", emailBtn: "お問い合わせ (Email)", galleryHead: "その他の詳細ビジュアル", lightboxTip: "クリックするかEscキーで閉じる" }
         };
 
-        const ui = uiDict[langKey] || uiDict.zh;
-        document.getElementById('back-link').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.back}`;
-        document.getElementById('zoom-text').innerHTML = `<i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}`;
-        document.getElementById('img-tip').textContent = ui.tip;
-        document.getElementById('case-heading').textContent = ui.caseHead;
-        document.getElementById('back-works').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.backWorks}`;
-        document.getElementById('email-btn').innerHTML = `<i class="fa-solid fa-envelope mr-2"></i> ${ui.emailBtn}`;
-        document.getElementById('gallery-heading').textContent = ui.galleryHead;
-        document.getElementById('lightbox-tip').textContent = ui.lightboxTip;
-        document.getElementById('back-link').href = `index.html`;
+        function updateProjectContent() {
+            const langKey = langs[currentLangIndex];
+            document.getElementById('lang-btn').textContent = langNames[langKey];
+            const ui = uiDict[langKey];
 
-        document.getElementById('p-category').textContent = project.category[langKey] || project.category.zh;
-        document.getElementById('p-title').textContent = project.title[langKey] || project.title.zh;
-        document.getElementById('p-image').src = project.image;
-        document.getElementById('p-description').textContent = project.description[langKey] || project.description.zh;
+            document.getElementById('back-link').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.back}`;
+            document.getElementById('zoom-text').innerHTML = `<i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}`;
+            document.getElementById('img-tip').textContent = ui.tip;
+            document.getElementById('case-heading').textContent = ui.caseHead;
+            document.getElementById('back-works').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.backWorks}`;
+            document.getElementById('email-btn').innerHTML = `<i class="fa-solid fa-envelope mr-2"></i> ${ui.emailBtn}`;
+            document.getElementById('gallery-heading').textContent = ui.galleryHead;
+            document.getElementById('lightbox-tip').textContent = ui.lightboxTip;
+            document.getElementById('back-link').href = `index.html?lang=${langKey}`;
+            document.getElementById('back-works').href = `index.html?lang=${langKey}#works`;
 
-        if (project.gallery && project.gallery.trim() !== '') {
-            document.getElementById('gallery-container').classList.remove('hidden');
-            const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
-            document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
-                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
-                    <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
-                        <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}
-                        </span>
+            const project = projects.find(p => p.id === projectId) || projects[0];
+            document.getElementById('p-category').textContent = project.category[langKey] || project.category.zh;
+            document.getElementById('p-title').textContent = project.title[langKey] || project.title.zh;
+            document.getElementById('p-image').src = project.image;
+            document.getElementById('p-description').textContent = project.description[langKey] || project.description.zh;
+
+            if (project.gallery && project.gallery.trim() !== '') {
+                document.getElementById('gallery-container').classList.remove('hidden');
+                const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
+                document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
+                    <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
+                        <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
+                            <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                                <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
+        }
+
+        function switchProjectLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            updateProjectContent();
         }
 
         function openLightbox(imgSrc) {
@@ -226,6 +245,10 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeLightbox();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProjectContent();
         });
     </script>
 </body>
