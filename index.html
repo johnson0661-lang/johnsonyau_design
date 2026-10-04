@@ -26,6 +26,7 @@
                     boxShadow: {
                         'hard': '2px 2px 0px 0px rgba(17,17,17,0.7)',
                         'hard-hover': '4px 4px 0px 0px rgba(17,17,17,0.85)',
+                        'btn': '3px 3px 0px 0px rgba(160,160,160,1)', /* 復刻截圖的按鈕陰影 */
                     }
                 }
             }
@@ -41,7 +42,6 @@
         body {
             background-color: #FAFAFA;
             color: #222222;
-            /* 極微弱的網格背景 */
             background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
             background-size: 80px 80px;
             background-attachment: fixed;
@@ -53,14 +53,12 @@
             border-bottom: 1px solid #E5E5E5;
         }
         
-        /* 裝飾性裁切角標 (Crop Marks) - 弱化版 */
         .crop-mark { position: absolute; width: 10px; height: 10px; border-color: #d1d5db; border-style: solid; pointer-events: none; }
         .crop-mark-tl { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
         .crop-mark-tr { top: -6px; right: -6px; border-width: 1px 1px 0 0; }
         .crop-mark-bl { bottom: -6px; left: -6px; border-width: 0 0 1px 1px; }
         .crop-mark-br { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
 
-        /* 輕量級雜誌卡片 */
         .spotlight-card {
             background: transparent;
             transition: transform 0.3s ease;
@@ -69,7 +67,6 @@
             transform: translate(-2px, -2px);
         }
         
-        /* 內部圖片框與幼線硬陰影 */
         .img-container {
             border: 1px solid #111;
             box-shadow: 2px 2px 0px 0px rgba(17,17,17,0.7);
@@ -83,7 +80,6 @@
         .vertical-text {
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            letter-spacing: 0.4em;
         }
 
         .image-overlay { opacity: 0; background: rgba(250, 250, 250, 0.85); transition: opacity 0.3s ease; }
@@ -148,11 +144,6 @@
                     探索作品集
                 </a>
             </div>
-        </div>
-
-        <div class="absolute right-6 bottom-12 flex flex-col items-center gap-4 hidden md:flex opacity-50">
-            <span class="vertical-text text-[10px] text-minimal-accent font-semibold">SCROLL DOWN</span>
-            <div class="w-px h-16 bg-minimal-accent"></div>
         </div>
     </section>
 
@@ -231,9 +222,21 @@
         </div>
     </section>
 
-    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-8 right-8 z-40 w-12 h-12 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition-all duration-300 shadow-hard">
-        <i class="fa-solid fa-arrow-up text-sm"></i>
-    </button>
+    <!-- 固定右下角的控制器 (SCROLL DOWN + BACK TO TOP) -->
+    <div class="fixed bottom-8 right-8 z-40 flex flex-col items-center justify-end min-h-[120px]">
+        
+        <!-- SCROLL DOWN 標示 (往下捲動會淡出) -->
+        <div id="scroll-indicator" class="flex flex-col items-center gap-4 transition-all duration-500 opacity-60">
+            <span class="vertical-text text-[9px] text-[#888888] font-bold tracking-[0.4em]">SCROLL DOWN</span>
+            <div class="w-px h-10 bg-[#bbbbbb]"></div>
+        </div>
+
+        <!-- 完美復刻的正方形回頂部按鈕 (往下捲動會浮現) -->
+        <button id="back-to-top" onclick="scrollToTop()" class="absolute bottom-0 w-11 h-11 bg-white border border-[#dddddd] text-minimal-accent flex items-center justify-center transition-all duration-500 shadow-btn hover:bg-[#f8f8f8] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] opacity-0 pointer-events-none">
+            <span class="text-xl font-light leading-none mb-0.5">&uarr;</span>
+        </button>
+        
+    </div>
 
     <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-minimal-lightgray">
         <p class="font-medium tracking-widest">&copy; 2026 JOHNSON YAU. ALL RIGHTS RESERVED. <br><span class="opacity-60 mt-2 inline-block">Press Ctrl/Cmd + Shift + L for Admin Panel</span></p>
@@ -570,23 +573,6 @@
             }).join('');
         }
 
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container'); const toast = document.createElement('div'); toast.className = 'custom-toast';
-            let icon = type === 'success' ? '<i class="fa-solid fa-check text-[#111]"></i>' : '<i class="fa-solid fa-xmark text-[#111]"></i>';
-            toast.innerHTML = `${icon} <span>${message}</span>`; container.appendChild(toast);
-            setTimeout(() => { toast.classList.add('toast-leave'); setTimeout(() => toast.remove(), 400); }, 3000);
-        }
-
-        const categoryMap = { '字體設計': {en:'Typeface', ja:'タイポグラフィ'}, '展覽': {en:'Exhibition', ja:'展覧会'}, '快閃店': {en:'Pop-up Store', ja:'ポップアップストア'}, '包裝設計': {en:'Packaging Design', ja:'パッケージ設計'}, '周邊設計': {en:'Merchandise', ja:'グッズ設計'}, '影片剪接': {en:'Video Editing', ja:'ビデオ編集'}, '其他': {en:'Others', ja:'その他'} };
-        function onCategorySelectChange() { const zhVal = document.getElementById('edit-cat-zh').value; const mapped = categoryMap[zhVal] || { en: 'Others', ja: 'その他' }; document.getElementById('edit-cat-en').value = mapped.en; document.getElementById('edit-cat-ja').value = mapped.ja; }
-        function previewAdminImage(inputId, imgId) { const url = document.getElementById(inputId).value; const imgEl = document.getElementById(imgId); const iconEl = document.getElementById(imgId + '-icon'); if (url && url.length > 5) { imgEl.src = url; imgEl.classList.remove('hidden'); if(iconEl) iconEl.classList.add('hidden'); imgEl.onerror = () => { imgEl.classList.add('hidden'); if(iconEl) iconEl.classList.remove('hidden'); }; } else { imgEl.classList.add('hidden'); if(iconEl) iconEl.classList.remove('hidden'); } }
-
-        const translationsDict = {
-            zh: { navWorks: "精選專案", navTrans: "電影翻譯紀錄", navAbout: "關於我", heroTag: "Multimedia Design & IP Localization", heroTitle: "簡約日式美學，<br><span class='text-minimal-gray'>精準視覺敘事。</span>", heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class='hidden md:inline'>Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。", btnWorks: "探索作品集", worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯", transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。", aboutTitle: "專業背景與聯絡方式", filterFeatured: "精選作品", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "快閃店", filterPkg: "包裝設計", filterMerch: "周邊設計", filterVideo: "影片剪接", filterOther: "其他" },
-            en: { navWorks: "Projects", navTrans: "Translation", navAbout: "About", heroTag: "Multimedia Design & IP Localization", heroTitle: "Minimalist Aesthetics, <br><span class='text-minimal-gray'>Visual Storytelling.</span>", heroDesc: "Specializing in Japanese anime IP licensing promotional materials, Typeface localization, <br class='hidden md:inline'>Pop-up store planning, physical packaging, and Japanese-to-Chinese film subtitle translation.", btnWorks: "Explore Works", worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive", transSub: "Cinematic localization accurately restoring context and emotional subtleties.", aboutTitle: "Professional Background & Contact", filterFeatured: "Featured", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up Store", filterPkg: "Packaging", filterMerch: "Merchandise", filterVideo: "Video Editing", filterOther: "Others" },
-            ja: { navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール", heroTag: "マルチメディアデザイン & IPローカライズ", heroTitle: "洗練された日本的美学、<br><span class='text-minimal-gray'>精確なビジュアルストーリー。</span>", heroDesc: "日本アニメIPライセンス販促物、タイポグラフィローカライズ、<br class='hidden md:inline'>ポップアップストア空間設計、パッケージ開発、日本語字幕・映画翻訳に特化。", btnWorks: "作品集を見る", worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績", transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。", aboutTitle: "専門的な背景と連絡先", filterFeatured: "厳選作品", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップストア", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterVideo: "ビデオ編集", filterOther: "その他" }
-        };
-
         function filterProjects(c, b) { currentFilterCategory = c; currentPageIndex = 0; document.querySelectorAll('.filter-btn').forEach(btn => btn.className="filter-btn px-5 py-2.5 bg-white text-minimal-gray hover:text-minimal-accent transition border border-minimal-border shadow-hard"); if(b) b.className="filter-btn active px-5 py-2.5 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard"; renderProjects(); }
         function prevPage() { currentPageIndex--; renderProjects(); } function nextPage() { currentPageIndex++; renderProjects(); }
         function prevTransPage() { transPageIndex--; renderTranslations(); } function nextTransPage() { transPageIndex++; renderTranslations(); }
@@ -674,7 +660,23 @@
         async function deleteTranslation(id) { if (confirm('確定要刪除這筆紀錄嗎？')) { try { await db.collection('translations').doc(id).delete(); translations = translations.filter(t => t.id !== id); renderAdminTransLists(); showToast('紀錄已刪除！'); } catch(err) { console.error(err); showToast('刪除失敗', 'error'); } } }
         async function duplicateTranslation(id) { const tr = translations.find(t => t.id === id); if (!tr) return; const newId = 't_' + Date.now(); const clonedTitle = typeof tr.title === 'object' ? { zh: (tr.title.zh || '') + ' (複製)', en: (tr.title.en || '') + ' (Copy)', ja: (tr.title.ja || '') + ' (コピー)' } : tr.title + ' (複製)'; const newTr = { ...tr, id: newId, title: clonedTitle }; try { await db.collection('translations').doc(newId).set(newTr); translations.unshift(newTr); renderAdminTransLists(); showToast('紀錄已複製！'); } catch(err) { console.error(err); showToast('複製失敗', 'error'); } }
 
-        window.addEventListener('DOMContentLoaded', () => { fetchCloudData(); startAutoPlay(); startTransAutoPlay(); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.15 }); document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); });
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            const indicator = document.getElementById('scroll-indicator');
+            if (window.scrollY > 300) {
+                btn.classList.remove('opacity-0', 'pointer-events-none');
+                btn.classList.add('opacity-100', 'pointer-events-auto');
+                if(indicator) indicator.classList.replace('opacity-60', 'opacity-0');
+            } else {
+                btn.classList.add('opacity-0', 'pointer-events-none');
+                btn.classList.remove('opacity-100', 'pointer-events-auto');
+                if(indicator) indicator.classList.replace('opacity-0', 'opacity-60');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => { fetchCloudData(); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.15 }); document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); });
     </script>
 </body>
 </html>
