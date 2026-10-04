@@ -50,28 +50,45 @@
         </div>
     </header>
 
-    <!-- Project Detail Container -->
-    <main class="max-w-4xl mx-auto px-6 py-20">
-        <div class="card-glass border border-apple-border rounded-3xl p-8 md:p-14 shadow-2xl">
-            <span id="p-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-3 block"></span>
-            <h1 id="p-title" class="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tight"></h1>
+    <!-- Project Detail Section (左右分欄排版) -->
+    <main class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- Main Featured Image -->
-            <div class="w-full h-[450px] rounded-2xl overflow-hidden bg-black mb-10 border border-apple-border shadow-2xl">
-                <img id="p-image" src="" alt="Main Image" class="w-full h-full object-cover">
+            <!-- 左側：主圖與圖片小字說明 (Col 6) -->
+            <div class="lg:col-span-6 space-y-4 sticky top-28">
+                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black border border-apple-border shadow-2xl">
+                    <img id="p-image" src="" alt="Main Image" class="w-full h-full object-cover">
+                </div>
+                <p class="text-xs text-apple-gray px-2">實戰專案主視覺呈現，完美對應日本官方授權與在地化設計規範。</p>
             </div>
 
-            <!-- Detailed Description Section -->
-            <div class="mb-12">
-                <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-4">專案介紹與設計理念 (Case Study)</h2>
-                <div id="p-description" class="text-apple-dark text-base md:text-lg leading-relaxed whitespace-pre-line space-y-4"></div>
+            <!-- 右側：大標題與長篇設計理念 Case Study (Col 6) -->
+            <div class="lg:col-span-6 space-y-6">
+                <div>
+                    <span id="p-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-3 block"></span>
+                    <h1 id="p-title" class="text-3xl md:text-5xl font-semibold text-white tracking-tight leading-tight"></h1>
+                </div>
+
+                <div class="w-full h-px bg-apple-border my-6"></div>
+
+                <div class="space-y-6">
+                    <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">設計理念與專案拆解 (Case Study)</h2>
+                    <div id="p-description" class="text-apple-gray text-base md:text-lg leading-relaxed whitespace-pre-line space-y-6 font-normal"></div>
+                </div>
+
+                <div class="pt-8">
+                    <a href="index.html#works" class="inline-flex items-center px-6 py-3 rounded-full bg-apple-lightgray text-white text-xs font-medium border border-apple-border hover:bg-apple-border transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> 返回瀏覽其他專案
+                    </a>
+                </div>
             </div>
 
-            <!-- Multi-Image Gallery Showcase -->
-            <div id="gallery-container" class="border-t border-apple-border/50 pt-8 hidden">
-                <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-6">更多專案細節與視覺展示</h2>
-                <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
-            </div>
+        </div>
+
+        <!-- 底部：更多細節與視覺展示圖庫 -->
+        <div id="gallery-container" class="mt-28 border-t border-apple-border/50 pt-16 hidden">
+            <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
+            <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
     </main>
 
@@ -81,7 +98,6 @@
     </footer>
 
     <script>
-        // 與主頁相同的專案資料庫（或可共用）
         const projects = [
             { 
                 id: '1', 
@@ -89,7 +105,7 @@
                 category: 'Typeface 本地化', 
                 image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
-                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' 
+                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。在字體結構、粗細對比及筆畫轉角上均反覆調校，完美融入數碼暴龍歷代作品之視覺宇宙中。' 
             },
             { 
                 id: '2', 
@@ -97,7 +113,7 @@
                 category: 'Pop-up Store 與展覽', 
                 image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
-                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' 
+                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現。透過精準的空間佈局與沈浸式打卡點設計，成功吸引大量粉絲並創造極佳的商業轉換率。' 
             },
             { 
                 id: '3', 
@@ -105,7 +121,7 @@
                 category: '實體包裝設計', 
                 image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
-                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' 
+                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求，兼具粉絲收藏價值與現場營運的高效能。' 
             },
             { 
                 id: '4', 
@@ -113,44 +129,23 @@
                 category: '實體包裝設計', 
                 image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80',
-                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' 
-            },
-            { 
-                id: '5', 
-                title: '板前壽司 & 上膳食堂聖誕餐牌宣傳品', 
-                category: 'F&B 商業平面', 
-                image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
-                description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料。捕捉美食質感並配合強烈促銷視覺，提升顧客消費意欲[cite: 19, 20]。' 
-            },
-            { 
-                id: '6', 
-                title: '《蠟筆小新》2025 期間限定店視覺規劃', 
-                category: 'Pop-up Store 與展覽', 
-                image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80',
-                description: 'AIRSIDE 蠟筆小新 Pop-up Store 之空間平面佈局、打卡位與限定周邊企劃。創造沉浸式粉絲體驗與高效能的零售動線。' 
+                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學，每一個盒型與印刷工藝都經過嚴格審視。' 
             }
         ];
 
-        // 讀取網址中的 id 參數
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id') || '1';
-
         const project = projects.find(p => p.id === projectId) || projects[0];
 
-        // 填入資料到頁面
         document.getElementById('p-category').textContent = project.category;
         document.getElementById('p-title').textContent = project.title;
         document.getElementById('p-image').src = project.image;
         document.getElementById('p-description').textContent = project.description;
 
-        // 處理多圖圖庫
         if (project.gallery && project.gallery.trim() !== '') {
             document.getElementById('gallery-container').classList.remove('hidden');
             const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
-            const galleryGrid = document.getElementById('p-gallery');
-            galleryGrid.innerHTML = galleryUrls.map(gUrl => `
+            document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
                 <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black border border-apple-border shadow-lg">
                     <img src="${gUrl}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                 </div>
