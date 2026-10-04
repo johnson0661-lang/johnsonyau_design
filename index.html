@@ -279,9 +279,15 @@
 
             <!-- 專案管理面板 -->
             <div id="admin-projects-panel" class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">實戰專案列表</h4>
-                    <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-1.5 text-xs" id="admin-proj-filter-btns">
+                        <button onclick="filterAdminProjects('all', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition">全部</button>
+                        <button onclick="filterAdminProjects('Typeface 本地化', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Typeface</button>
+                        <button onclick="filterAdminProjects('Pop-up Store 與展覽', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Pop-up</button>
+                        <button onclick="filterAdminProjects('實體包裝設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">包裝設計</button>
+                        <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">其他</button>
+                    </div>
+                    <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center shrink-0">
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增專案
                     </button>
                 </div>
@@ -290,9 +296,14 @@
 
             <!-- 電影翻譯管理面板 -->
             <div id="admin-trans-panel" class="space-y-4 hidden">
-                <div class="flex justify-between items-center">
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表 (自動按年份與名稱排序)</h4>
-                    <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-apple-gray">篩選年份:</span>
+                        <select id="admin-year-filter" onchange="renderAdminTransLists()" class="px-3 py-1.5 bg-apple-lightgray text-white text-xs border border-apple-border rounded-xl outline-none">
+                            <option value="all">全部年份</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center shrink-0">
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
                     </button>
                 </div>
@@ -748,8 +759,9 @@
             } else {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
-                renderAdminLists();
+                renderAdminLists('all');
                 renderAdminTransLists();
+                loadYearFilterOptions();
                 loadAboutForm();
             }
         }
@@ -782,9 +794,25 @@
             }
         }
 
-        function renderAdminLists() {
-            const langKey = langs[currentLangIndex];
-            document.getElementById('admin-project-list').innerHTML = projects.map(p => `
+        let adminProjFilter = 'all';
+        function filterAdminProjects(category, btnElement) {
+            adminProjFilter = category;
+            document.querySelectorAll('.admin-filter-btn').forEach(btn => {
+                btn.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition";
+            });
+            if (btnElement) {
+                btnElement.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition";
+            }
+            renderAdminLists(category);
+        }
+
+        function renderAdminLists(filter = 'all') {
+            const filtered = filter === 'all' ? projects : projects.filter(p => {
+                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
+                return cat === filter;
+            });
+
+            document.getElementById('admin-project-list').innerHTML = filtered.map(p => `
                 <div class="py-3 flex items-center justify-between text-xs">
                     <div class="flex items-center space-x-3">
                         <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
@@ -799,7 +827,18 @@
             `).join('');
         }
 
+        function loadYearFilterOptions() {
+            const years = [...new Set(translations.map(t => t.year))].sort((a, b) => parseInt(b) - parseInt(a));
+            const select = document.getElementById('admin-year-filter');
+            const currentVal = select.value;
+            select.innerHTML = `<option value="all">全部年份</option>` + years.map(y => `<option value="${y}">${y}年</option>`).join('');
+            select.value = currentVal;
+        }
+
         function renderAdminTransLists() {
+            loadYearFilterOptions();
+            const yearFilter = document.getElementById('admin-year-filter').value;
+            
             const sortedTrs = [...translations].sort((a, b) => {
                 const yearA = parseInt(a.year) || 0;
                 const yearB = parseInt(b.year) || 0;
@@ -811,7 +850,9 @@
                 return titleA.localeCompare(titleB, 'zh-HK');
             });
 
-            document.getElementById('admin-trans-list').innerHTML = sortedTrs.map(tr => {
+            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
+
+            document.getElementById('admin-trans-list').innerHTML = filteredTrs.map(tr => {
                 let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
                 return `
                     <div class="py-3 flex items-center justify-between text-xs">
@@ -947,7 +988,7 @@
             if (confirm('確定要刪除這個專案嗎？')) {
                 projects = projects.filter(p => p.id !== id);
                 localStorage.setItem('portfolio_projects', JSON.stringify(projects));
-                renderAdminLists();
+                renderAdminLists(adminProjFilter);
                 renderProjects(currentFilterCategory);
                 alert('專案已刪除！');
             }
@@ -968,7 +1009,7 @@
             };
             projects.unshift(newProject);
             localStorage.setItem('portfolio_projects', JSON.stringify(projects));
-            renderAdminLists();
+            renderAdminLists(adminProjFilter);
             renderProjects(currentFilterCategory);
             alert('專案已成功複製！');
         }
