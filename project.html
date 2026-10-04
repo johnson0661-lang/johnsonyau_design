@@ -78,7 +78,7 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header (加入同分類上下篇切換箭嘴) -->
+    <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
             <a href="index.html" class="group flex items-center">
@@ -86,16 +86,17 @@
             </a>
 
             <div class="flex items-center space-x-6">
-                <!-- 同分類上一個/下一個作品切換按鈕 -->
+                <!-- 簡約純圖標上下篇切換按鈕 -->
                 <div class="flex items-center space-x-2 border-r border-apple-border pr-6">
-                    <button onclick="prevProject()" id="prev-proj-btn" class="px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center shadow-sm" title="上一個同分類作品">
-                        <i class="fa-solid fa-chevron-left mr-1.5 text-[10px]"></i> <span id="prev-text">上一個</span>
+                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 rounded-full bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center justify-center shadow-sm" title="上一個同分類作品">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextProject()" id="next-proj-btn" class="px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center shadow-sm" title="下一個同分類作品">
-                        <span id="next-text">下一個</span> <i class="fa-solid fa-chevron-right ml-1.5 text-[10px]"></i>
+                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 rounded-full bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center justify-center shadow-sm" title="下一個同分類作品">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
 
+                <!-- 支援三語設定的返回列表按鈕 -->
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-1.5"></i> <span id="back-text">返回作品列表</span>
                 </a>
@@ -173,6 +174,14 @@
     <script>
         const langs = ['zh', 'en', 'ja'];
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
+        
+        // 三語返回列表按鈕字串
+        const backTexts = {
+            zh: "返回作品列表",
+            en: "Back to Projects",
+            ja: "プロジェクト一覧に戻る"
+        };
+
         let currentLangIndex = 0;
         let currentProjectData = null;
         let allProjects = [];
@@ -217,8 +226,6 @@
             }
 
             document.getElementById('lang-btn').textContent = langNames[langs[currentLangIndex]];
-            
-            // 計算同分類下的所有專案
             calcSameCategoryProjects();
             renderProjectContent();
         }
@@ -231,14 +238,13 @@
             if (catStr === 'Pop-up Store' || catStr === '快閃店') return '快閃店';
             if (catStr === '實體包裝設計' || catStr === '包裝設計' || catStr === 'Packaging Design') return '包裝設計';
             if (catStr === '周邊設計' || catStr === 'Merchandise') return '周邊設計';
+            if (catStr === '影片剪接' || catStr === 'Video Editing') return '影片剪接';
             return catStr || '其他';
         }
 
         function calcSameCategoryProjects() {
             if (!currentProjectData) return;
             const currentNormCat = getNormalizedCategory(currentProjectData.category);
-            
-            // 找出所有同分類的專案
             sameCategoryProjects = allProjects.filter(p => getNormalizedCategory(p.category) === currentNormCat);
             currentIndexInCat = sameCategoryProjects.findIndex(p => p.id === currentProjectData.id);
             if (currentIndexInCat === -1) currentIndexInCat = 0;
@@ -277,6 +283,7 @@
                 else if (norm === '快閃店') category = langKey === 'en' ? 'Pop-up Store' : (langKey === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
                 else if (norm === '包裝設計') category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
                 else if (norm === '周邊設計') category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
+                else if (norm === '影片剪接') category = langKey === 'en' ? 'Video Editing' : (langKey === 'ja' ? 'ビデオ編集' : '影片剪接');
                 else category = langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : '其他');
             }
 
@@ -287,6 +294,9 @@
             document.getElementById('project-category').textContent = category;
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
             document.getElementById('main-preview-img').src = currentProjectData.image;
+
+            // 更新三語返回按鈕文字
+            document.getElementById('back-text').textContent = backTexts[langKey];
 
             galleryImages = [];
             if (currentProjectData.image) galleryImages.push(currentProjectData.image);
