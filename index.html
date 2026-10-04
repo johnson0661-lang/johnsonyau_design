@@ -71,17 +71,15 @@
     <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <div class="w-24 hidden md:block"></div>
-            <!-- Centered Logo -->
             <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-                <a href="#" class="group">
+                <a href="index.html" class="group">
                     <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
                 </a>
             </div>
-            <!-- Nav Links -->
             <nav class="hidden md:flex items-center space-x-8 text-apple-gray ml-auto">
-                <a href="#works" class="hover:text-white transition">精選專案</a>
-                <a href="#translation" class="hover:text-white transition">電影翻譯紀錄</a>
-                <a href="#about" class="hover:text-white transition">專業資歷</a>
+                <a href="index.html#works" class="hover:text-white transition">精選專案</a>
+                <a href="index.html#translation" class="hover:text-white transition">電影翻譯紀錄</a>
+                <a href="index.html#about" class="hover:text-white transition">專業資歷</a>
             </nav>
             <div class="md:hidden"></div>
         </div>
@@ -136,7 +134,7 @@
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-            <p class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖[cite: 13]。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+            <p class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
         </div>
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </section>
@@ -150,10 +148,10 @@
             </div>
             <div class="md:col-span-2 space-y-6 text-apple-gray font-normal leading-relaxed text-base md:text-lg">
                 <p>
-                    畢業於香港知專設計學院（HKDI）視覺傳達高級文憑[cite: 16]。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理）[cite: 16]，擅長結合日式美學與精準的商業視覺傳達。
+                    畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。
                 </p>
                 <p>
-                    精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力[cite: 16]，長期擔綱日本動畫電影之字幕與宣傳物料在地化重任。
+                    精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力，長期擔綱日本動畫電影之字幕與宣傳物料在地化重任。
                 </p>
                 <div class="pt-4 flex flex-wrap gap-3">
                     <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">Adobe Illustrator</span>
@@ -177,36 +175,6 @@
     <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
-
-    <!-- Project Detail Modal (Enhanced with Multi-Image Gallery & Full Case Study View) -->
-    <div id="project-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-4xl w-full p-8 md:p-12 relative max-h-[90vh] overflow-y-auto shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <span id="modal-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-2 block"></span>
-            <h3 id="modal-title" class="text-3xl font-semibold text-white mb-6"></h3>
-            
-            <div id="modal-video-tabs" class="flex flex-wrap gap-2 mb-4 hidden"></div>
-            
-            <!-- Main Media Display -->
-            <div id="modal-media-container" class="w-full h-96 rounded-2xl mb-6 overflow-hidden bg-black/50 border border-apple-border flex items-center justify-center"></div>
-
-            <!-- Detailed Description -->
-            <div class="mb-8">
-                <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案介紹與設計理念</h4>
-                <p id="modal-description" class="text-apple-dark text-base leading-relaxed whitespace-pre-line"></p>
-            </div>
-
-            <!-- Additional Gallery Images Placeholder (Multi-Image Showcase) -->
-            <div id="modal-gallery-section" class="border-t border-apple-border/50 pt-6">
-                <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-4">更多專案細節與視覺展示</h4>
-                <div id="modal-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- Dynamic Gallery Images will load here -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Movie Poster Lightbox Modal -->
     <div id="poster-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4" onclick="closePosterModal()">
@@ -337,7 +305,6 @@
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
 
-        // 預設專案資料（包含 gallery 欄位可存放多張補充圖片網址）
         let projects = [
             { 
                 id: '1', 
@@ -346,7 +313,7 @@
                 image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
                 youtube: '', 
-                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' 
+                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。' 
             },
             { 
                 id: '2', 
@@ -355,7 +322,7 @@
                 image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
                 youtube: '', 
-                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' 
+                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現。' 
             },
             { 
                 id: '3', 
@@ -364,7 +331,7 @@
                 image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
                 youtube: '', 
-                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' 
+                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求。' 
             },
             { 
                 id: '4', 
@@ -373,7 +340,7 @@
                 image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80',
                 youtube: '', 
-                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' 
+                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學。' 
             },
             { 
                 id: '5', 
@@ -382,7 +349,7 @@
                 image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
                 youtube: '', 
-                description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料。捕捉美食質感並配合強烈促銷視覺，提升顧客消費意欲[cite: 19, 20]。' 
+                description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料。捕捉美食質感並配合強烈促銷視覺，提升顧客消費意欲。' 
             },
             { 
                 id: '6', 
@@ -490,19 +457,6 @@
             }
         }
 
-        function getYouTubeEmbedUrl(url) {
-            if (!url) return null;
-            let videoId = '';
-            if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1]?.split('?')[0];
-            } else if (url.includes('watch?v=')) {
-                videoId = url.split('watch?v=')[1]?.split('&')[0];
-            } else if (url.includes('embed/')) {
-                videoId = url.split('embed/')[1]?.split('?')[0];
-            }
-            return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-        }
-
         function renderProjects(filter = 'all') {
             const grid = document.getElementById('project-grid');
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
@@ -518,11 +472,11 @@
                 else if (index % 5 === 0) spanClass = "col-span-1 md:col-span-3 lg:col-span-3";
                 else spanClass = "col-span-1 md:col-span-1 lg:col-span-2";
 
+                // 點擊卡片直接跳轉到獨立詳情頁 project.html 並帶入 id
                 return `
-                    <div onclick="openModal('${p.id}')" class="group cursor-pointer card-glass rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 hover:scale-[1.01] ${spanClass} flex flex-col justify-between">
+                    <div onclick="location.href='project.html?id=${p.id}'" class="group cursor-pointer card-glass rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 hover:scale-[1.01] ${spanClass} flex flex-col justify-between">
                         <div class="overflow-hidden aspect-[16/10] bg-black relative">
                             <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
-                            ${p.youtube ? '<div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs text-white flex items-center border border-apple-border shadow-lg"><i class="fa-brands fa-youtube text-rose-500 mr-2 text-sm"></i> 影片剪接</div>' : ''}
                         </div>
                         <div class="p-8">
                             <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${p.category}</span>
@@ -564,78 +518,6 @@
                 }
             });
             renderProjects(category);
-        }
-
-        // Open Project Detail Modal with Multi-Image Gallery & Full Description
-        function openModal(id) {
-            const p = projects.find(item => item.id == id);
-            if (!p) return;
-            document.getElementById('modal-category').textContent = p.category;
-            document.getElementById('modal-title').textContent = p.title;
-            document.getElementById('modal-description').textContent = p.description;
-
-            const mediaContainer = document.getElementById('modal-media-container');
-            const videoTabsContainer = document.getElementById('modal-video-tabs');
-            videoTabsContainer.innerHTML = '';
-            videoTabsContainer.classList.add('hidden');
-
-            if (p.youtube && p.youtube.trim() !== '') {
-                const urls = p.youtube.split(',').map(u => u.trim()).filter(u => u.length > 0);
-                const embedUrls = urls.map(u => getYouTubeEmbedUrl(u)).filter(u => u !== null);
-
-                if (embedUrls.length > 0) {
-                    mediaContainer.innerHTML = `<iframe src="${embedUrls[0]}" class="w-full h-full border-0" allowfullscreen></iframe>`;
-
-                    if (embedUrls.length > 1) {
-                        videoTabsContainer.classList.remove('hidden');
-                        videoTabsContainer.classList.add('flex');
-                        videoTabsContainer.innerHTML = embedUrls.map((eUrl, index) => `
-                            <button onclick="switchModalVideo('${eUrl}', this)" class="px-3.5 py-1.5 rounded-full text-xs font-medium transition ${index === 0 ? 'bg-white text-black' : 'bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border'}">
-                                片段 ${index + 1}
-                            </button>
-                        `).join('');
-                    }
-                } else {
-                    mediaContainer.innerHTML = `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">`;
-                }
-            } else {
-                mediaContainer.innerHTML = `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">`;
-            }
-
-            // Render Gallery Images
-            const galleryGrid = document.getElementById('modal-gallery-grid');
-            const gallerySection = document.getElementById('modal-gallery-section');
-            galleryGrid.innerHTML = '';
-
-            if (p.gallery && p.gallery.trim() !== '') {
-                gallerySection.style.display = 'block';
-                const galleryUrls = p.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
-                galleryGrid.innerHTML = galleryUrls.map(gUrl => `
-                    <div class="overflow-hidden aspect-[4/3] rounded-xl bg-black border border-apple-border group cursor-pointer" onclick="openPosterModal('${p.title.replace(/'/g, "\\'")}', '專案細節', '${gUrl}')">
-                        <img src="${gUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    </div>
-                `).join('');
-            } else {
-                gallerySection.style.display = 'none';
-            }
-
-            document.getElementById('project-modal').classList.remove('hidden');
-            document.getElementById('project-modal').classList.add('flex');
-        }
-
-        function switchModalVideo(embedUrl, btn) {
-            document.getElementById('modal-media-container').innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0" allowfullscreen></iframe>`;
-            const parent = btn.parentElement;
-            parent.querySelectorAll('button').forEach(b => {
-                b.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border";
-            });
-            btn.className = "px-3.5 py-1.5 rounded-full text-xs font-medium transition bg-white text-black";
-        }
-
-        function closeModal() {
-            document.getElementById('project-modal').classList.add('hidden');
-            document.getElementById('project-modal').classList.remove('flex');
-            document.getElementById('modal-media-container').innerHTML = '';
         }
 
         function toggleAdminModal() {
