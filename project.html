@@ -124,7 +124,6 @@
             <!-- 左側：細節圖展示與切換控制 -->
             <div class="lg:col-span-6 space-y-6">
                 <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10] relative group">
-                    <!-- 點擊細節圖進行放大 -->
                     <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain rounded-2xl shadow-lg transition duration-500 cursor-pointer">
                     
                     <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
@@ -222,7 +221,29 @@
             const langKey = langs[currentLangIndex];
 
             const title = typeof currentProjectData.title === 'object' ? (currentProjectData.title[langKey] || currentProjectData.title.zh) : currentProjectData.title;
-            const category = typeof currentProjectData.category === 'object' ? (currentProjectData.category[langKey] || currentProjectData.category.zh) : currentProjectData.category;
+            
+            // 處理分類的多語言對應顯示
+            let category = '';
+            if (typeof currentProjectData.category === 'object') {
+                category = currentProjectData.category[langKey] || currentProjectData.category.zh;
+            } else {
+                // 如果後台存的是舊的字串格式，自動進行三語映射
+                const catStr = currentProjectData.category;
+                if (catStr === 'Pop-up Store' || catStr === '快閃店') {
+                    category = langs[currentLangIndex] === 'en' ? 'Pop-up Store' : (langs[currentLangIndex] === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
+                } else if (catStr === '字體設計' || catStr === 'Typeface 本地化') {
+                    category = langs[currentLangIndex] === 'en' ? 'Typeface' : (langs[currentLangIndex] === 'ja' ? 'タイポグラフィ' : '字體設計');
+                } else if (catStr === '展覽與視覺企劃' || catStr === '展覽') {
+                    category = langs[currentLangIndex] === 'en' ? 'Exhibition' : (langs[currentLangIndex] === 'ja' ? '展覧会' : '展覽與視覺企劃');
+                } else if (catStr === '實體包裝設計' || catStr === '包裝設計') {
+                    category = langs[currentLangIndex] === 'en' ? 'Packaging Design' : (langs[currentLangIndex] === 'ja' ? 'パッケージ' : '實體包裝設計');
+                } else if (catStr === '周邊設計') {
+                    category = langs[currentLangIndex] === 'en' ? 'Merchandise' : (langs[currentLangIndex] === 'ja' ? 'グッズ設計' : '周邊設計');
+                } else {
+                    category = catStr;
+                }
+            }
+
             const description = typeof currentProjectData.description === 'object' ? (currentProjectData.description[langKey] || currentProjectData.description.zh) : currentProjectData.description;
 
             document.getElementById('page-title').textContent = title + ' | Johnson Yau';
@@ -276,7 +297,6 @@
             updateGalleryDisplay();
         }
 
-        // 燈箱控制函數
         function openLightbox(imgSrc) {
             if (!imgSrc) return;
             document.getElementById('lightbox-img').src = imgSrc;
@@ -287,7 +307,6 @@
             document.getElementById('lightbox-modal').classList.remove('active');
         }
 
-        // 監聽 ESC 鍵關閉燈箱
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
