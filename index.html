@@ -187,45 +187,44 @@
 
     <!-- Works Section -->
     <section id="works" class="max-w-7xl mx-auto px-6 py-40 reveal-up">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
-            <div class="flex flex-col md:flex-row md:items-center gap-4 mt-6 md:mt-0">
-                <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs">
-                    <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
-                    <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
-                    <button onclick="filterProjects('展覽與視覺企劃', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
-                    <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
-                    <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
-                    <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
-                    <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
-                </div>
-                <!-- 移除數字，僅保留左右按鈕 -->
-                <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0">
-                    <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </button>
-                    <button onclick="nextPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </button>
-                </div>
+            <!-- 上一頁 / 下一頁 按鈕獨立置於右下方一行 -->
+            <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
+                <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button onclick="nextPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
             </div>
+        </div>
+        <!-- 獨立一行的分類篩選按鈕列 -->
+        <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs mb-12">
+            <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
+            <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
+            <button onclick="filterProjects('展覽與視覺企劃', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
+            <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
+            <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
+            <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
+            <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" onmouseenter="pauseAutoPlay()" onmouseleave="startAutoPlay()"></div>
     </section>
 
     <!-- Translation Section -->
     <section id="translation" class="max-w-7xl mx-auto px-6 py-40 reveal-up">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
                 <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
                 <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
             </div>
-            <!-- 電影翻譯分頁控制：移除數字提示 -->
-            <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 mt-6 md:mt-0">
+            <!-- 電影翻譯分頁按鈕獨立置於右下方 -->
+            <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 self-end md:self-auto">
                 <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
