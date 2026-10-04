@@ -150,7 +150,7 @@
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
             </a>
             <nav class="hidden md:flex items-center space-x-8 text-apple-gray">
-                <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
+                <a href="index.html#works" class="nav-works hover:text-white transition">作品集</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
             </nav>
@@ -190,7 +190,7 @@
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
-                <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
+                <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">作品集分類</h3>
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
                 <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-all">全部專案</button>
@@ -223,7 +223,7 @@
             <div class="md:col-span-7 space-y-6">
                 <div>
                     <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">About Me & Contact</h2>
-                    <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">專業背景與聯絡方式</h3>
+                    <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">關於我與聯絡方式</h3>
                 </div>
                 <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4">
                     <!-- 關於我動態渲染區塊 -->
@@ -438,15 +438,15 @@
 
         const translationsDict = {
             zh: {
-                navWorks: "精選專案", navTrans: "電影翻譯紀錄", navAbout: "關於我",
+                navWorks: "作品集", navTrans: "電影翻譯紀錄", navAbout: "關於我",
                 heroTag: "Multimedia Design & IP Localization",
                 heroTitle: "簡約日式美學，<br><span class='text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray'>精準視覺敘事。</span>",
                 heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class='hidden md:inline'>Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
                 btnWorks: "探索作品集", btnTrans: "電影翻譯紀錄",
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
-                aboutTitle: "專業背景與聯絡方式",
-                filterAll: "全部專案", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計"
+                aboutTitle: "自我介紹與聯絡方式",
+                filterAll: "全部作品", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -456,7 +456,7 @@
                 btnWorks: "Explore Works", btnTrans: "Translation Works",
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
-                aboutTitle: "Professional Background & Contact",
+                aboutTitle: "About Me & Contact",
                 filterAll: "All Projects", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "Packaging"
             },
             ja: {
@@ -467,7 +467,7 @@
                 btnWorks: "作品集を見る", btnTrans: "翻訳実績を見る",
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
-                aboutTitle: "専門的な背景と連絡先",
+                aboutTitle: "自己紹介と連絡先",
                 filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterPopup: "ポップアップ", filterPkg: "パッケージ"
             }
         };
