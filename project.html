@@ -147,12 +147,26 @@
         </div>
     </div>
 
-    <!-- Project Editor Modal (三語編輯) -->
+    <!-- Project Editor Modal (加入電腦圖片上載功能) -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (三語)</h3>
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (圖片與三語)</h3>
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片 (可輸入網址 或 選擇電腦檔案)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="edit-image" required placeholder="https:// 或上載圖片" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                        <label class="px-4 py-3 bg-apple-accent text-white rounded-xl cursor-pointer hover:bg-blue-600 transition flex items-center justify-center whitespace-nowrap font-medium shadow">
+                            <i class="fa-solid fa-upload mr-1.5"></i> 選擇檔案
+                            <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'edit-image')">
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細圖庫網址 (多張請用半形逗號 , 分隔)</label>
+                    <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (繁體中文)</label>
                     <input type="text" id="edit-title-zh" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
@@ -200,9 +214,9 @@
                 image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
                 description: { 
-                    zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。', 
-                    en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media[cite: 18].', 
-                    ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現[cite: 18]。' 
+                    zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
+                    en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
+                    ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現。' 
                 } 
             },
             { 
@@ -212,9 +226,9 @@
                 image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
                 description: { 
-                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。', 
-                    en: 'Led the spatial planning, visual direction, and limited merchandise development for the Ultraman Pop-up Store at Langham Place in 2025[cite: 23].', 
-                    ja: '2025年にランガム・プレイスで開催されたウルトラマンポップアップストアの空間動線計画、ビジュアル、限定グッズ開発を主導[cite: 23]。' 
+                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現。', 
+                    en: 'Led the spatial planning, visual direction, and limited merchandise development for the Ultraman Pop-up Store at Langham Place in 2025.', 
+                    ja: '2025年にランガム・プレイスで開催されたウルトラマンポップアップストアの空間動線計画、ビジュアル、限定グッズ開発を主導。' 
                 } 
             },
             { 
@@ -224,9 +238,9 @@
                 image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', 
                 description: { 
-                    zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。', 
-                    en: 'Developed a series of physical F&B packaging items for film promotion, perfectly blending character IP aesthetics with mass production requirements[cite: 21].', 
-                    ja: '映画プロモーション用の飲食パッケージシリーズ（紙コップ、ホットドッグボックス、ポップコーンバケットなど）を開発[cite: 21]。' 
+                    zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求。', 
+                    en: 'Developed a series of physical F&B packaging items for film promotion, perfectly blending character IP aesthetics with mass production requirements.', 
+                    ja: '映画プロモーション用の飲食パッケージシリーズ（紙コップ、ホットドッグボックス、ポップコーンバケットなど）を開発。' 
                 } 
             },
             { 
@@ -236,9 +250,9 @@
                 image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
                 description: { 
-                    zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。', 
-                    en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set[cite: 22].', 
-                    ja: '日本のサプライヤーと連携し、4K UHD + Blu-ray豪華版セットの素材、コスト、パッケージング工程を統括[cite: 22]。' 
+                    zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學。', 
+                    en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set.', 
+                    ja: '日本のサプライヤーと連携し、4K UHD + Blu-ray豪華版セットの素材、コスト、パッケージング工程を統括。' 
                 } 
             }
         ];
@@ -314,6 +328,17 @@
             modal.classList.remove('flex');
         }
 
+        // 處理從電腦上傳圖片並自動轉為 Base64
+        function handleImageUpload(event, targetInputId) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(targetInputId).value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
                 e.preventDefault();
@@ -383,6 +408,8 @@
             document.getElementById('edit-id').value = id;
             const p = projects.find(item => item.id == id);
             if (!p) return;
+            document.getElementById('edit-image').value = p.image || '';
+            document.getElementById('edit-gallery').value = p.gallery || '';
             document.getElementById('edit-title-zh').value = p.title.zh || '';
             document.getElementById('edit-title-en').value = p.title.en || '';
             document.getElementById('edit-title-ja').value = p.title.ja || '';
@@ -403,6 +430,8 @@
             const id = document.getElementById('edit-id').value;
             const idx = projects.findIndex(p => p.id == id);
             if (idx !== -1) {
+                projects[idx].image = document.getElementById('edit-image').value;
+                projects[idx].gallery = document.getElementById('edit-gallery').value;
                 projects[idx].title.zh = document.getElementById('edit-title-zh').value;
                 projects[idx].title.en = document.getElementById('edit-title-en').value;
                 projects[idx].title.ja = document.getElementById('edit-title-ja').value;
