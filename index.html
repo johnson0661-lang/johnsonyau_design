@@ -11,7 +11,7 @@
                 extend: {
                     colors: {
                         minimal: {
-                            bg: '#fafafa',
+                            bg: '#fbfbfb',
                             card: '#ffffff',
                             text: '#222222',
                             gray: '#888888',
@@ -40,8 +40,16 @@
     <script src="data.js"></script>
 
     <style>
+        /* 注入靈魂的極簡網格背景 */
         body {
-            background-color: #fafafa;
+            background-color: #fbfbfb;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 0, 0, 0.015) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 0, 0, 0.01) 0%, transparent 50%),
+                linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+            background-attachment: fixed;
             color: #222222;
         }
 
@@ -58,7 +66,6 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
         }
 
-        /* 日系極簡卡片效果 */
         .spotlight-card {
             background: #ffffff;
             border-radius: 1.5rem;
@@ -164,7 +171,6 @@
             to { opacity: 0; transform: translateY(-20px) scale(0.9); }
         }
         
-        /* 若原本是白色 Logo，用 filter 將其反轉為黑色 */
         .logo-invert { filter: invert(1) grayscale(1); }
     </style>
 </head>
@@ -194,7 +200,7 @@
     <!-- Hero Section -->
     <section class="min-h-[80vh] max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col justify-center items-center text-center relative reveal-up active">
         <div>
-            <span class="hero-tag inline-block text-[10px] uppercase tracking-[0.25em] text-minimal-gray font-semibold mb-6 px-4 py-1.5 rounded-full bg-minimal-lightgray border border-minimal-border">
+            <span class="hero-tag inline-block text-[10px] uppercase tracking-[0.25em] text-minimal-gray font-semibold mb-6 px-4 py-1.5 rounded-full bg-white border border-minimal-border shadow-sm">
                 Multimedia Design & IP Localization
             </span>
             <h1 class="hero-title text-5xl md:text-7xl font-bold tracking-tight text-minimal-accent mb-8 leading-[1.1] text-center">
@@ -264,10 +270,10 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-minimal-lightgray py-40 reveal-up border-t border-minimal-border">
+    <section id="about" class="bg-white py-40 reveal-up border-t border-minimal-border">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center">
-                <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border border-minimal-border shadow-soft bg-white group">
+                <div class="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border border-minimal-border shadow-soft bg-minimal-lightgray group relative">
                     <img src="profile.jpg" alt="Johnson Yau" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://via.placeholder.com/300x300?text=Profile'">
                 </div>
             </div>
@@ -292,7 +298,7 @@
     </button>
 
     <!-- Footer -->
-    <footer class="py-12 text-center text-[11px] text-minimal-gray">
+    <footer class="py-12 text-center text-[11px] text-minimal-gray bg-minimal-lightgray border-t border-minimal-border">
         <p>&copy; 2026 Johnson Yau. All rights reserved. <br><span class="opacity-50 mt-1 inline-block">Press Ctrl/Cmd + Shift + L for Admin Panel</span></p>
     </footer>
 
