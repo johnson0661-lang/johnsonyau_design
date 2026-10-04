@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Johnson Yau | Design & Creative Portfolio</title>
+    <title>Johnson Yau | Multimedia Design & Creative Portfolio</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -70,21 +70,18 @@
     <!-- Header with Centered Logo -->
     <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
-            <!-- Left empty spacing for balance -->
             <div class="w-24 hidden md:block"></div>
-
             <!-- Centered Logo -->
             <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                 <a href="#" class="group">
                     <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
                 </a>
             </div>
-
-            <!-- Right Nav Links -->
+            <!-- Nav Links -->
             <nav class="hidden md:flex items-center space-x-8 text-apple-gray ml-auto">
-                <a href="#works" class="hover:text-white transition">作品集</a>
-                <a href="#translation" class="hover:text-white transition">電影翻譯</a>
-                <a href="#about" class="hover:text-white transition">關於</a>
+                <a href="#works" class="hover:text-white transition">精選專案</a>
+                <a href="#translation" class="hover:text-white transition">電影翻譯紀錄</a>
+                <a href="#about" class="hover:text-white transition">專業資歷</a>
             </nav>
             <div class="md:hidden"></div>
         </div>
@@ -96,17 +93,17 @@
             <div class="w-[700px] h-[700px] bg-gradient-to-tr from-blue-600/30 via-indigo-600/20 to-purple-600/20 rounded-full blur-[160px] animate-glow"></div>
         </div>
         <span class="inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-4 px-3 py-1 rounded-full bg-apple-lightgray border border-apple-border">
-            Creative Design & Localization
+            Multimedia Design & IP Localization
         </span>
         <h1 class="text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08] text-center">
             極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-300 to-apple-gray">精準視覺敘事。</span>
         </h1>
         <p class="text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
-            專注於商品周邊、平面設計、Typeface本地化、展覽快閃店、影片剪接與日文字幕電影翻譯。
+            專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
         </p>
         <div class="flex justify-center gap-4">
             <a href="#works" class="px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition transform hover:scale-105 duration-300 shadow-2xl">
-                探索精選作品
+                探索精選專案
             </a>
             <a href="#translation" class="px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition transform hover:scale-105 duration-300">
                 電影翻譯紀錄
@@ -118,16 +115,17 @@
     <section id="works" class="max-w-7xl mx-auto px-6 py-28 border-t border-apple-border/50 reveal-up">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
             <div>
-                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Works</h2>
-                <h3 class="text-4xl font-semibold tracking-tight text-white">作品一覽</h3>
+                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
+                <h3 class="text-4xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
+            <!-- Updated filter buttons matching CV categories -->
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
-                <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm">全部</button>
-                <button onclick="filterProjects('商品，禮品，周邊')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">商品/周邊</button>
-                <button onclick="filterProjects('平面設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">平面設計</button>
-                <button onclick="filterProjects('Typeface本地化/logo設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface/Logo</button>
-                <button onclick="filterProjects('展覽/快閃店')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">展覽/快閃店</button>
-                <button onclick="filterProjects('影片剪接')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">影片剪接</button>
+                <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm">全部專案</button>
+                <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface 本地化</button>
+                <button onclick="filterProjects('Pop-up Store 與展覽')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Pop-up 展覽</button>
+                <button onclick="filterProjects('實體包裝設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">實體包裝</button>
+                <button onclick="filterProjects('F&B 商業平面')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">F&B 商業平面</button>
+                <button onclick="filterProjects('影片剪接與動態')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">影片剪接</button>
             </div>
         </div>
 
@@ -139,7 +137,7 @@
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 class="text-4xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-            <p class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+            <p class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖[cite: 13]。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
         </div>
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </section>
@@ -149,15 +147,24 @@
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 items-center">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-3">About Me</h2>
-                <h3 class="text-3xl font-semibold text-white tracking-tight">設計哲學與專業範疇</h3>
+                <h3 class="text-3xl font-semibold text-white tracking-tight">專業背景與設計哲學</h3>
             </div>
             <div class="md:col-span-2 space-y-6 text-apple-gray font-normal leading-relaxed text-base md:text-lg">
                 <p>
-                    專注於平面設計、商品周邊開發、Logo與Typeface本地化、展覽快閃店視覺規劃及動態影像剪接。追求極致簡約、結構清晰與精準的商業視覺傳達。
+                    畢業於香港知專設計學院（HKDI）視覺傳達高級文憑[cite: 16]。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理）[cite: 16]，擅長結合日式美學與精準的商業視覺傳達。
                 </p>
                 <p>
-                    具備流利日語能力，長年參與日文字幕至繁體中文電影翻譯，擅長捕捉文化背景與情感細節，將語境完美轉化。
+                    精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力[cite: 16]，長期擔綱日本動畫電影之字幕與宣傳物料在地化重任。
                 </p>
+                <div class="pt-4 flex flex-wrap gap-3">
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">Adobe Illustrator</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">Photoshop</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">InDesign</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">Premiere Pro</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">After Effects</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">Blender 3D</span>
+                    <span class="px-3.5 py-1.5 rounded-full bg-apple-lightgray border border-apple-border text-xs text-white">日語 N1</span>
+                </div>
             </div>
         </div>
     </section>
@@ -223,13 +230,13 @@
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
                 <div class="space-x-2">
-                    <button onclick="openEditorForNewProject()" class="px-4 py-2 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow">+ 新增作品</button>
+                    <button onclick="openEditorForNewProject()" class="px-4 py-2 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow">+ 新增專案</button>
                     <button onclick="openEditorForNewTranslation()" class="px-4 py-2 bg-apple-lightgray text-white rounded-full text-xs font-medium hover:bg-apple-border transition border border-apple-border">+ 新增翻譯紀錄</button>
                 </div>
             </div>
             <div class="space-y-6">
                 <div>
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">作品列表</h4>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表</h4>
                     <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
                 </div>
                 <div class="pt-4 border-t border-apple-border/50">
@@ -243,7 +250,7 @@
     <!-- Project Editor Modal -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯作品</h3>
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案</h3>
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
@@ -253,11 +260,11 @@
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">分類</label>
                     <select id="edit-category" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                        <option value="商品，禮品，周邊">商品，禮品，周邊</option>
-                        <option value="平面設計">平面設計</option>
-                        <option value="Typeface本地化/logo設計">Typeface本地化/logo設計</option>
-                        <option value="展覽/快閃店">展覽/快閃店</option>
-                        <option value="影片剪接">影片剪接</option>
+                        <option value="Typeface 本地化">Typeface 本地化</option>
+                        <option value="Pop-up Store 與展覽">Pop-up Store 與展覽</option>
+                        <option value="實體包裝設計">實體包裝設計</option>
+                        <option value="F&B 商業平面">F&B 商業平面</option>
+                        <option value="影片剪接與動態">影片剪接與動態</option>
                     </select>
                 </div>
                 <div>
@@ -313,12 +320,14 @@
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
 
+        // 預設專案資料（對應 CV 中的核心實戰項目）
         let projects = [
-            { id: '1', title: '限定角色周邊商品設計系列', category: '商品，禮品，周邊', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', youtube: '', description: '為動漫及角色 IP 開發之精美周邊、金屬徽章及壓克力立牌視覺規劃。' },
-            { id: '2', title: '品牌形象識別與平面宣傳品', category: '平面設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', youtube: '', description: '主導整體平面印刷品排版、海報視覺與宣傳物料設計。' },
-            { id: '3', title: '特製日文字體本地化與 Logo 訂製', category: 'Typeface本地化/logo設計', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', youtube: '', description: '針對特定展覽與品牌視覺需求進行日文字體本地化調整及專屬 Logo 塑造。' },
-            { id: '4', title: '動漫IP主題快閃店與展覽空間視覺', category: '展覽/快閃店', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', youtube: '', description: '日本授權展覽與期間限定 Pop-up Store 之主視覺及空間導視規劃。' },
-            { id: '5', title: '官方宣傳短片剪輯合集 (支援多影片)', category: '影片剪接', image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80', youtube: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ, https://www.youtube.com/watch?v=3JZ_D3ELwOQ', description: '活動宣傳片與動態影像剪輯合集。點擊可透過上方分頁切換觀看不同片段。' }
+            { id: '1', title: '數碼暴龍 Last Evolution 絆 - 字體在地化', category: 'Typeface 本地化', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', youtube: '', description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface[cite: 18]。' },
+            { id: '2', title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', youtube: '', description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發[cite: 23]。' },
+            { id: '3', title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', youtube: '', description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶[cite: 21]。' },
+            { id: '4', title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', youtube: '', description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝[cite: 22]。' },
+            { id: '5', title: '板前壽司 & 上膳食堂聖誕餐牌宣傳品', category: 'F&B 商業平面', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', youtube: '', description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料[cite: 19, 20]。' },
+            { id: '6', title: '《蠟筆小新》2025 期間限定店視覺規劃', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', description: 'AIRSIDE 蠟筆小新 Pop-up Store 之空間平面佈局、打卡位與限定周邊企劃[cite: 24]。' }
         ];
 
         let translations = [
@@ -434,7 +443,7 @@
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
             
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-16 text-center text-apple-gray text-sm">此分類暫無作品</div>`;
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-apple-gray text-sm">此分類暫無專案</div>`;
                 return;
             }
 
@@ -483,7 +492,7 @@
         function filterProjects(category) {
             currentFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.textContent.trim() === category || (category === 'all' && btn.textContent.trim() === '全部')) {
+                if(btn.textContent.trim() === category || (category === 'all' && btn.textContent.trim() === '全部專案')) {
                     btn.className = "filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium text-xs shadow-sm";
                 } else {
                     btn.className = "filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium text-xs border border-apple-border";
@@ -589,7 +598,7 @@
         function openEditorForNewProject() {
             document.getElementById('edit-id').value = '';
             document.getElementById('edit-title').value = '';
-            document.getElementById('edit-category').value = '商品，禮品，周邊';
+            document.getElementById('edit-category').value = 'Typeface 本地化';
             document.getElementById('edit-image').value = '';
             document.getElementById('edit-youtube').value = '';
             document.getElementById('edit-description').value = '';
@@ -636,7 +645,7 @@
         }
 
         function deleteProject(id) {
-            if (confirm('確定刪除此作品？')) {
+            if (confirm('確定刪除此專案？')) {
                 projects = projects.filter(p => p.id != id);
                 renderProjects(currentFilter);
                 renderAdminLists();
