@@ -495,8 +495,20 @@
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM", authDomain: "johnsonportfolio-1262d.firebaseapp.com", projectId: "johnsonportfolio-1262d", storageBucket: "johnsonportfolio-1262d.firebasestorage.app", messagingSenderId: "656225433263", appId: "1:656225433263:web:545e29b1b5ec71c737065a" };
         firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
+       const ADMIN_PASSWORD = 'johnson2026'; // ✅ 加回了密碼設定
         let projects = []; let translations = []; let aboutData = { zh: "正在載入...", en: "Loading...", ja: "読み込み中..." };
         const langs = ['zh', 'en', 'ja']; const langNames = { zh: 'EN', en: '日', ja: '繁' }; let currentLangIndex = 0;
+        
+        // ✅ 補回下載資料庫備份功能
+        function exportDataJS() {
+            const dataObj = { projects, translations, aboutData };
+            const jsContent = `// Johnson Yau 作品集全球資料庫\nwindow.PORTFOLIO_DATA = ${JSON.stringify(dataObj, null, 4)};`;
+            const blob = new Blob([jsContent], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'data.js';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            showToast('✅ 資料庫檔案 (data.js) 已成功下載！');
+        }
         let currentFilterCategory = 'featured'; let currentPageIndex = 0; let itemsPerPage = 4; let autoPlayTimer = null;
         let transPageIndex = 0; let transItemsPerPage = 8; let transAutoPlayTimer = null;
         let adminProjPageIndex = 0; let adminProjPerPage = 10; let adminTransPageIndex = 0; let adminTransPerPage = 10;
@@ -582,8 +594,48 @@
         function startAutoPlay() { autoPlayTimer = setInterval(nextPage, 7000); } function pauseAutoPlay() { clearInterval(autoPlayTimer); }
         function startTransAutoPlay() { transAutoPlayTimer = setInterval(nextTransPage, 8000); } function pauseTransAutoPlay() { clearInterval(transAutoPlayTimer); }
         function renderAbout() { const container = document.getElementById('about-desc'); if(container) container.innerHTML = aboutData[langs[currentLangIndex]] || aboutData.zh; }
-        function switchLanguage() { currentLangIndex = (currentLangIndex + 1) % langs.length; const langKey = langs[currentLangIndex]; document.getElementById('lang-btn').textContent = langNames[langKey]; const t = translationsDict[langKey]; document.querySelector('.nav-works').textContent = t.navWorks; document.querySelector('.nav-trans').textContent = t.navTrans; document.querySelector('.nav-about').textContent = t.navAbout; document.querySelector('.hero-tag').textContent = t.heroTag; document.querySelector('.hero-title').innerHTML = t.heroTitle; document.querySelector('.hero-desc').innerHTML = t.heroDesc; document.querySelector('.btn-works').textContent = t.btnWorks; document.getElementById('works-heading').textContent = t.worksHeading; document.getElementById('trans-heading').textContent = t.transHeading; document.getElementById('trans-sub').textContent = t.transSub; document.getElementById('about-title').textContent = t.aboutTitle; document.getElementById('btn-featured').textContent = t.filterFeatured; document.getElementById('btn-type').textContent = t.filterType; document.getElementById('btn-exhibition').textContent = t.filterExhibition; document.getElementById('btn-popup').textContent = t.filterPopup; document.getElementById('btn-pkg').textContent = t.filterPkg; document.getElementById('btn-merch').textContent = t.filterMerch; document.getElementById('btn-video').textContent = t.filterVideo; document.getElementById('btn-other').textContent = t.filterOther; renderProjects(); renderTranslations(); renderAbout(); }
-        
+function switchLanguage() { 
+            currentLangIndex = (currentLangIndex + 1) % langs.length; 
+            const langKey = langs[currentLangIndex]; 
+            const t = translationsDict[langKey]; 
+            
+            // 更新語言按鈕文字
+            const langBtn = document.getElementById('lang-btn');
+            if (langBtn) langBtn.textContent = langNames[langKey]; 
+            
+            // 導覽列
+            if(document.querySelector('.nav-works')) document.querySelector('.nav-works').textContent = t.navWorks; 
+            if(document.querySelector('.nav-trans')) document.querySelector('.nav-trans').textContent = t.navTrans; 
+            if(document.querySelector('.nav-about')) document.querySelector('.nav-about').textContent = t.navAbout; 
+            
+            // Hero 區塊
+            if(document.querySelector('.hero-tag')) document.querySelector('.hero-tag').textContent = t.heroTag; 
+            if(document.querySelector('.hero-title')) document.querySelector('.hero-title').innerHTML = t.heroTitle; 
+            if(document.querySelector('.hero-desc')) document.querySelector('.hero-desc').innerHTML = t.heroDesc; 
+            if(document.querySelector('.btn-works')) document.querySelector('.btn-works').textContent = t.btnWorks; 
+            if(document.querySelector('.btn-trans')) document.querySelector('.btn-trans').textContent = t.btnTrans; 
+            
+            // 標題與副標題
+            if(document.getElementById('works-heading')) document.getElementById('works-heading').textContent = t.worksHeading; 
+            if(document.getElementById('trans-heading')) document.getElementById('trans-heading').textContent = t.transHeading; 
+            if(document.getElementById('trans-sub')) document.getElementById('trans-sub').textContent = t.transSub; 
+            if(document.getElementById('about-title')) document.getElementById('about-title').textContent = t.aboutTitle; 
+            
+            // 分類篩選按鈕
+            if(document.getElementById('btn-featured')) document.getElementById('btn-featured').textContent = t.filterFeatured; 
+            if(document.getElementById('btn-type')) document.getElementById('btn-type').textContent = t.filterType; 
+            if(document.getElementById('btn-exhibition')) document.getElementById('btn-exhibition').textContent = t.filterExhibition; 
+            if(document.getElementById('btn-popup')) document.getElementById('btn-popup').textContent = t.filterPopup; 
+            if(document.getElementById('btn-pkg')) document.getElementById('btn-pkg').textContent = t.filterPkg; 
+            if(document.getElementById('btn-merch')) document.getElementById('btn-merch').textContent = t.filterMerch; 
+            if(document.getElementById('btn-video')) document.getElementById('btn-video').textContent = t.filterVideo; 
+            if(document.getElementById('btn-other')) document.getElementById('btn-other').textContent = t.filterOther; 
+            
+            // 重新渲染動態內容
+            renderProjects(); 
+            renderTranslations(); 
+            renderAbout(); 
+        }        
         document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') { e.preventDefault(); openPasswordModal(); } if (e.key === 'Escape') { closePasswordModal(); toggleAdminModal(false); closeEditModal(); closeTransEditModal(); } });
         function openPasswordModal() { document.getElementById('admin-password-input').value = ''; document.getElementById('password-modal').classList.remove('hidden'); document.getElementById('password-modal').classList.add('flex'); document.getElementById('admin-password-input').focus(); }
         function closePasswordModal() { document.getElementById('password-modal').classList.add('hidden'); document.getElementById('password-modal').classList.remove('flex'); }
