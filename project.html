@@ -78,19 +78,14 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header (無框、置中、純白字) -->
+    <!-- Header (已移除中間分類文字) -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
             </a>
-            
-            <!-- 中間分類：純白字、絕對置中、無任何框 -->
-            <div class="absolute left-1/2 -translate-x-1/2 text-white font-medium text-xs tracking-wider">
-                <span id="nav-category-badge">載入中...</span>
-            </div>
 
-            <div class="flex items-center space-x-6 z-10">
+            <div class="flex items-center space-x-6 z-10 ml-auto">
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
                 </a>
@@ -218,7 +213,6 @@
 
             const title = typeof currentProjectData.title === 'object' ? (currentProjectData.title[langKey] || currentProjectData.title.zh) : currentProjectData.title;
             
-            // 統一對應並清洗分類名稱
             let category = '';
             let rawCat = currentProjectData.category;
             if (typeof rawCat === 'object') {
@@ -245,7 +239,6 @@
             document.getElementById('page-title').textContent = title + ' | Johnson Yau';
             document.getElementById('project-title').textContent = title;
             document.getElementById('project-category').textContent = category;
-            document.getElementById('nav-category-badge').textContent = category;
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
             document.getElementById('main-preview-img').src = currentProjectData.image;
 
