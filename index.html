@@ -263,6 +263,7 @@
                     <button onclick="switchAdminTab('translations')" id="tab-trans-btn" class="px-4 py-2 bg-white text-minimal-gray border border-minimal-border hover:text-minimal-accent transition text-xs">電影翻譯紀錄</button>
                     <button onclick="switchAdminTab('about')" id="tab-about-btn" class="px-4 py-2 bg-white text-minimal-gray border border-minimal-border hover:text-minimal-accent transition text-xs">關於我</button>
                     <button onclick="exportDataJS()" class="px-4 py-2 bg-white text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition text-xs shadow-hard"><i class="fa-solid fa-download mr-1"></i> 備份資料</button>
+                    <button onclick="adminLogout()" class="px-4 py-2 bg-[#ffdfdf] text-red-600 border border-red-300 hover:bg-red-600 hover:text-white transition text-xs shadow-hard"><i class="fa-solid fa-right-from-bracket mr-1"></i> 登出</button>
                 </div>
             </div>
             <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-minimal-accent w-10 h-10 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white">
@@ -498,87 +499,62 @@
         };
         firebase.initializeApp(firebaseConfig); 
         const db = firebase.firestore();
+        
+        // 密碼與驗證狀態
         const ADMIN_PASSWORD = 'johnson2026';
+        let isAdminAuthenticated = false;
         
         let projects = []; 
         let translations = []; 
-        let aboutData = { zh: "正在載入...", en: "Loading...", ja: "読み込み中..." };
+        let aboutData = { 
+            zh: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。", 
+            en: "Focused on Japanese anime IP licensing promotions, typography localization, pop-up exhibitions, packaging design, and Japanese film subtitling.", 
+            ja: "日本アニメ・IP公式宣伝デザイン、フォントローカライズ、ポップアップストア企画、パッケージデザイン、映画字幕翻訳に注力。" 
+        };
         
         const langs = ['zh', 'en', 'ja']; 
         const langNames = { zh: 'EN', en: '日', ja: '繁' }; 
         let currentLangIndex = 0;
 
-        // ✅ 補齊多國語言文字字典
         const translationsDict = {
             zh: {
-                navWorks: '精選專案',
-                navTrans: '電影翻譯紀錄',
-                navAbout: '關於我',
+                navWorks: '精選專案', navTrans: '電影翻譯紀錄', navAbout: '關於我',
                 heroTag: 'Multimedia Design & IP Localization',
                 heroTitle: '簡約日式美學，<br><span class="text-minimal-gray">精準視覺敘事。</span>',
                 heroDesc: '專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class="hidden md:inline">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。',
-                btnWorks: '探索作品集',
-                btnTrans: '電影翻譯紀錄',
+                btnWorks: '探索作品集', btnTrans: '電影翻譯紀錄',
                 worksHeading: '實戰專案分類',
                 transHeading: '日文字幕 > 繁體中文字幕電影翻譯',
                 transSub: '精準還原語境、文化脈絡與情感細節之影視在地化作品。',
                 aboutTitle: '專業背景與聯絡方式',
-                filterFeatured: '精選作品',
-                filterType: '字體設計',
-                filterExhibition: '展覽',
-                filterPopup: '快閃店',
-                filterPkg: '包裝設計',
-                filterMerch: '周邊設計',
-                filterVideo: '影片剪接',
-                filterOther: '其他'
+                filterFeatured: '精選作品', filterType: '字體設計', filterExhibition: '展覽', filterPopup: '快閃店', filterPkg: '包裝設計', filterMerch: '周邊設計', filterVideo: '影片剪接', filterOther: '其他'
             },
             en: {
-                navWorks: 'Selected Projects',
-                navTrans: 'Movie Localization',
-                navAbout: 'About Me',
+                navWorks: 'Selected Projects', navTrans: 'Movie Localization', navAbout: 'About Me',
                 heroTag: 'Multimedia Design & IP Localization',
                 heroTitle: 'Minimalist Aesthetics,<br><span class="text-minimal-gray">Precise Visual Storytelling.</span>',
                 heroDesc: 'Specialized in Japanese ACG IP promotional materials, Typography Localization,<br class="hidden md:inline">Pop-up store exhibition planning, packaging design, and Japanese movie subtitling.',
-                btnWorks: 'Explore Projects',
-                btnTrans: 'Subtitling Works',
+                btnWorks: 'Explore Projects', btnTrans: 'Subtitling Works',
                 worksHeading: 'Project Categories',
                 transHeading: 'Japanese to Traditional Chinese Subtitle Localization',
                 transSub: 'High-fidelity cinematic localization capturing cultural context and nuanced emotions.',
                 aboutTitle: 'Background & Contact',
-                filterFeatured: 'Featured',
-                filterType: 'Typography',
-                filterExhibition: 'Exhibition',
-                filterPopup: 'Pop-up Store',
-                filterPkg: 'Packaging',
-                filterMerch: 'Merchandise',
-                filterVideo: 'Video Editing',
-                filterOther: 'Others'
+                filterFeatured: 'Featured', filterType: 'Typography', filterExhibition: 'Exhibition', filterPopup: 'Pop-up Store', filterPkg: 'Packaging', filterMerch: 'Merchandise', filterVideo: 'Video Editing', filterOther: 'Others'
             },
             ja: {
-                navWorks: '実績紹介',
-                navTrans: '映画字幕翻訳実績',
-                navAbout: '自己紹介',
+                navWorks: '実績紹介', navTrans: '映画字幕翻訳実績', navAbout: '自己紹介',
                 heroTag: 'Multimedia Design & IP Localization',
                 heroTitle: '洗練された美学、<br><span class="text-minimal-gray">的確なビジュアルストーリー。</span>',
                 heroDesc: '日本アニメ・IP公式宣伝デザイン、フォントローカライズ、<br class="hidden md:inline">ポップアップストア企画、パッケージデザイン、映画字幕翻訳に注力。',
-                btnWorks: '実績を見る',
-                btnTrans: '字幕翻訳実績',
+                btnWorks: '実績を見る', btnTrans: '字幕翻訳実績',
                 worksHeading: 'プロジェクト分類',
                 transHeading: '日本語 ＞ 繁体字中国語 映画字幕翻訳',
                 transSub: '文脈、文化的背景、感情の機微を忠実に再現した映像ローカライゼーション。',
                 aboutTitle: '経歴・お問い合わせ',
-                filterFeatured: '注目作品',
-                filterType: 'フォント設計',
-                filterExhibition: '展示会',
-                filterPopup: 'POP-UP',
-                filterPkg: 'パッケージ',
-                filterMerch: 'グッズ',
-                filterVideo: '動画編集',
-                filterOther: 'その他'
+                filterFeatured: '注目作品', filterType: 'フォント設計', filterExhibition: '展示会', filterPopup: 'POP-UP', filterPkg: 'パッケージ', filterMerch: 'グッズ', filterVideo: '動画編集', filterOther: 'その他'
             }
         };
 
-        // ✅ 分類對照表
         const categoryMap = {
             '字體設計': { en: 'Typography', ja: 'フォント設計' },
             '展覽': { en: 'Exhibition', ja: '展示会' },
@@ -590,21 +566,25 @@
         };
 
         function onCategorySelectChange() {
-            const zhVal = document.getElementById('edit-cat-zh').value;
+            const el = document.getElementById('edit-cat-zh');
+            if (!el) return;
+            const zhVal = el.value;
             const mapped = categoryMap[zhVal] || { en: 'Others', ja: 'その他' };
-            document.getElementById('edit-cat-en').value = mapped.en;
-            document.getElementById('edit-cat-ja').value = mapped.ja;
+            const enInput = document.getElementById('edit-cat-en');
+            const jaInput = document.getElementById('edit-cat-ja');
+            if (enInput) enInput.value = mapped.en;
+            if (jaInput) jaInput.value = mapped.ja;
         }
 
-        // ✅ 圖片即時預覽函數
         function previewAdminImage(inputId, imgId, iconId) {
             const input = document.getElementById(inputId);
             const img = document.getElementById(imgId);
             const icon = iconId ? document.getElementById(iconId) : null;
             if (!input || !img) return;
 
-            if (input.value && input.value.trim() !== '' && input.value.trim() !== 'image/') {
-                img.src = input.value.trim();
+            const val = input.value ? input.value.trim() : '';
+            if (val && val !== 'image/' && val !== '') {
+                img.src = val;
                 img.classList.remove('hidden');
                 if (icon) icon.classList.add('hidden');
             } else {
@@ -613,7 +593,6 @@
             }
         }
 
-        // ✅ 自訂 Toast 提示
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -632,12 +611,18 @@
 
         function exportDataJS() {
             const dataObj = { projects, translations, aboutData };
-            const jsContent = `// Johnson Yau 作品集全球資料庫\nwindow.PORTFOLIO_DATA = ${JSON.stringify(dataObj, null, 4)};`;
+            const jsContent = `// Johnson Yau 作品集備份檔案\nwindow.PORTFOLIO_DATA = ${JSON.stringify(dataObj, null, 4)};`;
             const blob = new Blob([jsContent], { type: 'application/javascript' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = 'data.js';
             document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-            showToast('資料庫檔案 (data.js) 已成功下載！');
+            showToast('備份檔案 (data.js) 已下載！');
+        }
+
+        function adminLogout() {
+            isAdminAuthenticated = false;
+            toggleAdminModal(false);
+            showToast('已登出管理中心');
         }
 
         let currentFilterCategory = 'featured'; 
@@ -648,7 +633,7 @@
         let transItemsPerPage = 8; 
         let transAutoPlayTimer = null;
         
-        let adminProjFilter = 'all'; // ✅ 初始化全域變數
+        let adminProjFilter = 'all'; 
         let adminProjPageIndex = 0; 
         let adminProjPerPage = 10; 
         let adminTransPageIndex = 0; 
@@ -662,20 +647,30 @@
                 const projSnapshot = await db.collection('projects').get(); 
                 if (!projSnapshot.empty) { 
                     projects = projSnapshot.docs.map(doc => doc.data()); 
+                } else {
+                    const localProj = localStorage.getItem('local_projects');
+                    if (localProj) projects = JSON.parse(localProj);
                 }
                 
                 const transSnapshot = await db.collection('translations').get(); 
                 if (!transSnapshot.empty) { 
                     translations = transSnapshot.docs.map(doc => doc.data()); 
+                } else {
+                    const localTrans = localStorage.getItem('local_translations');
+                    if (localTrans) translations = JSON.parse(localTrans);
                 }
-                
-                renderProjects(); 
-                renderTranslations(); 
-                renderAbout();
             } catch (error) { 
-                console.error("Firebase Error:", error); 
-                showToast('雲端載入異常，請檢查網路或 Firebase Rules', 'error');
+                console.warn("Firebase 讀取受限，切換到本地緩存模式:", error);
+                const localProj = localStorage.getItem('local_projects');
+                if (localProj) projects = JSON.parse(localProj);
+                const localTrans = localStorage.getItem('local_translations');
+                if (localTrans) translations = JSON.parse(localTrans);
+                const localAbout = localStorage.getItem('local_about');
+                if (localAbout) aboutData = JSON.parse(localAbout);
             }
+            renderProjects(); 
+            renderTranslations(); 
+            renderAbout();
         }
 
         function getFilteredProjects() {
@@ -716,14 +711,14 @@
                         <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
                         
                         <div class="img-container aspect-[16/9] bg-white relative flex items-center justify-center overflow-hidden z-10">
-                            <img src="${p.image}" alt="${pTitle}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" class="w-full h-full object-contain p-2 opacity-90 group-hover:opacity-100 transition duration-300 group-hover:scale-105">
+                            <img src="${p.image || ''}" alt="${pTitle || ''}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" class="w-full h-full object-contain p-2 opacity-90 group-hover:opacity-100 transition duration-300 group-hover:scale-105">
                             <div class="absolute inset-0 flex items-center justify-center image-overlay">
                                 <span class="view-btn px-8 py-2.5 text-sm">檢視專案</span>
                             </div>
                         </div>
                         <div class="pt-4 relative z-10">
-                            <span class="text-[10px] font-bold tracking-widest uppercase text-minimal-gray mb-1 block">${pCat}</span>
-                            <h4 class="text-xl font-bold text-minimal-accent leading-snug">${pTitle}</h4>
+                            <span class="text-[10px] font-bold tracking-widest uppercase text-minimal-gray mb-1 block">${pCat || ''}</span>
+                            <h4 class="text-xl font-bold text-minimal-accent leading-snug">${pTitle || ''}</h4>
                         </div>
                     </div>
                 `;
@@ -768,11 +763,11 @@
                 return `
                     <div class="spotlight-card flex flex-col relative transition duration-300 p-2">
                         <div class="img-container w-full aspect-[2/3] bg-white relative flex items-center justify-center p-2 z-10">
-                            <img src="${tr.image}" alt="${displayTitle}" onerror="this.src='https://via.placeholder.com/400x600?text=Movie'" class="w-full h-full object-cover">
-                            <span class="absolute -bottom-2 -right-2 text-[10px] font-bold px-3 py-1 bg-white text-minimal-accent border border-minimal-accent shadow-hard pointer-events-none">${tr.year}</span>
+                            <img src="${tr.image || ''}" alt="${displayTitle || ''}" onerror="this.src='https://via.placeholder.com/400x600?text=Movie'" class="w-full h-full object-cover">
+                            <span class="absolute -bottom-2 -right-2 text-[10px] font-bold px-3 py-1 bg-white text-minimal-accent border border-minimal-accent shadow-hard pointer-events-none">${tr.year || ''}</span>
                         </div>
                         <div class="pt-5 pb-2 text-center z-10">
-                            <h4 class="text-[13px] font-medium text-minimal-accent leading-snug">${displayTitle}</h4>
+                            <h4 class="text-[13px] font-medium text-minimal-accent leading-snug">${displayTitle || ''}</h4>
                         </div>
                     </div>
                 `;
@@ -837,10 +832,15 @@
             renderAbout(); 
         }        
 
+        // 鍵盤快捷鍵：Ctrl/Cmd + Shift + L
         document.addEventListener('keydown', (e) => { 
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') { 
                 e.preventDefault(); 
-                openPasswordModal(); 
+                if (isAdminAuthenticated) {
+                    toggleAdminModal(true);
+                } else {
+                    openPasswordModal(); 
+                }
             } 
             if (e.key === 'Escape') { 
                 closePasswordModal(); 
@@ -866,23 +866,25 @@
             e.preventDefault(); 
             const inputVal = document.getElementById('admin-password-input').value; 
             if (inputVal === ADMIN_PASSWORD) { 
+                isAdminAuthenticated = true; 
                 closePasswordModal(); 
                 toggleAdminModal(true); 
+                showToast('登入成功！');
             } else { 
-                showToast('密碼錯誤！', 'error'); 
+                showToast('密碼錯誤！請重新輸入', 'error'); 
                 document.getElementById('admin-password-input').value = ''; 
             } 
         }
 
         function toggleAdminModal(show = null) { 
             const modal = document.getElementById('admin-modal'); 
-            const isHidden = show !== null ? !show : modal.classList.contains('hidden'); 
-            if (isHidden) { 
-                modal.classList.add('hidden'); 
-                modal.classList.remove('flex'); 
-                renderProjects(); 
-                renderTranslations(); 
-            } else { 
+            const willOpen = show !== null ? show : modal.classList.contains('hidden'); 
+            
+            if (willOpen) {
+                if (!isAdminAuthenticated) {
+                    openPasswordModal(); 
+                    return;
+                }
                 modal.classList.remove('hidden'); 
                 modal.classList.add('flex'); 
                 adminProjPageIndex = 0; 
@@ -891,6 +893,11 @@
                 renderAdminTransLists(); 
                 loadYearFilterOptions(); 
                 loadAboutForm(); 
+            } else { 
+                modal.classList.add('hidden'); 
+                modal.classList.remove('flex'); 
+                renderProjects(); 
+                renderTranslations(); 
             } 
         }
 
@@ -945,7 +952,7 @@
             document.getElementById('admin-project-list').innerHTML = pageItems.map(p => `
                 <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 border border-transparent hover:border-minimal-border transition">
                     <div class="flex items-center space-x-4">
-                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/50'" class="w-12 h-12 object-cover bg-white border border-minimal-accent shadow-hard">
+                        <img src="${p.image || ''}" onerror="this.src='https://via.placeholder.com/50'" class="w-12 h-12 object-cover bg-white border border-minimal-accent shadow-hard">
                         <span class="font-bold text-minimal-accent tracking-wide">${typeof p.title === 'object' ? (p.title.zh || p.title) : p.title}</span>
                     </div>
                     <div class="space-x-2 flex shrink-0 font-medium">
@@ -978,7 +985,7 @@
         }
 
         function loadYearFilterOptions() { 
-            const years = [...new Set(translations.map(t => t.year))].sort((a, b) => parseInt(b) - parseInt(a)); 
+            const years = [...new Set(translations.map(t => t.year))].filter(Boolean).sort((a, b) => parseInt(b) - parseInt(a)); 
             const select = document.getElementById('admin-year-filter'); 
             const currentVal = select.value; 
             select.innerHTML = `<option value="all">全部年份</option>` + years.map(y => `<option value="${y}">${y}年</option>`).join(''); 
@@ -1005,14 +1012,14 @@
             const pageTrs = filteredTrs.slice(startIdx, startIdx + adminTransPerPage);
             document.getElementById('admin-trans-page-indicator').textContent = `${adminTransPageIndex + 1} / ${totalPages}`;
             document.getElementById('admin-trans-list').innerHTML = pageTrs.map(tr => {
-                let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
+                let titleZh = typeof tr.title === 'object' ? (tr.title.zh || tr.title) : tr.title;
                 return `
                     <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 border border-transparent hover:border-minimal-border transition">
                         <div class="flex items-center space-x-4">
-                            <img src="${tr.image}" onerror="this.src='https://via.placeholder.com/50x70'" class="w-10 h-14 object-cover bg-white border border-minimal-accent shadow-hard">
+                            <img src="${tr.image || ''}" onerror="this.src='https://via.placeholder.com/50x70'" class="w-10 h-14 object-cover bg-white border border-minimal-accent shadow-hard">
                             <div>
-                                <span class="font-bold text-minimal-accent block mb-1 tracking-wide">${titleZh}</span>
-                                <span class="text-[10px] bg-white px-2 py-0.5 border border-minimal-accent font-bold">${tr.year}</span>
+                                <span class="font-bold text-minimal-accent block mb-1 tracking-wide">${titleZh || ''}</span>
+                                <span class="text-[10px] bg-white px-2 py-0.5 border border-minimal-accent font-bold">${tr.year || ''}</span>
                             </div>
                         </div>
                         <div class="space-x-2 flex shrink-0 font-medium">
@@ -1056,14 +1063,15 @@
                 en: document.getElementById('about-en').value, 
                 ja: document.getElementById('about-ja').value 
             }; 
+            localStorage.setItem('local_about', JSON.stringify(aboutData));
             try { 
                 await db.collection('portfolio').doc('about').set(aboutData); 
-                renderAbout();
-                showToast('「關於我」已同步至 Firebase！'); 
+                showToast('「關於我」已同步至雲端！'); 
             } catch (err) { 
-                console.error(err); 
-                showToast('儲存失敗，請檢查 Firebase 權限', 'error'); 
+                console.warn(err); 
+                showToast('已保存於本機！', 'info'); 
             } 
+            renderAbout();
         }
 
         function openNewProjectModal() { 
@@ -1082,34 +1090,41 @@
             document.getElementById('preview-main').classList.add('hidden'); 
             document.getElementById('preview-main-icon').classList.remove('hidden'); 
             document.getElementById('edit-modal-title').innerHTML = '新增專案'; 
-            toggleAdminModal(false); 
+            
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('flex');
             document.getElementById('edit-modal').classList.remove('hidden'); 
             document.getElementById('edit-modal').classList.add('flex'); 
         }
 
         function openEditModal(id) { 
-            const project = projects.find(p => p.id === id); 
+            const project = projects.find(p => String(p.id) === String(id)); 
             if (!project) return; 
             document.getElementById('edit-id').value = project.id; 
-            document.getElementById('edit-title-zh').value = typeof project.title === 'object' ? (project.title.zh || '') : project.title; 
-            document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : project.title; 
-            document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : project.title; 
+            document.getElementById('edit-title-zh').value = typeof project.title === 'object' ? (project.title.zh || '') : (project.title || ''); 
+            document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : (project.title || ''); 
+            document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : (project.title || ''); 
             
-            let catZh = typeof project.category === 'object' ? (project.category.zh || '字體設計') : project.category; 
+            let catZh = typeof project.category === 'object' ? (project.category.zh || '字體設計') : (project.category || '字體設計'); 
             const selectEl = document.getElementById('edit-cat-zh'); 
-            if ([...selectEl.options].some(o => o.value === catZh)) selectEl.value = catZh; 
-            else selectEl.value = '其他'; 
+            if ([...selectEl.options].some(o => o.value === catZh)) {
+                selectEl.value = catZh; 
+            } else {
+                selectEl.value = '其他'; 
+            }
             onCategorySelectChange(); 
             
             document.getElementById('edit-image').value = project.image || ''; 
             previewAdminImage('edit-image', 'preview-main', 'preview-main-icon'); 
             document.getElementById('edit-gallery').value = project.gallery || ''; 
             document.getElementById('edit-youtube').value = project.youtube || ''; 
-            document.getElementById('edit-desc-zh').value = typeof project.description === 'object' ? (project.description.zh || '') : project.description; 
-            document.getElementById('edit-desc-en').value = typeof project.description === 'object' ? (project.description.en || '') : project.description; 
-            document.getElementById('edit-desc-ja').value = typeof project.description === 'object' ? (project.description.ja || '') : project.description; 
+            document.getElementById('edit-desc-zh').value = typeof project.description === 'object' ? (project.description.zh || '') : (project.description || ''); 
+            document.getElementById('edit-desc-en').value = typeof project.description === 'object' ? (project.description.en || '') : (project.description || ''); 
+            document.getElementById('edit-desc-ja').value = typeof project.description === 'object' ? (project.description.ja || '') : (project.description || ''); 
             document.getElementById('edit-modal-title').innerHTML = '編輯專案資料'; 
-            toggleAdminModal(false); 
+            
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('flex');
             document.getElementById('edit-modal').classList.remove('hidden'); 
             document.getElementById('edit-modal').classList.add('flex'); 
         }
@@ -1146,41 +1161,46 @@
                 } 
             }; 
             
+            if (id) { 
+                const idx = projects.findIndex(p => String(p.id) === String(id)); 
+                if(idx !== -1) projects[idx] = projectData; 
+            } else {
+                projects.unshift(projectData); 
+            }
+            localStorage.setItem('local_projects', JSON.stringify(projects));
+
             try { 
                 await db.collection('projects').doc(targetId).set(projectData); 
-                if (id) { 
-                    const idx = projects.findIndex(p => p.id === id); 
-                    if(idx !== -1) projects[idx] = projectData; 
-                } else {
-                    projects.unshift(projectData); 
-                }
-                closeEditModal(); 
-                renderAdminLists(adminProjFilter); 
-                renderProjects();
-                showToast('專案資料已儲存！'); 
+                showToast('專案資料已儲存至雲端！'); 
             } catch (err) { 
-                console.error(err); 
-                showToast('儲存失敗，請檢查 Firebase 權限', 'error'); 
+                console.warn(err); 
+                showToast('雲端受限，已儲存於本機！', 'info'); 
             } 
+            
+            closeEditModal(); 
+            renderAdminLists(adminProjFilter); 
+            renderProjects();
         }
 
         async function deleteProject(id) { 
             if (confirm('確定要刪除這個專案嗎？')) { 
+                projects = projects.filter(p => String(p.id) !== String(id)); 
+                localStorage.setItem('local_projects', JSON.stringify(projects));
+                renderAdminLists(adminProjFilter); 
+                renderProjects();
+                
                 try { 
                     await db.collection('projects').doc(id).delete(); 
-                    projects = projects.filter(p => p.id !== id); 
-                    renderAdminLists(adminProjFilter); 
-                    renderProjects();
                     showToast('專案已刪除！'); 
                 } catch(err) { 
-                    console.error(err); 
-                    showToast('刪除失敗', 'error'); 
+                    console.warn(err); 
+                    showToast('已從本地刪除'); 
                 } 
             } 
         }
 
         async function duplicateProject(id) { 
-            const project = projects.find(p => p.id === id); 
+            const project = projects.find(p => String(p.id) === String(id)); 
             if (!project) return; 
             const newId = String(Date.now()); 
             const clonedTitle = typeof project.title === 'object' ? { 
@@ -1190,15 +1210,17 @@
             } : project.title + ' (複製)'; 
             
             const newProject = { ...project, id: newId, title: clonedTitle }; 
+            projects.unshift(newProject); 
+            localStorage.setItem('local_projects', JSON.stringify(projects));
+            renderAdminLists(adminProjFilter); 
+            renderProjects();
+            
             try { 
                 await db.collection('projects').doc(newId).set(newProject); 
-                projects.unshift(newProject); 
-                renderAdminLists(adminProjFilter); 
-                renderProjects();
                 showToast('專案已複製！'); 
             } catch(err) { 
-                console.error(err); 
-                showToast('複製失敗', 'error'); 
+                console.warn(err); 
+                showToast('已在本機完成複製'); 
             } 
         }
 
@@ -1212,23 +1234,27 @@
             document.getElementById('preview-trans').classList.add('hidden'); 
             document.getElementById('preview-trans-icon').classList.remove('hidden'); 
             document.getElementById('trans-modal-title').innerHTML = '新增電影翻譯'; 
-            toggleAdminModal(false); 
+            
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('flex');
             document.getElementById('trans-edit-modal').classList.remove('hidden'); 
             document.getElementById('trans-edit-modal').classList.add('flex'); 
         }
 
         function openTransEditModal(id) { 
-            const tr = translations.find(t => t.id === id); 
+            const tr = translations.find(t => String(t.id) === String(id)); 
             if (!tr) return; 
             document.getElementById('trans-edit-id').value = tr.id; 
-            document.getElementById('trans-title-zh').value = typeof tr.title === 'object' ? (tr.title.zh || '') : tr.title; 
-            document.getElementById('trans-title-en').value = typeof tr.title === 'object' ? (tr.title.en || '') : tr.title; 
-            document.getElementById('trans-title-ja').value = typeof tr.title === 'object' ? (tr.title.ja || '') : tr.title; 
-            document.getElementById('trans-edit-year').value = tr.year; 
-            document.getElementById('trans-edit-image').value = tr.image; 
+            document.getElementById('trans-title-zh').value = typeof tr.title === 'object' ? (tr.title.zh || '') : (tr.title || ''); 
+            document.getElementById('trans-title-en').value = typeof tr.title === 'object' ? (tr.title.en || '') : (tr.title || ''); 
+            document.getElementById('trans-title-ja').value = typeof tr.title === 'object' ? (tr.title.ja || '') : (tr.title || ''); 
+            document.getElementById('trans-edit-year').value = tr.year || ''; 
+            document.getElementById('trans-edit-image').value = tr.image || ''; 
             previewAdminImage('trans-edit-image', 'preview-trans', 'preview-trans-icon'); 
             document.getElementById('trans-modal-title').innerHTML = '編輯電影翻譯'; 
-            toggleAdminModal(false); 
+            
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('flex');
             document.getElementById('trans-edit-modal').classList.remove('hidden'); 
             document.getElementById('trans-edit-modal').classList.add('flex'); 
         }
@@ -1254,41 +1280,46 @@
                 image: document.getElementById('trans-edit-image').value 
             }; 
             
+            if (id) { 
+                const idx = translations.findIndex(t => String(t.id) === String(id)); 
+                if(idx !== -1) translations[idx] = transData; 
+            } else {
+                translations.unshift(transData); 
+            }
+            localStorage.setItem('local_translations', JSON.stringify(translations));
+
             try { 
                 await db.collection('translations').doc(targetId).set(transData); 
-                if (id) { 
-                    const idx = translations.findIndex(t => t.id === id); 
-                    if(idx !== -1) translations[idx] = transData; 
-                } else {
-                    translations.unshift(transData); 
-                }
-                closeTransEditModal(); 
-                renderAdminTransLists(); 
-                renderTranslations();
-                showToast('紀錄已同步！'); 
+                showToast('紀錄已同步至雲端！'); 
             } catch(err) { 
-                console.error(err); 
-                showToast('儲存失敗，請檢查 Firebase 權限', 'error'); 
+                console.warn(err); 
+                showToast('已保存於本機！', 'info'); 
             } 
+
+            closeTransEditModal(); 
+            renderAdminTransLists(); 
+            renderTranslations();
         }
 
         async function deleteTranslation(id) { 
             if (confirm('確定要刪除這筆紀錄嗎？')) { 
+                translations = translations.filter(t => String(t.id) !== String(id)); 
+                localStorage.setItem('local_translations', JSON.stringify(translations));
+                renderAdminTransLists(); 
+                renderTranslations();
+
                 try { 
                     await db.collection('translations').doc(id).delete(); 
-                    translations = translations.filter(t => t.id !== id); 
-                    renderAdminTransLists(); 
-                    renderTranslations();
                     showToast('紀錄已刪除！'); 
                 } catch(err) { 
-                    console.error(err); 
-                    showToast('刪除失敗', 'error'); 
+                    console.warn(err); 
+                    showToast('已自本機刪除'); 
                 } 
             } 
         }
 
         async function duplicateTranslation(id) { 
-            const tr = translations.find(t => t.id === id); 
+            const tr = translations.find(t => String(t.id) === String(id)); 
             if (!tr) return; 
             const newId = 't_' + Date.now(); 
             const clonedTitle = typeof tr.title === 'object' ? { 
@@ -1298,15 +1329,17 @@
             } : tr.title + ' (複製)'; 
             
             const newTr = { ...tr, id: newId, title: clonedTitle }; 
+            translations.unshift(newTr); 
+            localStorage.setItem('local_translations', JSON.stringify(translations));
+            renderAdminTransLists(); 
+            renderTranslations();
+
             try { 
                 await db.collection('translations').doc(newId).set(newTr); 
-                translations.unshift(newTr); 
-                renderAdminTransLists(); 
-                renderTranslations();
                 showToast('紀錄已複製！'); 
             } catch(err) { 
-                console.error(err); 
-                showToast('複製失敗', 'error'); 
+                console.warn(err); 
+                showToast('已在本機完成複製'); 
             } 
         }
 
