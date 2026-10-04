@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <!-- Project Editor Modal (支援三語輸入) -->
+    <!-- Project Editor Modal -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
             <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (三語)</h3>
@@ -309,8 +309,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                aboutDesc: "<p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p><p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>",
-                transDescDefault: "日文字幕至繁體中文電影翻譯與在地化調整。"
+                aboutDesc: "<p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p><p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -321,8 +320,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Click any movie poster to view high-resolution details. Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                aboutDesc: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>",
-                transDescDefault: "Japanese to Traditional Chinese film subtitle translation and localization."
+                aboutDesc: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -333,8 +331,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "映画ポスターをクリックすると高画質で表示されます。文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                aboutDesc: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>",
-                transDescDefault: "日本語字幕から繁体字中国語への映画翻訳およびローカライズ。"
+                aboutDesc: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>"
             }
         };
 
@@ -478,7 +475,6 @@
 
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
-            const t = translationsDict[langs[currentLangIndex]];
             const zoomText = currentLangIndex === 1 ? "Click to Zoom" : currentLangIndex === 2 ? "クリックして拡大" : "點擊放大檢視";
 
             grid.innerHTML = translations.map(tr => `
@@ -493,8 +489,7 @@
                         <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-base font-semibold text-white mb-2">${tr.title}</h4>
-                        <p class="text-xs text-apple-gray leading-relaxed">${t.transDescDefault}</p>
+                        <h4 class="text-base font-semibold text-white">${tr.title}</h4>
                     </div>
                 </div>
             `).join('');
@@ -671,7 +666,7 @@
             renderTranslations();
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.1add('active');
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
             }, { threshold: 0.15 });
             document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
