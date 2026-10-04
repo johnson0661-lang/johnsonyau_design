@@ -153,18 +153,51 @@
         </div>
     </div>
 
+    <!-- Password Prompt Modal -->
+    <div id="password-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center modal-fade">
+            <h3 class="text-lg font-semibold text-white mb-4">請輸入管理員密碼</h3>
+            <form onsubmit="verifyPassword(event)" class="space-y-4">
+                <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none text-center">
+                <div class="flex space-x-2">
+                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2.5 bg-apple-lightgray text-apple-gray rounded-xl text-xs font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-white text-black rounded-xl text-xs font-medium">確認登入</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
+            <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表</h4>
+                    <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/40">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
 
     <script>
+        const ADMIN_PASSWORD = 'johnson2026';
         let defaultProjects = [
             { 
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'images/digimon.jpg', 
+                image: 'images/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.jpg', 
                 gallery: '', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
@@ -286,10 +319,68 @@
         }
 
         document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+                e.preventDefault();
+                openPasswordModal();
+            }
             if (e.key === 'Escape') {
                 closeLightbox();
+                closePasswordModal();
+                toggleAdminModal(false);
             }
         });
+
+        function openPasswordModal() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('password-modal').classList.add('flex');
+            document.getElementById('admin-password-input').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('password-modal').classList.add('hidden');
+            document.getElementById('password-modal').classList.remove('flex');
+        }
+
+        function verifyPassword(e) {
+            e.preventDefault();
+            const inputVal = document.getElementById('admin-password-input').value;
+            if (inputVal === ADMIN_PASSWORD) {
+                closePasswordModal();
+                toggleAdminModal(true);
+            } else {
+                alert('密碼錯誤！');
+                document.getElementById('admin-password-input').value = '';
+            }
+        }
+
+        function toggleAdminModal(show = null) {
+            const modal = document.getElementById('admin-modal');
+            const isHidden = show !== null ? !show : modal.classList.contains('hidden');
+            if (isHidden) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            } else {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                renderAdminLists();
+            }
+        }
+
+        function renderAdminLists() {
+            const langKey = langs[currentLangIndex];
+            document.getElementById('admin-project-list').innerHTML = projects.map(p => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-3">
+                        <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
+                        <span class="font-medium text-white">${p.title[langKey] || p.title.zh}</span>
+                    </div>
+                    <div class="space-x-1.5">
+                        <button type="button" onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border hover:bg-apple-border transition">前往編輯專案詳情</button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             updateProjectContent();
