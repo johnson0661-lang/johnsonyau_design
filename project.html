@@ -38,7 +38,7 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
-            <a href="index.html" class="flex items-center text-apple-gray hover:text-white transition">
+            <a href="index.html" id="back-link" class="flex items-center text-apple-gray hover:text-white transition">
                 <i class="fa-solid fa-arrow-left mr-2"></i> 返回主頁
             </a>
             <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
@@ -54,20 +54,20 @@
     <main class="max-w-7xl mx-auto px-6 py-24">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：主圖 (無白框、沉浸式純黑背景) -->
+            <!-- 左側：主圖 -->
             <div class="lg:col-span-6 space-y-4 sticky top-28">
                 <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black relative flex items-center justify-center cursor-pointer group" onclick="openLightbox(document.getElementById('p-image').src)">
                     <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-3xl pointer-events-none">
-                        <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                        <span id="zoom-text" class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
                             <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
                         </span>
                     </div>
                 </div>
-                <p class="text-xs text-apple-gray px-2">實戰專案主視覺呈現，點擊圖片可放大檢視完整比例。</p>
+                <p id="img-tip" class="text-xs text-apple-gray px-2">實戰專案主視覺呈現，點擊圖片可放大檢視完整比例。</p>
             </div>
 
-            <!-- 右側：大標題、Case Study 與 Email 聯絡區 -->
+            <!-- 右側：大標題、Case Study 與按鈕 -->
             <div class="lg:col-span-6 space-y-6">
                 <div>
                     <span id="p-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-3 block"></span>
@@ -77,16 +77,15 @@
                 <div class="w-full h-px bg-apple-border my-6"></div>
 
                 <div class="space-y-6">
-                    <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">設計理念與專案拆解 (Case Study)</h2>
+                    <h2 id="case-heading" class="text-xs uppercase tracking-wider text-apple-gray font-semibold">設計理念與專案拆解 (Case Study)</h2>
                     <div id="p-description" class="text-apple-gray text-base md:text-lg leading-relaxed whitespace-pre-line space-y-6 font-normal"></div>
                 </div>
 
-                <!-- 聯絡與返回按鈕 (固定顯示 Email 掣) -->
                 <div class="pt-8 flex flex-wrap gap-4 items-center">
-                    <a href="index.html#works" class="inline-flex items-center px-6 py-3.5 rounded-full bg-apple-lightgray text-white text-xs font-medium border border-apple-border hover:bg-apple-border transition">
+                    <a href="index.html#works" id="back-works" class="inline-flex items-center px-6 py-3.5 rounded-full bg-apple-lightgray text-white text-xs font-medium border border-apple-border hover:bg-apple-border transition">
                         <i class="fa-solid fa-arrow-left mr-2"></i> 返回瀏覽其他專案
                     </a>
-                    <a href="mailto:johnson0661@gmail.com" class="inline-flex items-center px-6 py-3.5 rounded-full bg-white text-black text-xs font-medium hover:bg-stone-200 transition shadow-xl">
+                    <a href="mailto:johnson0661@gmail.com" id="email-btn" class="inline-flex items-center px-6 py-3.5 rounded-full bg-white text-black text-xs font-medium hover:bg-stone-200 transition shadow-xl">
                         <i class="fa-solid fa-envelope mr-2"></i> 聯絡我 (Email)
                     </a>
                 </div>
@@ -96,7 +95,7 @@
 
         <!-- 底部：更多細節圖庫 -->
         <div id="gallery-container" class="mt-28 border-t border-apple-border/50 pt-16 hidden">
-            <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
+            <h2 id="gallery-heading" class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
             <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
     </main>
@@ -108,7 +107,7 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <img id="lightbox-img" src="" alt="Zoomed Image" class="max-h-[80vh] w-auto object-contain rounded-2xl shadow-2xl border border-apple-border">
-            <p class="text-xs text-apple-gray mt-4">點擊任意空白處或按 Esc 鍵即可關閉放大檢視</p>
+            <p id="lightbox-tip" class="text-xs text-apple-gray mt-4">點擊任意空白處或按 Esc 鍵即可關閉放大檢視</p>
         </div>
     </div>
 
@@ -121,46 +120,81 @@
         const projects = [
             { 
                 id: '1', 
-                title: '數碼暴龍 Last Evolution 絆 - 字體在地化', 
-                category: 'Typeface 本地化', 
+                title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
+                category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
                 image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
-                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' 
+                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。', 
+                    en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media[cite: 18].', 
+                    ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現[cite: 18]。' 
+                } 
             },
             { 
                 id: '2', 
-                title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', 
-                category: 'Pop-up Store 與展覽', 
+                title: { zh: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', en: 'ULTRAMAN The Hero Premiere Exhibition & Pop-up', ja: 'ULTRAMAN The Hero Premiere 展示＆ポップアップ' }, 
+                category: { zh: 'Pop-up Store 與展覽', en: 'Pop-up & Exhibition', ja: '展示・ポップアップ' }, 
                 image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
-                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' 
+                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。', 
+                    en: 'Led the spatial planning, visual direction, and limited merchandise development for the Ultraman Pop-up Store at Langham Place in 2025[cite: 23].', 
+                    ja: '2025年にランガム・プレイスで開催されたウルトラマンポップアップストアの空間動線計画、ビジュアル、限定グッズ開発を主導[cite: 23]。' 
+                } 
             },
             { 
                 id: '3', 
-                title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', 
-                category: '實體包裝設計', 
+                title: { zh: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', en: 'SPY×FAMILY CODE: White - Physical Packaging Design', ja: '劇場版『SPY×FAMILY CODE: White』パッケージデザイン' }, 
+                category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
                 image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
-                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' 
+                gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。', 
+                    en: 'Developed a series of physical F&B packaging items for film promotion, perfectly blending character IP aesthetics with mass production requirements[cite: 21].', 
+                    ja: '映画プロモーション用の飲食パッケージシリーズ（紙コップ、ホットドッグボックス、ポップコーンバケットなど）を開発[cite: 21]。' 
+                } 
             },
             { 
                 id: '4', 
-                title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', 
-                category: '實體包裝設計', 
+                title: { zh: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', en: 'EVANGELION:3.0+1.11 - Collector Edition Blu-ray Packaging', ja: '『シン・エヴァンゲリオン劇場版』豪華版BDパッケージ' }, 
+                category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
                 image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80',
-                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' 
+                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。', 
+                    en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set[cite: 22].', 
+                    ja: '日本のサプライヤーと連携し、4K UHD + Blu-ray豪華版セットの素材、コスト、パッケージング工程を統括[cite: 22]。' 
+                } 
             }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id') || '1';
+        const langKey = urlParams.get('lang') || 'zh';
         const project = projects.find(p => p.id === projectId) || projects[0];
 
-        document.getElementById('p-category').textContent = project.category;
-        document.getElementById('p-title').textContent = project.title;
+        // 3 語獨立頁面文字對應
+        const uiDict = {
+            zh: { back: "返回主頁", zoom: "點擊放大檢視", tip: "實戰專案主視覺呈現，點擊圖片可放大檢視完整比例。", caseHead: "設計理念與專案拆解 (Case Study)", backWorks: "返回瀏覽其他專案", emailBtn: "聯絡我 (Email)", galleryHead: "更多專案細節與視覺展示", lightboxTip: "點擊任意空白處或按 Esc 鍵即可關閉放大檢視" },
+            en: { back: "Back to Home", zoom: "Click to Zoom", tip: "Main visual presentation. Click to view full scale.", caseHead: "Design Concept & Case Study", backWorks: "Back to Projects", emailBtn: "Contact (Email)", galleryHead: "More Visual Details", lightboxTip: "Click anywhere or press Esc to close" },
+            ja: { back: "ホームに戻る", zoom: "クリックして拡大", tip: "メインビジュアル。クリックして全画面表示。", caseHead: "デザインコンセプト & ケーススタディ", backWorks: "プロジェクト一覧に戻る", emailBtn: "お問い合わせ (Email)", galleryHead: "その他の詳細ビジュアル", lightboxTip: "クリックするかEscキーで閉じる" }
+        };
+
+        const ui = uiDict[langKey] || uiDict.zh;
+        document.getElementById('back-link').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.back}`;
+        document.getElementById('zoom-text').innerHTML = `<i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}`;
+        document.getElementById('img-tip').textContent = ui.tip;
+        document.getElementById('case-heading').textContent = ui.caseHead;
+        document.getElementById('back-works').innerHTML = `<i class="fa-solid fa-arrow-left mr-2"></i> ${ui.backWorks}`;
+        document.getElementById('email-btn').innerHTML = `<i class="fa-solid fa-envelope mr-2"></i> ${ui.emailBtn}`;
+        document.getElementById('gallery-heading').textContent = ui.galleryHead;
+        document.getElementById('lightbox-tip').textContent = ui.lightboxTip;
+        document.getElementById('back-link').href = `index.html`;
+
+        document.getElementById('p-category').textContent = project.category[langKey] || project.category.zh;
+        document.getElementById('p-title').textContent = project.title[langKey] || project.title.zh;
         document.getElementById('p-image').src = project.image;
-        document.getElementById('p-description').textContent = project.description;
+        document.getElementById('p-description').textContent = project.description[langKey] || project.description.zh;
 
         if (project.gallery && project.gallery.trim() !== '') {
             document.getElementById('gallery-container').classList.remove('hidden');
@@ -170,7 +204,7 @@
                     <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
                         <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
+                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}
                         </span>
                     </div>
                 </div>
@@ -191,9 +225,7 @@
         }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
+            if (e.key === 'Escape') closeLightbox();
         });
     </script>
 </body>
