@@ -65,18 +65,25 @@
             100% { opacity: 0; transform: scale(1.06); }
         }
 
-        /* 開場 Loading：柔和呼吸閃爍 (Breathing Effect) */
-        .intro-loading-text {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
-            animation: introBreathe 2s infinite ease-in-out !important;
-            will-change: opacity;
-        }
+       /* 開場 Loading：呼吸閃爍 + 結尾與 Logo 同步淡出 */
+    .intro-loading-text {
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
+        animation: introBreathe 2s infinite ease-in-out, introTextFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        will-change: opacity, transform;
+    }
 
-        @keyframes introBreathe {
-            0% { opacity: 0.15; filter: blur(0.2px); }
-            50% { opacity: 1; filter: blur(0px); }
-            100% { opacity: 0.15; filter: blur(0.2px); }
-        }
+    @keyframes introBreathe {
+        0%, 100% { opacity: 0.15; filter: blur(0.2px); }
+        50% { opacity: 1; filter: blur(0px); }
+    }
+
+    /* 與 Logo (introFade) 相同的 3.2s 生命週期淡出動畫 */
+    @keyframes introTextFade {
+        0% { opacity: 0; transform: scale(0.96); }
+        30% { opacity: 1; transform: scale(1); }
+        75% { opacity: 1; transform: scale(1.01); }
+        100% { opacity: 0; transform: scale(1.04); }
+    }
 
         body {
             background-color: #FAFAFA;
