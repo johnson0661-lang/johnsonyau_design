@@ -98,10 +98,6 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
-        <div class="mb-10 text-center">
-            <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-4 px-4 py-1.5 bg-white border border-minimal-border shadow-hard"></span>
-            <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
-        </div>
 <!-- 主媒體容器 (已移除黑色外框及陰影) -->
         <div class="relative w-full mb-16">
             <div id="media-container" class="relative z-10 w-full bg-transparent transition duration-300 flex items-center justify-center overflow-hidden p-4 md:p-12">
@@ -128,7 +124,16 @@
                 </div>
                 <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-4"></div>
             </div>
+<div class="lg:col-span-5 space-y-6 pt-2">
+                <!-- 移至此處：分類標籤與大標題 -->
+                <div>
+                    <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-3 px-3 py-1 bg-white border border-minimal-border shadow-hard"></span>
+                    <h1 id="project-title" class="text-2xl md:text-3xl font-bold tracking-tight text-minimal-accent leading-snug"></h1>
+                </div>
 
+                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">DESIGN CONCEPT & CASE STUDY</h3>
+                <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
+            </div>
             <div class="lg:col-span-5 space-y-6 pt-2">
                 <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">Design Concept & Case Study</h3>
                 <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
