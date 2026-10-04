@@ -74,23 +74,25 @@
             opacity: 0;
             transform: scale(1.06);
         }
- /* 開場 Loading 閃爍字樣 (日式極簡高質感版) */
+ /* 開場 Loading：柔和呼吸閃爍 (Breathing Effect) */
     .intro-loading-text {
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
-        font-size: 9px;
-        font-weight: 700;
-        letter-spacing: 1em; /* 超寬字距，呼應 SCROLL DOWN */
-        text-indent: 0.45em;   /* 補償最尾一個字的間距，保持絕對置中 */
-        color: #888888;
-        text-transform: uppercase;
-        animation: introBlink 1.4s infinite ease-in-out;
-        margin-top: 14px;
-        display: block;
+        animation: introBreathe 2s infinite ease-in-out !important;
+        will-change: opacity;
     }
-    @keyframes introBlink {
-        0%, 100% { opacity: 0.25; }
-        50% { opacity: 1; }
-    }
+  @keyframes introBreathe {
+        0% {
+            opacity: 0.15;
+            filter: blur(0.2px);
+        }
+        50% {
+            opacity: 1;
+            filter: blur(0px);
+        }
+        100% {
+            opacity: 0.15;
+            filter: blur(0.2px);
+        }
     }
         body {
             background-color: #FAFAFA;
@@ -165,7 +167,7 @@
             <div class="p-10 flex flex-col items-center gap-4">
                 <img id="intro-logo" src="logo.png" alt="Johnson Yau" class="logo-invert h-20 md:h-28 w-auto object-contain" onerror="this.src='https://via.placeholder.com/260x90?text=JOHNSON+YAU'">
                 <!-- ✅ 加入 Loading 閃爍小字 -->
-                <span class="intro-loading-text">LOADING...</span>
+                <span class="intro-loading-text text-[9px] font-bold text-[#888888] uppercase block text-center" style="letter-spacing: 0.85em !important; text-indent: 0.85em !important; margin-top: 18px;">LOADING...</span>
             </div>
         </div>
     </div>
