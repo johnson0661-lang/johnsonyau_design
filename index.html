@@ -274,31 +274,51 @@
         </div>
     </div>
 
-    <!-- Admin Modal (專案列表) -->
+    <!-- Admin Modal (綜合後台管理) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-3xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-4xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
-            </div>
-            <div class="space-y-6">
-                <div>
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表（可直接修改資料）</h4>
-                    <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50"></div>
+            <div class="flex items-center justify-between mb-6 border-b border-apple-border pb-4">
+                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理中心</h3>
+                <div class="flex space-x-2">
+                    <button onclick="switchAdminTab('projects')" id="tab-projects-btn" class="px-4 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition">精選專案</button>
+                    <button onclick="switchAdminTab('translations')" id="tab-trans-btn" class="px-4 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition">電影翻譯紀錄</button>
                 </div>
+            </div>
+
+            <!-- 專案管理面板 -->
+            <div id="admin-projects-panel" class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">實戰專案列表</h4>
+                    <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
+                        <i class="fa-solid fa-plus mr-1.5"></i> 新增專案
+                    </button>
+                </div>
+                <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50"></div>
+            </div>
+
+            <!-- 電影翻譯管理面板 -->
+            <div id="admin-trans-panel" class="space-y-4 hidden">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表</h4>
+                    <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
+                        <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
+                    </button>
+                </div>
+                <div id="admin-trans-list" class="space-y-3 divide-y divide-apple-border/50"></div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Project Modal (編輯單一專案彈窗) -->
+    <!-- Edit Project Modal (編輯或新增專案) -->
     <div id="edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <button onclick="closeEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="text-xl font-semibold text-white mb-6"><i class="fa-solid fa-pen-to-square mr-2"></i> 編輯專案資料</h3>
+            <h3 id="edit-modal-title" class="text-xl font-semibold text-white mb-6"><i class="fa-solid fa-pen-to-square mr-2"></i> 編輯專案資料</h3>
             <form id="edit-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
@@ -323,6 +343,35 @@
                 </div>
                 <div class="flex space-x-2 pt-4">
                     <button type="button" onclick="closeEditModal()" class="w-1/2 py-3 bg-apple-lightgray text-apple-gray rounded-xl font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="w-1/2 py-3 bg-white text-black rounded-xl font-medium">儲存變更</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Translation Modal (編輯或新增電影翻譯) -->
+    <div id="trans-edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
+            <button onclick="closeTransEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 id="trans-modal-title" class="text-xl font-semibold text-white mb-6"><i class="fa-solid fa-pen-to-square mr-2"></i> 編輯電影翻譯</h3>
+            <form onsubmit="saveTranslation(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="trans-edit-id">
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">電影名稱 (繁體中文)</label>
+                    <input type="text" id="trans-edit-title" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">上映年份 (例如: 2024)</label>
+                    <input type="text" id="trans-edit-year" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">海報圖片路徑 (例如: image/movies/... 或 URL)</label>
+                    <input type="text" id="trans-edit-image" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div class="flex space-x-2 pt-4">
+                    <button type="button" onclick="closeTransEditModal()" class="w-1/2 py-3 bg-apple-lightgray text-apple-gray rounded-xl font-medium border border-apple-border">取消</button>
                     <button type="submit" class="w-1/2 py-3 bg-white text-black rounded-xl font-medium">儲存變更</button>
                 </div>
             </form>
@@ -425,7 +474,7 @@
             }
         ];
 
-        let translations = [
+        let defaultTranslations = [
             { id: 't1', title: { zh: '幪面超人 555 20th PARADISE REGAINED', en: 'Kamen Rider 555 20th: Paradise Regained', ja: '仮面ライダー555 20th パラダイス・リゲインド' }, year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
             { id: 't2', title: { zh: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', en: 'Kamen Rider The Winter Movie: Gotchard & Geats', ja: '仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ' }, year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
             { id: 't3', title: { zh: '少女與戰車 最終章 第4話', en: 'Girls und Panzer das Finale: Part 4', ja: 'ガールズ＆パンツァー 最終章 第4話' }, year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
@@ -457,6 +506,7 @@
         ];
 
         let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
+        let translations = JSON.parse(localStorage.getItem('portfolio_translations')) || defaultTranslations;
 
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
@@ -600,6 +650,7 @@
                 closePasswordModal();
                 toggleAdminModal(false);
                 closeEditModal();
+                closeTransEditModal();
             }
         });
 
@@ -637,6 +688,26 @@
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 renderAdminLists();
+                renderAdminTransLists();
+            }
+        }
+
+        function switchAdminTab(tab) {
+            const pPanel = document.getElementById('admin-projects-panel');
+            const tPanel = document.getElementById('admin-trans-panel');
+            const pBtn = document.getElementById('tab-projects-btn');
+            const tBtn = document.getElementById('tab-trans-btn');
+
+            if (tab === 'projects') {
+                pPanel.classList.remove('hidden');
+                tPanel.classList.add('hidden');
+                pBtn.className = "px-4 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
+                tBtn.className = "px-4 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
+            } else {
+                tPanel.classList.remove('hidden');
+                pPanel.classList.add('hidden');
+                tBtn.className = "px-4 py-2 bg-white text-black rounded-xl text-xs font-medium shadow transition";
+                pBtn.className = "px-4 py-2 bg-apple-lightgray text-apple-gray border border-apple-border rounded-xl text-xs font-medium hover:text-white transition";
             }
         }
 
@@ -649,10 +720,47 @@
                         <span class="font-medium text-white">${p.title[langKey] || p.title.zh}</span>
                     </div>
                     <div class="space-x-1.5 flex">
-                        <button type="button" onclick="openEditModal('${p.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯專案資料</button>
+                        <button type="button" onclick="openEditModal('${p.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
+                        <button type="button" onclick="deleteProject('${p.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function renderAdminTransLists() {
+            const langKey = langs[currentLangIndex];
+            document.getElementById('admin-trans-list').innerHTML = translations.map(tr => {
+                let titleStr = typeof tr.title === 'object' ? (tr.title[langKey] || tr.title.zh) : tr.title;
+                return `
+                    <div class="py-3 flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-3">
+                            <img src="${tr.image}" class="w-9 h-12 object-cover rounded-lg bg-apple-lightgray border border-apple-border">
+                            <div>
+                                <span class="font-medium text-white block">${titleStr}</span>
+                                <span class="text-[10px] text-apple-accent">${tr.year}</span>
+                            </div>
+                        </div>
+                        <div class="space-x-1.5 flex">
+                            <button type="button" onclick="openTransEditModal('${tr.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
+                            <button type="button" onclick="deleteTranslation('${tr.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 專案 Modal 控制
+        function openNewProjectModal() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('edit-title-zh').value = '';
+            document.getElementById('edit-category-zh').value = '';
+            document.getElementById('edit-image').value = 'image/';
+            document.getElementById('edit-gallery').value = '';
+            document.getElementById('edit-desc-zh').value = '';
+            document.getElementById('edit-modal-title').innerHTML = '<i class="fa-solid fa-plus mr-2"></i> 新增專案';
+            toggleAdminModal(false);
+            document.getElementById('edit-modal').classList.remove('hidden');
+            document.getElementById('edit-modal').classList.add('flex');
         }
 
         function openEditModal(id) {
@@ -664,7 +772,8 @@
             document.getElementById('edit-image').value = project.image || '';
             document.getElementById('edit-gallery').value = project.gallery || '';
             document.getElementById('edit-desc-zh').value = project.description.zh || '';
-
+            document.getElementById('edit-modal-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i> 編輯專案資料';
+            toggleAdminModal(false);
             document.getElementById('edit-modal').classList.remove('hidden');
             document.getElementById('edit-modal').classList.add('flex');
         }
@@ -672,28 +781,127 @@
         function closeEditModal() {
             document.getElementById('edit-modal').classList.add('hidden');
             document.getElementById('edit-modal').classList.remove('flex');
+            toggleAdminModal(true);
         }
 
         function saveProject(e) {
             e.preventDefault();
             const id = document.getElementById('edit-id').value;
-            const project = projects.find(p => p.id === id);
-            if (project) {
-                project.title.zh = document.getElementById('edit-title-zh').value;
-                project.category.zh = document.getElementById('edit-category-zh').value;
-                project.image = document.getElementById('edit-image').value;
-                project.gallery = document.getElementById('edit-gallery').value;
-                project.description.zh = document.getElementById('edit-desc-zh').value;
+            const titleZh = document.getElementById('edit-title-zh').value;
+            const categoryZh = document.getElementById('edit-category-zh').value;
+            const image = document.getElementById('edit-image').value;
+            const gallery = document.getElementById('edit-gallery').value;
+            const descZh = document.getElementById('edit-desc-zh').value;
 
+            if (id) {
+                const project = projects.find(p => p.id === id);
+                if (project) {
+                    project.title.zh = titleZh;
+                    project.category.zh = categoryZh;
+                    project.image = image;
+                    project.gallery = gallery;
+                    project.description.zh = descZh;
+                }
+            } else {
+                const newId = String(Date.now());
+                projects.push({
+                    id: newId,
+                    title: { zh: titleZh, en: titleZh, ja: titleZh },
+                    category: { zh: categoryZh, en: categoryZh, ja: categoryZh },
+                    image: image,
+                    gallery: gallery,
+                    description: { zh: descZh, en: descZh, ja: descZh }
+                });
+            }
+
+            localStorage.setItem('portfolio_projects', JSON.stringify(projects));
+            closeEditModal();
+            renderProjects(currentFilterCategory);
+            alert('專案資料已成功儲存！');
+        }
+
+        function deleteProject(id) {
+            if (confirm('確定要刪除這個專案嗎？')) {
+                projects = projects.filter(p => p.id !== id);
                 localStorage.setItem('portfolio_projects', JSON.stringify(projects));
-                closeEditModal();
-                toggleAdminModal(true);
+                renderAdminLists();
                 renderProjects(currentFilterCategory);
-                alert('專案資料已成功更新！');
+                alert('專案已刪除！');
             }
         }
 
-        // 確保網頁完全載入後立即渲染專案與翻譯清單
+        // 電影翻譯 Modal 控制
+        function openNewTransModal() {
+            document.getElementById('trans-edit-id').value = '';
+            document.getElementById('trans-edit-title').value = '';
+            document.getElementById('trans-edit-year').value = '2026';
+            document.getElementById('trans-edit-image').value = 'image/';
+            document.getElementById('trans-modal-title').innerHTML = '<i class="fa-solid fa-plus mr-2"></i> 新增電影翻譯';
+            toggleAdminModal(false);
+            document.getElementById('trans-edit-modal').classList.remove('hidden');
+            document.getElementById('trans-edit-modal').classList.add('flex');
+        }
+
+        function openTransEditModal(id) {
+            const tr = translations.find(t => t.id === id);
+            if (!tr) return;
+            document.getElementById('trans-edit-id').value = tr.id;
+            let titleStr = typeof tr.title === 'object' ? tr.title.zh : tr.title;
+            document.getElementById('trans-edit-title').value = titleStr;
+            document.getElementById('trans-edit-year').value = tr.year;
+            document.getElementById('trans-edit-image').value = tr.image;
+            document.getElementById('trans-modal-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i> 編輯電影翻譯';
+            toggleAdminModal(false);
+            document.getElementById('trans-edit-modal').classList.remove('hidden');
+            document.getElementById('trans-edit-modal').classList.add('flex');
+        }
+
+        function closeTransEditModal() {
+            document.getElementById('trans-edit-modal').classList.add('hidden');
+            document.getElementById('trans-edit-modal').classList.remove('flex');
+            toggleAdminModal(true);
+        }
+
+        function saveTranslation(e) {
+            e.preventDefault();
+            const id = document.getElementById('trans-edit-id').value;
+            const title = document.getElementById('trans-edit-title').value;
+            const year = document.getElementById('trans-edit-year').value;
+            const image = document.getElementById('trans-edit-image').value;
+
+            if (id) {
+                const tr = translations.find(t => t.id === id);
+                if (tr) {
+                    tr.title = { zh: title, en: title, ja: title };
+                    tr.year = year;
+                    tr.image = image;
+                }
+            } else {
+                const newId = 't_' + Date.now();
+                translations.unshift({
+                    id: newId,
+                    title: { zh: title, en: title, ja: title },
+                    year: year,
+                    image: image
+                });
+            }
+
+            localStorage.setItem('portfolio_translations', JSON.stringify(translations));
+            closeTransEditModal();
+            renderTranslations();
+            alert('電影翻譯紀錄已成功儲存！');
+        }
+
+        function deleteTranslation(id) {
+            if (confirm('確定要刪除這筆電影翻譯紀錄嗎？')) {
+                translations = translations.filter(t => t.id !== id);
+                localStorage.setItem('portfolio_translations', JSON.stringify(translations));
+                renderAdminTransLists();
+                renderTranslations();
+                alert('記錄已刪除！');
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             renderProjects();
             renderTranslations();
