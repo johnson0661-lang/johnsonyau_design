@@ -639,7 +639,7 @@
                             <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg transition duration-500">
                             <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                         </div>
-                        <div class="p-6 text-center">
+                        <div class="p-6 flex items-center justify-center text-center flex-grow">
                             <h4 class="text-base font-semibold text-white">${displayTitle}</h4>
                         </div>
                     </div>
@@ -787,6 +787,7 @@
                     </div>
                     <div class="space-x-1.5 flex">
                         <button type="button" onclick="openEditModal('${p.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
+                        <button type="button" onclick="duplicateProject('${p.id}')" class="px-3.5 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg font-medium hover:bg-blue-500/30 transition border border-blue-500/30">複製</button>
                         <button type="button" onclick="deleteProject('${p.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
                     </div>
                 </div>
@@ -818,6 +819,7 @@
                         </div>
                         <div class="space-x-1.5 flex">
                             <button type="button" onclick="openTransEditModal('${tr.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯</button>
+                            <button type="button" onclick="duplicateTranslation('${tr.id}')" class="px-3.5 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg font-medium hover:bg-blue-500/30 transition border border-blue-500/30">複製</button>
                             <button type="button" onclick="deleteTranslation('${tr.id}')" class="px-3.5 py-1.5 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition border border-red-500/30">刪除</button>
                         </div>
                     </div>
@@ -946,6 +948,26 @@
             }
         }
 
+        function duplicateProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+            const newId = String(Date.now());
+            const clonedTitle = typeof project.title === 'object' 
+                ? { zh: (project.title.zh || '') + ' (複製)', en: (project.title.en || '') + ' (Copy)', ja: (project.title.ja || '') + ' (コピー)' }
+                : project.title + ' (複製)';
+            
+            const newProject = {
+                ...project,
+                id: newId,
+                title: clonedTitle
+            };
+            projects.unshift(newProject);
+            localStorage.setItem('portfolio_projects', JSON.stringify(projects));
+            renderAdminLists();
+            renderProjects(currentFilterCategory);
+            alert('專案已成功複製！');
+        }
+
         // 電影翻譯 Modal 控制
         function openNewTransModal() {
             document.getElementById('trans-edit-id').value = '';
@@ -1021,6 +1043,26 @@
                 renderTranslations();
                 alert('記錄已刪除！');
             }
+        }
+
+        function duplicateTranslation(id) {
+            const tr = translations.find(t => t.id === id);
+            if (!tr) return;
+            const newId = 't_' + Date.now();
+            const clonedTitle = typeof tr.title === 'object'
+                ? { zh: (tr.title.zh || '') + ' (複製)', en: (tr.title.en || '') + ' (Copy)', ja: (tr.title.ja || '') + ' (コピー)' }
+                : tr.title + ' (複製)';
+            
+            const newTr = {
+                ...tr,
+                id: newId,
+                title: clonedTitle
+            };
+            translations.unshift(newTr);
+            localStorage.setItem('portfolio_translations', JSON.stringify(translations));
+            renderAdminTransLists();
+            renderTranslations();
+            alert('電影翻譯紀錄已成功複製！');
         }
 
         window.addEventListener('DOMContentLoaded', () => {
