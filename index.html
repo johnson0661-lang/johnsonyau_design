@@ -290,7 +290,7 @@
             <!-- 電影翻譯管理面板 -->
             <div id="admin-trans-panel" class="space-y-4 hidden">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表 (自動按年份由新到舊排列)</h4>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表 (自動按年份與名稱排序)</h4>
                     <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
                     </button>
@@ -614,7 +614,16 @@
             if (!grid) return;
             const langKey = langs[currentLangIndex];
 
-            const sortedTranslations = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            const sortedTranslations = [...translations].sort((a, b) => {
+                const yearA = parseInt(a.year) || 0;
+                const yearB = parseInt(b.year) || 0;
+                if (yearB !== yearA) {
+                    return yearB - yearA;
+                }
+                const titleA = (typeof a.title === 'object' ? (a.title[langKey] || a.title.zh) : a.title) || '';
+                const titleB = (typeof b.title === 'object' ? (b.title[langKey] || b.title.zh) : b.title) || '';
+                return titleA.localeCompare(titleB, 'zh-HK');
+            });
 
             grid.innerHTML = sortedTranslations.map(tr => {
                 let displayTitle = '';
@@ -630,7 +639,7 @@
                             <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg transition duration-500">
                             <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 text-center">
                             <h4 class="text-base font-semibold text-white">${displayTitle}</h4>
                         </div>
                     </div>
@@ -785,7 +794,17 @@
         }
 
         function renderAdminTransLists() {
-            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            const sortedTrs = [...translations].sort((a, b) => {
+                const yearA = parseInt(a.year) || 0;
+                const yearB = parseInt(b.year) || 0;
+                if (yearB !== yearA) {
+                    return yearB - yearA;
+                }
+                const titleA = (typeof a.title === 'object' ? (a.title.zh || a.title) : a.title) || '';
+                const titleB = (typeof b.title === 'object' ? (b.title.zh || b.title) : b.title) || '';
+                return titleA.localeCompare(titleB, 'zh-HK');
+            });
+
             document.getElementById('admin-trans-list').innerHTML = sortedTrs.map(tr => {
                 let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
                 return `
