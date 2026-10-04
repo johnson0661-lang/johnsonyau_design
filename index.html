@@ -450,7 +450,7 @@
             
             grid.innerHTML = filtered.map((p) => `
                 <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
-                    <div class="overflow-hidden aspect-[16/10] bg-black/60 relative flex items-center justify-center p-6">
+                    <div class="overflow-hidden aspect-[16/10] bg-black/60 relative flex items-center justify-center p-12">
                         <img src="${p.image}" alt="${p.title[langKey]}" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition duration-700 shadow-xl opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-8">
