@@ -62,7 +62,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* 升級版：極幼細金屬光澤邊框與游標聚光流光卡片特效 */
+        /* 頂級純淨冷色流光邊框與互動卡片 */
         .spotlight-card {
             position: relative;
             background: rgba(18, 18, 22, 0.75);
@@ -164,8 +164,8 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="min-h-[85vh] max-w-5xl mx-auto px-6 pt-32 pb-44 flex flex-col justify-center items-center text-center relative reveal-up active">
+    <!-- Hero Section (強制滿版高度，絕對不會外洩下一個標題) -->
+    <section class="min-h-screen max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center relative reveal-up active">
         <div>
             <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
                 Multimedia Design & IP Localization
@@ -187,9 +187,9 @@
         </div>
     </section>
 
-    <!-- Works Section -->
-    <section id="works" class="max-w-7xl mx-auto px-6 py-56 reveal-up">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-24">
+    <!-- Works Section (獨立滿版屏) -->
+    <section id="works" class="min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-center py-24 reveal-up">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
@@ -204,9 +204,9 @@
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- Translation Section -->
-    <section id="translation" class="max-w-7xl mx-auto px-6 py-56 reveal-up">
-        <div class="mb-24">
+    <!-- Translation Section (獨立滿版屏) -->
+    <section id="translation" class="min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-center py-24 reveal-up">
+        <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
             <p id="trans-sub" class="text-sm text-apple-gray mt-3">點擊任意電影海報可檢視高清大圖。精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
@@ -214,8 +214,8 @@
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="bg-[#030308]/90 backdrop-blur-2xl py-64 reveal-up">
+    <!-- About Section (獨立滿版屏) -->
+    <section id="about" class="min-h-screen bg-[#030308]/90 backdrop-blur-2xl flex flex-col justify-center py-24 reveal-up">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center">
                 <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden border border-apple-border shadow-2xl bg-black group">
