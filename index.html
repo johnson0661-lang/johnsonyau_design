@@ -51,11 +51,12 @@
             transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
         }
 
-        #intro-logo {
-            opacity: 0;
-            transform: scale(0.9);
-            animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+       #intro-logo {
+        opacity: 0;
+        transform: scale(0.9);
+        animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        filter: brightness(0); /* 強制將白色圖檔轉成純黑色 */
+    }
 
         @keyframes introFade {
             0% { opacity: 0; transform: scale(0.9); }
