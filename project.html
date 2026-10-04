@@ -68,21 +68,23 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header -->
+    <!-- Header (完美仿主頁無框置中純白字風格) -->
     <header class="sticky top-0 z-50 apple-glass">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
-            <div class="flex items-center space-x-6">
-                <a href="index.html" class="group flex items-center">
-                    <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
-                </a>
-                <span class="text-apple-border">/</span>
-                <span id="nav-category-badge" class="px-3 py-1 rounded-full bg-apple-lightgray text-apple-accent font-medium border border-apple-border shadow-sm">載入中...</span>
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
+            <a href="index.html" class="group flex items-center z-10">
+                <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
+            </a>
+            
+            <!-- 中間分類顯示：無框、純白字、絕對置中 -->
+            <div class="absolute left-1/2 -translate-x-1/2 text-white font-medium text-xs tracking-wider">
+                <span id="nav-category-badge">載入中...</span>
             </div>
-            <div class="flex items-center space-x-6">
+
+            <div class="flex items-center space-x-6 z-10">
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
                 </a>
-                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
+                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
                 </button>
             </div>
@@ -103,7 +105,7 @@
             <img id="main-preview-img" src="" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl">
         </div>
 
-        <!-- 下方：左右分欄（左側細節圖+左右切換按鈕 / 右側詳細文案） -->
+        <!-- 下方：左右分欄 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             <!-- 左側：細節圖展示與切換控制 -->
@@ -120,7 +122,7 @@
                     </button>
                 </div>
 
-                <!-- 桃紅色分頁導航圓點 Pagination Dots -->
+                <!-- 桃紅色分頁導航點 Pagination Dots -->
                 <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2">
                     <!-- 動態生成點點 -->
                 </div>
@@ -204,7 +206,6 @@
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
             document.getElementById('main-preview-img').src = currentProjectData.image;
 
-            // 處理細節圖庫 (Gallery)
             galleryImages = [];
             if (currentProjectData.image) galleryImages.push(currentProjectData.image);
             if (currentProjectData.gallery) {
@@ -223,7 +224,6 @@
             if (galleryImages.length === 0) return;
             document.getElementById('gallery-active-img').src = galleryImages[activeGalleryIndex];
 
-            // 渲染桃紅色導航點 Pagination Dots
             const dotsContainer = document.getElementById('pagination-dots');
             dotsContainer.innerHTML = galleryImages.map((_, idx) => `
                 <button onclick="setGalleryIndex(${idx})" class="w-3 h-3 rounded-full transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-apple-dot scale-125 shadow-md shadow-apple-dot/50' : 'bg-apple-border hover:bg-apple-gray'}"></button>
