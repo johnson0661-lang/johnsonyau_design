@@ -116,9 +116,7 @@
                     <h1 id="p-title" class="text-3xl md:text-5xl font-semibold text-white tracking-tight leading-tight"></h1>
                 </div>
 
-                <div class="w-full h-px bg-apple-border my-6"></div>
-
-                <div class="space-y-6">
+                <div class="space-y-6 pt-6">
                     <h2 id="case-heading" class="text-xs uppercase tracking-wider text-apple-gray font-semibold">設計理念與專案拆解 (Case Study)</h2>
                     <div id="p-description" class="text-apple-gray text-base md:text-lg leading-relaxed whitespace-pre-line space-y-6 font-normal"></div>
                 </div>
@@ -136,7 +134,7 @@
         </div>
 
         <!-- 底部：更多細節圖庫 -->
-        <div id="gallery-container" class="mt-28 border-t border-apple-border/40 pt-16 hidden">
+        <div id="gallery-container" class="mt-28 pt-16 hidden">
             <h2 id="gallery-heading" class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
             <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
@@ -167,9 +165,9 @@
         </div>
     </div>
 
-    <!-- Admin Modal -->
+    <!-- Admin Modal (專案列表) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-3xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
@@ -178,10 +176,43 @@
             </div>
             <div class="space-y-6">
                 <div>
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表</h4>
-                    <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表（可直接修改資料）</h4>
+                    <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Edit Project Modal (編輯單一專案彈窗) -->
+    <div id="edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
+            <button onclick="closeEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 class="text-xl font-semibold text-white mb-6"><i class="fa-solid fa-pen-to-square mr-2"></i> 編輯專案資料</h3>
+            <form id="edit-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">專案標題 (繁體中文)</label>
+                    <input type="text" id="edit-title-zh" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">專案分類</label>
+                    <input type="text" id="edit-category-zh" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">主圖圖片路徑 (例如: image/Digimon/...)</label>
+                    <input type="text" id="edit-image" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-apple-gray mb-1 font-semibold">設計理念與專案拆解 (Case Study 繁體中文)</label>
+                    <textarea id="edit-desc-zh" rows="5" required class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none resize-none"></textarea>
+                </div>
+                <div class="flex space-x-2 pt-4">
+                    <button type="button" onclick="closeEditModal()" class="w-1/2 py-3 bg-apple-lightgray text-apple-gray rounded-xl font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="w-1/2 py-3 bg-white text-black rounded-xl font-medium">儲存變更</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -327,6 +358,7 @@
                 closeLightbox();
                 closePasswordModal();
                 toggleAdminModal(false);
+                closeEditModal();
             }
         });
 
@@ -375,11 +407,47 @@
                         <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
                         <span class="font-medium text-white">${p.title[langKey] || p.title.zh}</span>
                     </div>
-                    <div class="space-x-1.5">
-                        <button type="button" onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border hover:bg-apple-border transition">前往編輯專案詳情</button>
+                    <div class="space-x-1.5 flex">
+                        <button type="button" onclick="openEditModal('${p.id}')" class="px-3.5 py-1.5 bg-white text-black rounded-lg font-medium hover:bg-stone-200 transition shadow-sm">編輯專案資料</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function openEditModal(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+            document.getElementById('edit-id').value = project.id;
+            document.getElementById('edit-title-zh').value = project.title.zh || '';
+            document.getElementById('edit-category-zh').value = project.category.zh || '';
+            document.getElementById('edit-image').value = project.image || '';
+            document.getElementById('edit-desc-zh').value = project.description.zh || '';
+
+            document.getElementById('edit-modal').classList.remove('hidden');
+            document.getElementById('edit-modal').classList.add('flex');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+            document.getElementById('edit-modal').classList.remove('flex');
+        }
+
+        function saveProject(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const project = projects.find(p => p.id === id);
+            if (project) {
+                project.title.zh = document.getElementById('edit-title-zh').value;
+                project.category.zh = document.getElementById('edit-category-zh').value;
+                project.image = document.getElementById('edit-image').value;
+                project.description.zh = document.getElementById('edit-desc-zh').value;
+
+                localStorage.setItem('portfolio_projects', JSON.stringify(projects));
+                closeEditModal();
+                toggleAdminModal(true);
+                updateProjectContent();
+                alert('專案資料已成功更新！');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
