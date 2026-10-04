@@ -118,7 +118,6 @@
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 class="text-4xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
-            <!-- Updated filter buttons matching CV categories -->
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
                 <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm">全部專案</button>
                 <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface 本地化</button>
@@ -179,19 +178,33 @@
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
 
-    <!-- Project Detail Modal -->
+    <!-- Project Detail Modal (Enhanced with Multi-Image Gallery & Full Case Study View) -->
     <div id="project-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-4xl w-full p-8 md:p-12 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <span id="modal-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-2 block"></span>
-            <h3 id="modal-title" class="text-2xl font-semibold text-white mb-4"></h3>
+            <h3 id="modal-title" class="text-3xl font-semibold text-white mb-6"></h3>
             
             <div id="modal-video-tabs" class="flex flex-wrap gap-2 mb-4 hidden"></div>
-            <div id="modal-media-container" class="w-full h-80 rounded-2xl mb-6 overflow-hidden bg-black/50 border border-apple-border"></div>
+            
+            <!-- Main Media Display -->
+            <div id="modal-media-container" class="w-full h-96 rounded-2xl mb-6 overflow-hidden bg-black/50 border border-apple-border flex items-center justify-center"></div>
 
-            <p id="modal-description" class="text-apple-gray text-sm leading-relaxed whitespace-pre-line"></p>
+            <!-- Detailed Description -->
+            <div class="mb-8">
+                <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案介紹與設計理念</h4>
+                <p id="modal-description" class="text-apple-dark text-base leading-relaxed whitespace-pre-line"></p>
+            </div>
+
+            <!-- Additional Gallery Images Placeholder (Multi-Image Showcase) -->
+            <div id="modal-gallery-section" class="border-t border-apple-border/50 pt-6">
+                <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-4">更多專案細節與視覺展示</h4>
+                <div id="modal-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Dynamic Gallery Images will load here -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -249,8 +262,8 @@
 
     <!-- Project Editor Modal -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯專案</h3>
+        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容</h3>
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
@@ -268,16 +281,20 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面圖片網址 (Image URL)</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片網址 (Main Image URL)</label>
                     <input type="url" id="edit-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">YouTube 連結 (多條請用半形逗號 , 分隔)</label>
-                    <input type="text" id="edit-youtube" placeholder="https://youtu.be/xxx, https://youtu.be/yyy" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細圖庫網址 (多張請用半形逗號 , 分隔)</label>
+                    <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細說明</label>
-                    <textarea id="edit-description" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">YouTube 連結 (選填)</label>
+                    <input type="text" id="edit-youtube" placeholder="https://youtu.be/xxx" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹說明</label>
+                    <textarea id="edit-description" rows="4" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
@@ -320,14 +337,62 @@
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
 
-        // 預設專案資料（對應 CV 中的核心實戰項目）
+        // 預設專案資料（包含 gallery 欄位可存放多張補充圖片網址）
         let projects = [
-            { id: '1', title: '數碼暴龍 Last Evolution 絆 - 字體在地化', category: 'Typeface 本地化', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', youtube: '', description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface[cite: 18]。' },
-            { id: '2', title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', youtube: '', description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發[cite: 23]。' },
-            { id: '3', title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', youtube: '', description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶[cite: 21]。' },
-            { id: '4', title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', youtube: '', description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝[cite: 22]。' },
-            { id: '5', title: '板前壽司 & 上膳食堂聖誕餐牌宣傳品', category: 'F&B 商業平面', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', youtube: '', description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料[cite: 19, 20]。' },
-            { id: '6', title: '《蠟筆小新》2025 期間限定店視覺規劃', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', description: 'AIRSIDE 蠟筆小新 Pop-up Store 之空間平面佈局、打卡位與限定周邊企劃[cite: 24]。' }
+            { 
+                id: '1', 
+                title: '數碼暴龍 Last Evolution 絆 - 字體在地化', 
+                category: 'Typeface 本地化', 
+                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' 
+            },
+            { 
+                id: '2', 
+                title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', 
+                category: 'Pop-up Store 與展覽', 
+                image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' 
+            },
+            { 
+                id: '3', 
+                title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', 
+                category: '實體包裝設計', 
+                image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' 
+            },
+            { 
+                id: '4', 
+                title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', 
+                category: '實體包裝設計', 
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' 
+            },
+            { 
+                id: '5', 
+                title: '板前壽司 & 上膳食堂聖誕餐牌宣傳品', 
+                category: 'F&B 商業平面', 
+                image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料。捕捉美食質感並配合強烈促銷視覺，提升顧客消費意欲[cite: 19, 20]。' 
+            },
+            { 
+                id: '6', 
+                title: '《蠟筆小新》2025 期間限定店視覺規劃', 
+                category: 'Pop-up Store 與展覽', 
+                image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80',
+                youtube: '', 
+                description: 'AIRSIDE 蠟筆小新 Pop-up Store 之空間平面佈局、打卡位與限定周邊企劃。創造沉浸式粉絲體驗與高效能的零售動線。' 
+            }
         ];
 
         let translations = [
@@ -501,6 +566,7 @@
             renderProjects(category);
         }
 
+        // Open Project Detail Modal with Multi-Image Gallery & Full Description
         function openModal(id) {
             const p = projects.find(item => item.id == id);
             if (!p) return;
@@ -534,6 +600,23 @@
                 }
             } else {
                 mediaContainer.innerHTML = `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">`;
+            }
+
+            // Render Gallery Images
+            const galleryGrid = document.getElementById('modal-gallery-grid');
+            const gallerySection = document.getElementById('modal-gallery-section');
+            galleryGrid.innerHTML = '';
+
+            if (p.gallery && p.gallery.trim() !== '') {
+                gallerySection.style.display = 'block';
+                const galleryUrls = p.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
+                galleryGrid.innerHTML = galleryUrls.map(gUrl => `
+                    <div class="overflow-hidden aspect-[4/3] rounded-xl bg-black border border-apple-border group cursor-pointer" onclick="openPosterModal('${p.title.replace(/'/g, "\\'")}', '專案細節', '${gUrl}')">
+                        <img src="${gUrl}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                `).join('');
+            } else {
+                gallerySection.style.display = 'none';
             }
 
             document.getElementById('project-modal').classList.remove('hidden');
@@ -600,6 +683,7 @@
             document.getElementById('edit-title').value = '';
             document.getElementById('edit-category').value = 'Typeface 本地化';
             document.getElementById('edit-image').value = '';
+            document.getElementById('edit-gallery').value = '';
             document.getElementById('edit-youtube').value = '';
             document.getElementById('edit-description').value = '';
             document.getElementById('editor-modal').classList.remove('hidden');
@@ -613,6 +697,7 @@
             document.getElementById('edit-title').value = p.title;
             document.getElementById('edit-category').value = p.category;
             document.getElementById('edit-image').value = p.image;
+            document.getElementById('edit-gallery').value = p.gallery || '';
             document.getElementById('edit-youtube').value = p.youtube || '';
             document.getElementById('edit-description').value = p.description;
             document.getElementById('editor-modal').classList.remove('hidden');
@@ -630,14 +715,15 @@
             const title = document.getElementById('edit-title').value;
             const category = document.getElementById('edit-category').value;
             const image = document.getElementById('edit-image').value;
+            const gallery = document.getElementById('edit-gallery').value;
             const youtube = document.getElementById('edit-youtube').value;
             const description = document.getElementById('edit-description').value;
 
             if (id) {
                 const idx = projects.findIndex(p => p.id == id);
-                if (idx !== -1) projects[idx] = { id, title, category, image, youtube, description };
+                if (idx !== -1) projects[idx] = { id, title, category, image, gallery, youtube, description };
             } else {
-                projects.unshift({ id: Date.now().toString(), title, category, image, youtube, description });
+                projects.unshift({ id: Date.now().toString(), title, category, image, gallery, youtube, description });
             }
             closeEditor();
             renderProjects(currentFilter);
