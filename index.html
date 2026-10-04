@@ -212,15 +212,23 @@
         </div>
     </div>
 
-    <!-- Project Editor Modal -->
+    <!-- Project Editor Modal (支援三語輸入) -->
     <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容</h3>
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (三語)</h3>
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (繁體)</label>
-                    <input type="text" id="edit-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (繁體中文)</label>
+                    <input type="text" id="edit-title-zh" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (英文 English)</label>
+                    <input type="text" id="edit-title-en" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (日文 日本語)</label>
+                    <input type="text" id="edit-title-ja" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">分類</label>
@@ -240,8 +248,16 @@
                     <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹說明 (繁體)</label>
-                    <textarea id="edit-description" rows="4" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (繁體中文)</label>
+                    <textarea id="edit-desc-zh" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (英文 English)</label>
+                    <textarea id="edit-desc-en" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (日文 日本語)</label>
+                    <textarea id="edit-desc-ja" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
@@ -279,7 +295,7 @@
 
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
-        let currentLangIndex = 0; // 0: zh, 1: en, 2: ja
+        let currentLangIndex = 0; 
         const langs = ['zh', 'en', 'ja'];
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
 
@@ -503,6 +519,7 @@
             renderProjects(category);
         }
 
+        // 監聽快捷鍵開啟後台 (Cmd + Shift + L)
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
                 e.preventDefault();
@@ -564,7 +581,6 @@
                     </div>
                     <div class="space-x-1.5">
                         <button type="button" onclick="openEditorForEditProject('${p.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
-                        <button type="button" onclick="deleteProject('${p.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
                     </div>
                 </div>
             `).join('');
@@ -577,32 +593,23 @@
                     </div>
                     <div class="space-x-1.5">
                         <button type="button" onclick="openEditorForEditTranslation('${t.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
-                        <button type="button" onclick="deleteTranslation('${t.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function openEditorForNewProject() {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('edit-title').value = '';
-            document.getElementById('edit-category').value = 'Typeface 本地化';
-            document.getElementById('edit-image').value = '';
-            document.getElementById('edit-gallery').value = '';
-            document.getElementById('edit-description').value = '';
-            document.getElementById('editor-modal').classList.remove('hidden');
-            document.getElementById('editor-modal').classList.add('flex');
         }
 
         function openEditorForEditProject(id) {
             document.getElementById('edit-id').value = id;
             const p = projects.find(item => item.id == id);
             if (!p) return;
-            document.getElementById('edit-title').value = p.title.zh;
-            document.getElementById('edit-category').value = p.category.zh;
+            document.getElementById('edit-title-zh').value = p.title.zh;
+            document.getElementById('edit-title-en').value = p.title.en;
+            document.getElementById('edit-title-ja').value = p.title.ja;
             document.getElementById('edit-image').value = p.image;
             document.getElementById('edit-gallery').value = p.gallery || '';
-            document.getElementById('edit-description').value = p.description.zh;
+            document.getElementById('edit-desc-zh').value = p.description.zh;
+            document.getElementById('edit-desc-en').value = p.description.en;
+            document.getElementById('edit-desc-ja').value = p.description.ja;
             document.getElementById('editor-modal').classList.remove('hidden');
             document.getElementById('editor-modal').classList.add('flex');
         }
@@ -615,47 +622,18 @@
         function saveProject(e) {
             e.preventDefault();
             const id = document.getElementById('edit-id').value;
-            const titleText = document.getElementById('edit-title').value;
-            const categoryText = document.getElementById('edit-category').value;
-            const image = document.getElementById('edit-image').value;
-            const gallery = document.getElementById('edit-gallery').value;
-            const descText = document.getElementById('edit-description').value;
-
-            const newProj = {
-                id: id || Date.now().toString(),
-                title: { zh: titleText, en: titleText, ja: titleText },
-                category: { zh: categoryText, en: categoryText, ja: categoryText },
-                image: image,
-                gallery: gallery,
-                description: { zh: descText, en: descText, ja: descText }
-            };
-
-            if (id) {
-                const idx = projects.findIndex(p => p.id == id);
-                if (idx !== -1) projects[idx] = newProj;
-            } else {
-                projects.unshift(newProj);
+            const idx = projects.findIndex(p => p.id == id);
+            if (idx !== -1) {
+                projects[idx].title.zh = document.getElementById('edit-title-zh').value;
+                projects[idx].title.en = document.getElementById('edit-title-en').value;
+                projects[idx].title.ja = document.getElementById('edit-title-ja').value;
+                projects[idx].description.zh = document.getElementById('edit-desc-zh').value;
+                projects[idx].description.en = document.getElementById('edit-desc-en').value;
+                projects[idx].description.ja = document.getElementById('edit-desc-ja').value;
             }
             closeEditor();
             renderProjects();
             renderAdminLists();
-        }
-
-        function deleteProject(id) {
-            if (confirm('確定刪除此專案？')) {
-                projects = projects.filter(p => p.id != id);
-                renderProjects();
-                renderAdminLists();
-            }
-        }
-
-        function openEditorForNewTranslation() {
-            document.getElementById('trans-edit-id').value = '';
-            document.getElementById('trans-title').value = '';
-            document.getElementById('trans-year').value = '2026';
-            document.getElementById('trans-image').value = '';
-            document.getElementById('trans-editor-modal').classList.remove('hidden');
-            document.getElementById('trans-editor-modal').classList.add('flex');
         }
 
         function openEditorForEditTranslation(id) {
@@ -677,27 +655,15 @@
         function saveTranslation(e) {
             e.preventDefault();
             const id = document.getElementById('trans-edit-id').value;
-            const title = document.getElementById('trans-title').value;
-            const year = document.getElementById('trans-year').value;
-            const image = document.getElementById('trans-image').value;
-
-            if (id) {
-                const idx = translations.findIndex(t => t.id == id);
-                if (idx !== -1) translations[idx] = { id, title, year, image };
-            } else {
-                translations.unshift({ id: Date.now().toString(), title, year, image });
+            const idx = translations.findIndex(t => t.id == id);
+            if (idx !== -1) {
+                translations[idx].title = document.getElementById('trans-title').value;
+                translations[idx].year = document.getElementById('trans-year').value;
+                translations[idx].image = document.getElementById('trans-image').value;
             }
             closeTransEditor();
             renderTranslations();
             renderAdminLists();
-        }
-
-        function deleteTranslation(id) {
-            if (confirm('確定刪除此翻譯紀錄？')) {
-                translations = translations.filter(t => t.id != id);
-                renderTranslations();
-                renderAdminLists();
-            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -705,7 +671,7 @@
             renderTranslations();
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('active');
+                    if (entry.isIntersecting) entry.target.classList.1add('active');
                 });
             }, { threshold: 0.15 });
             document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
