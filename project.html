@@ -10,19 +10,21 @@
             theme: {
                 extend: {
                     colors: {
-                        apple: {
-                            bg: '#020205',
-                            card: '#161619',
-                            dark: '#f5f5f7',
-                            gray: '#86868b',
-                            lightgray: '#1d1d1f',
-                            border: '#333338',
-                            accent: '#2997ff',
-                            dot: '#ff2d55'
+                        minimal: {
+                            bg: '#fafafa',
+                            card: '#ffffff',
+                            text: '#222222',
+                            gray: '#888888',
+                            lightgray: '#f5f5f5',
+                            border: '#ebebeb',
+                            accent: '#111111'
                         }
                     },
                     fontFamily: {
                         sans: ['-apple-system', 'BlinkMacSystemFont', "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.04)',
                     }
                 }
             }
@@ -36,28 +38,20 @@
 
     <style>
         body {
-            background-color: #020205;
-            background-image: 
-                radial-gradient(circle at 50% 10%, rgba(41, 151, 255, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 15% 35%, rgba(0, 113, 227, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 85% 75%, rgba(41, 151, 255, 0.1) 0%, transparent 45%),
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 60px 60px, 60px 60px;
-            background-attachment: fixed;
+            background-color: #fafafa;
+            color: #222222;
         }
 
-        .apple-glass { 
-            background: rgba(2, 2, 5, 0.85); 
-            backdrop-filter: saturate(200%) blur(35px); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .glass-header { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: saturate(180%) blur(20px); 
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .card-glass { 
-            background: rgba(22, 22, 25, 0.75); 
-            backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        .card-light { 
+            background: #ffffff; 
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.05);
         }
 
         .reveal-up {
@@ -79,30 +73,32 @@
             opacity: 1;
             pointer-events: auto;
         }
+        
+        .logo-invert { filter: invert(1) grayscale(1); }
     </style>
 </head>
-<body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
+<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <header class="sticky top-0 z-50 apple-glass">
+    <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
             <a href="index.html" class="group flex items-center">
-                <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
+                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain group-hover:opacity-60 transition duration-300">
             </a>
 
             <div class="flex items-center space-x-6">
-                <div class="flex items-center space-x-2 border-r border-apple-border pr-6">
-                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 rounded-full bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center justify-center shadow-sm" title="上一個同分類作品">
+                <div class="flex items-center space-x-2 border-r border-minimal-border pr-6">
+                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 rounded-full bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-sm" title="上一個同分類作品">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 rounded-full bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center justify-center shadow-sm" title="下一個同分類作品">
+                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 rounded-full bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-sm" title="下一個同分類作品">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
 
-                <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center font-medium">
+                <a href="index.html#works" class="text-minimal-gray hover:text-minimal-accent transition flex items-center font-medium">
                     <i class="fa-solid fa-arrow-left mr-1.5"></i> <span id="back-text">返回作品列表</span>
                 </a>
-                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
+                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-4 py-1.5 rounded-full bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition font-medium shadow-sm">
                     EN
                 </button>
             </div>
@@ -110,49 +106,49 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
-        <div class="mb-8">
-            <span id="project-category" class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">Category</span>
-            <h1 id="project-title" class="text-3xl md:text-5xl font-semibold tracking-tight text-white leading-tight"></h1>
+        <div class="mb-10 text-center">
+            <span id="project-category" class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-minimal-gray mb-3 px-3 py-1 bg-white border border-minimal-border rounded-full"></span>
+            <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
         </div>
 
-        <div id="media-container" class="card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl relative">
+        <div id="media-container" class="card-light rounded-3xl overflow-hidden mb-12 p-4 md:p-8 flex items-center justify-center bg-minimal-lightgray border border-minimal-border shadow-soft relative">
             <!-- 動態填入圖片或 YouTube iframe -->
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div class="lg:col-span-6 space-y-6">
-                <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10] relative group">
-                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain rounded-2xl shadow-lg transition duration-500 cursor-pointer">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="card-light rounded-3xl overflow-hidden p-4 bg-minimal-lightgray border border-minimal-border flex items-center justify-center aspect-[16/10] relative group">
+                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain rounded-xl shadow-sm transition duration-500 cursor-pointer">
                     
-                    <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
+                    <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-white/90 text-minimal-accent text-[11px] font-medium backdrop-blur-sm border border-minimal-border opacity-0 group-hover:opacity-100 transition shadow-sm pointer-events-none">
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
 
-                    <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
+                    <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 text-minimal-accent backdrop-blur-sm border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-md">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextGalleryImage(event)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
+                    <button onclick="nextGalleryImage(event)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 text-minimal-accent backdrop-blur-sm border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-md">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
                 <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
             </div>
 
-            <div class="lg:col-span-6 space-y-6">
-                <h3 id="case-study-heading" class="text-xs uppercase tracking-widest text-apple-gray font-semibold">Design Concept & Case Study</h3>
-                <div id="project-description" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
+            <div class="lg:col-span-5 space-y-6 pt-4">
+                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.15em] text-minimal-gray font-bold border-b border-minimal-border pb-3">Design Concept & Case Study</h3>
+                <div id="project-description" class="text-[#444444] font-normal leading-relaxed text-sm space-y-4"></div>
             </div>
         </div>
     </main>
 
-    <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border z-10 shadow-xl">
+    <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-white/95 backdrop-blur-md flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-minimal-gray hover:text-minimal-accent w-12 h-12 rounded-full bg-minimal-lightgray flex items-center justify-center transition border border-minimal-border z-10 shadow-sm">
             <i class="fa-solid fa-xmark text-sm"></i>
         </button>
-        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" onclick="event.stopPropagation()">
     </div>
 
-    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/40 mt-20">
+    <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border mt-12">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
 
@@ -169,7 +165,6 @@
         let galleryImages = [];
         let activeGalleryIndex = 0;
 
-        // 初始化 Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM",
             authDomain: "johnsonportfolio-1262d.firebaseapp.com",
@@ -188,34 +183,23 @@
 
         async function loadProject() {
             try {
-                // 從 Firebase 獲取單一專案 (因為詳情頁只需要顯示一筆，或者獲取全部作分類切換)
                 const snapshot = await db.collection('projects').get();
-                if (!snapshot.empty) {
-                    allProjects = snapshot.docs.map(doc => doc.data());
-                } else {
-                    // 如果雲端無資料，嘗試從 LocalStorage 讀取備援
-                    allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
-                }
+                if (!snapshot.empty) allProjects = snapshot.docs.map(doc => doc.data());
+                else allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
             } catch (err) {
-                console.error("Firebase load failed, using local backup", err);
+                console.error(err);
                 allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
             }
 
             const id = getProjectIdFromURL();
             currentProjectData = allProjects.find(p => p.id === id);
-
-            if (!currentProjectData && allProjects.length > 0) {
-                currentProjectData = allProjects[0];
-            }
+            if (!currentProjectData && allProjects.length > 0) currentProjectData = allProjects[0];
 
             const langParam = new URLSearchParams(window.location.search).get('lang');
-            if (langParam && langs.includes(langParam)) {
-                currentLangIndex = langs.indexOf(langParam);
-            } else {
+            if (langParam && langs.includes(langParam)) currentLangIndex = langs.indexOf(langParam);
+            else {
                 const savedLang = localStorage.getItem('portfolio_lang');
-                if (savedLang && langs.includes(savedLang)) {
-                    currentLangIndex = langs.indexOf(savedLang);
-                }
+                if (savedLang && langs.includes(savedLang)) currentLangIndex = langs.indexOf(savedLang);
             }
 
             document.getElementById('lang-btn').textContent = langNames[langs[currentLangIndex]];
@@ -226,13 +210,13 @@
         function getNormalizedCategory(cat) {
             if (typeof cat === 'object') return cat.zh || '';
             let catStr = String(cat || '').trim();
-            if (catStr === 'Typeface 本地化' || catStr === 'Typeface' || catStr === '字體設計') return '字體設計';
-            if (catStr === '展覽與視覺企劃' || catStr === '展覽' || catStr === 'Exhibition') return '展覽';
-            if (catStr === 'Pop-up Store' || catStr === '快閃店') return '快閃店';
-            if (catStr === '實體包裝設計' || catStr === '包裝設計' || catStr === 'Packaging Design') return '包裝設計';
-            if (catStr === '周邊設計' || catStr === 'Merchandise') return '周邊設計';
-            if (catStr === '影片剪接' || catStr === 'Video Editing') return '影片剪接';
-            return catStr || '其他';
+            if (catStr.includes('Typeface') || catStr.includes('字體')) return '字體設計';
+            if (catStr.includes('展覽') || catStr.includes('Exhibition')) return '展覽';
+            if (catStr.includes('Pop-up') || catStr.includes('快閃店')) return '快閃店';
+            if (catStr.includes('包裝') || catStr.includes('Packaging')) return '包裝設計';
+            if (catStr.includes('周邊') || catStr.includes('Merchandise')) return '周邊設計';
+            if (catStr.includes('影片') || catStr.includes('Video')) return '影片剪接';
+            return '其他';
         }
 
         function calcSameCategoryProjects() {
@@ -246,55 +230,30 @@
         function prevProject() {
             if (sameCategoryProjects.length <= 1) return;
             currentIndexInCat = (currentIndexInCat - 1 + sameCategoryProjects.length) % sameCategoryProjects.length;
-            const targetProj = sameCategoryProjects[currentIndexInCat];
-            const langKey = langs[currentLangIndex];
-            window.location.href = `project.html?id=${targetProj.id}&lang=${langKey}`;
+            window.location.href = `project.html?id=${sameCategoryProjects[currentIndexInCat].id}&lang=${langs[currentLangIndex]}`;
         }
 
         function nextProject() {
             if (sameCategoryProjects.length <= 1) return;
             currentIndexInCat = (currentIndexInCat + 1) % sameCategoryProjects.length;
-            const targetProj = sameCategoryProjects[currentIndexInCat];
-            const langKey = langs[currentLangIndex];
-            window.location.href = `project.html?id=${targetProj.id}&lang=${langKey}`;
+            window.location.href = `project.html?id=${sameCategoryProjects[currentIndexInCat].id}&lang=${langs[currentLangIndex]}`;
         }
 
         function extractYouTubeEmbedUrl(url) {
-            if (!url) return '';
-            let videoId = '';
-            if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1]?.split('?')[0];
-            } else if (url.includes('watch?v=')) {
-                videoId = url.split('watch?v=')[1]?.split('&')[0];
-            } else if (url.includes('embed/')) {
-                videoId = url.split('embed/')[1]?.split('?')[0];
-            } else {
-                videoId = url.trim();
-            }
+            if (!url) return ''; let videoId = '';
+            if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1]?.split('?')[0];
+            else if (url.includes('watch?v=')) videoId = url.split('watch?v=')[1]?.split('&')[0];
+            else if (url.includes('embed/')) videoId = url.split('embed/')[1]?.split('?')[0];
+            else videoId = url.trim();
             return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
         }
 
         function renderProjectContent() {
             if (!currentProjectData) return;
             const langKey = langs[currentLangIndex];
-
             const title = typeof currentProjectData.title === 'object' ? (currentProjectData.title[langKey] || currentProjectData.title.zh) : currentProjectData.title;
-            
-            let category = '';
             let rawCat = currentProjectData.category;
-            if (typeof rawCat === 'object') {
-                category = rawCat[langKey] || rawCat.zh;
-            } else {
-                let norm = getNormalizedCategory(rawCat);
-                if (norm === '字體設計') category = langKey === 'en' ? 'Typeface' : (langKey === 'ja' ? 'タイポグラフィ' : '字體設計');
-                else if (norm === '展覽') category = langKey === 'en' ? 'Exhibition' : (langKey === 'ja' ? '展覧会' : '展覽與視覺企劃');
-                else if (norm === '快閃店') category = langKey === 'en' ? 'Pop-up Store' : (langKey === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
-                else if (norm === '包裝設計') category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
-                else if (norm === '周邊設計') category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
-                else if (norm === '影片剪接') category = langKey === 'en' ? 'Video Editing' : (langKey === 'ja' ? 'ビデオ編集' : '影片剪接');
-                else category = langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : 'その他');
-            }
-
+            let category = typeof rawCat === 'object' ? (rawCat[langKey] || rawCat.zh) : rawCat;
             const description = typeof currentProjectData.description === 'object' ? (currentProjectData.description[langKey] || currentProjectData.description.zh) : currentProjectData.description;
 
             document.getElementById('page-title').textContent = title + ' | Johnson Yau';
@@ -307,20 +266,16 @@
             const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
 
             if (ytEmbedUrl) {
-                mediaContainer.innerHTML = `
-                    <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-xl bg-black">
-                        <iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                `;
-                mediaContainer.className = "card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 bg-black/60 border border-apple-border shadow-2xl relative";
+                mediaContainer.innerHTML = `<div class="w-full aspect-video rounded-2xl overflow-hidden shadow-sm bg-minimal-lightgray"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                mediaContainer.className = "card-light rounded-3xl overflow-hidden mb-12 p-4 md:p-8 bg-white border border-minimal-border shadow-soft relative";
             } else {
                 mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
-                    <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
-                        <i class="fa-solid fa-expand mr-1"></i> 點擊放大
+                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-xl shadow-sm transition group-hover:scale-[1.02]">
+                    <div class="absolute bottom-6 right-6 px-4 py-2 rounded-full bg-white/90 text-minimal-accent text-[11px] font-medium backdrop-blur-sm border border-minimal-border opacity-0 group-hover:opacity-100 transition shadow-sm pointer-events-none">
+                        <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
                     </div>
                 `;
-                mediaContainer.className = "card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl cursor-pointer group relative";
+                mediaContainer.className = "card-light rounded-3xl overflow-hidden mb-12 p-6 md:p-12 flex items-center justify-center bg-minimal-lightgray border border-minimal-border shadow-soft cursor-pointer group relative";
                 mediaContainer.onclick = () => openLightbox(currentProjectData.image);
             }
 
@@ -330,62 +285,29 @@
                 const extraImgs = currentProjectData.gallery.split(',').map(s => s.trim()).filter(Boolean);
                 galleryImages = galleryImages.concat(extraImgs);
             }
-
-            if (activeGalleryIndex >= galleryImages.length) {
-                activeGalleryIndex = 0;
-            }
-
+            if (activeGalleryIndex >= galleryImages.length) activeGalleryIndex = 0;
             updateGalleryDisplay();
         }
 
         function updateGalleryDisplay() {
             if (galleryImages.length === 0) return;
             document.getElementById('gallery-active-img').src = galleryImages[activeGalleryIndex];
-
             const dotsContainer = document.getElementById('pagination-dots');
             dotsContainer.innerHTML = galleryImages.map((_, idx) => `
-                <button onclick="setGalleryIndex(event, ${idx})" class="w-3 h-3 rounded-full transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-apple-dot scale-125 shadow-md shadow-apple-dot/50' : 'bg-apple-border hover:bg-apple-gray'}"></button>
+                <button onclick="setGalleryIndex(event, ${idx})" class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-minimal-accent scale-125' : 'bg-minimal-border hover:bg-minimal-gray'}"></button>
             `).join('');
         }
 
-        function setGalleryIndex(event, idx) {
-            event.stopPropagation();
-            activeGalleryIndex = idx;
-            updateGalleryDisplay();
-        }
-
-        function prevGalleryImage(event) {
-            event.stopPropagation();
-            if (galleryImages.length === 0) return;
-            activeGalleryIndex = (activeGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
-            updateGalleryDisplay();
-        }
-
-        function nextGalleryImage(event) {
-            event.stopPropagation();
-            if (galleryImages.length === 0) return;
-            activeGalleryIndex = (activeGalleryIndex + 1) % galleryImages.length;
-            updateGalleryDisplay();
-        }
-
-        function openLightbox(imgSrc) {
-            if (!imgSrc) return;
-            document.getElementById('lightbox-img').src = imgSrc;
-            document.getElementById('lightbox-modal').classList.add('active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').classList.remove('active');
-        }
+        function setGalleryIndex(event, idx) { event.stopPropagation(); activeGalleryIndex = idx; updateGalleryDisplay(); }
+        function prevGalleryImage(event) { event.stopPropagation(); if (galleryImages.length === 0) return; activeGalleryIndex = (activeGalleryIndex - 1 + galleryImages.length) % galleryImages.length; updateGalleryDisplay(); }
+        function nextGalleryImage(event) { event.stopPropagation(); if (galleryImages.length === 0) return; activeGalleryIndex = (activeGalleryIndex + 1) % galleryImages.length; updateGalleryDisplay(); }
+        function openLightbox(imgSrc) { if (!imgSrc) return; document.getElementById('lightbox-img').src = imgSrc; document.getElementById('lightbox-modal').classList.add('active'); }
+        function closeLightbox() { document.getElementById('lightbox-modal').classList.remove('active'); }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            } else if (e.key === 'ArrowLeft') {
-                prevProject();
-            } else if (e.key === 'ArrowRight') {
-                nextProject();
-            }
+            if (e.key === 'Escape') closeLightbox();
+            else if (e.key === 'ArrowLeft') prevProject();
+            else if (e.key === 'ArrowRight') nextProject();
         });
 
         function switchProjectLanguage() {
@@ -396,9 +318,7 @@
             renderProjectContent();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadProject();
-        });
+        window.addEventListener('DOMContentLoaded', () => { loadProject(); });
     </script>
 </body>
 </html>
