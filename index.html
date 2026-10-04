@@ -164,7 +164,7 @@
         </div>
     </header>
 
-    <!-- Hero Section (強制滿版高度，絕對不會外洩下一個標題) -->
+    <!-- Hero Section -->
     <section class="min-h-screen max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center relative reveal-up active">
         <div>
             <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
@@ -187,7 +187,7 @@
         </div>
     </section>
 
-    <!-- Works Section (獨立滿版屏) -->
+    <!-- Works Section -->
     <section id="works" class="min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-center py-24 reveal-up">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
             <div>
@@ -204,7 +204,7 @@
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- Translation Section (獨立滿版屏) -->
+    <!-- Translation Section -->
     <section id="translation" class="min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-center py-24 reveal-up">
         <div class="mb-16">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
@@ -214,7 +214,7 @@
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- About Section (獨立滿版屏) -->
+    <!-- About Section -->
     <section id="about" class="min-h-screen bg-[#030308]/90 backdrop-blur-2xl flex flex-col justify-center py-24 reveal-up">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center">
@@ -381,7 +381,7 @@
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'images/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.jpg', 
+                image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
                 gallery: '', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
@@ -429,37 +429,6 @@
 
         let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
 
-        let translations = [
-            { id: 't1', title: { zh: '幪面超人 555 20th PARADISE REGAINED', en: 'Kamen Rider 555 20th: Paradise Regained', ja: '仮面ライダー555 20th パラダイス・リゲインド' }, year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't2', title: { zh: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', en: 'Kamen Rider The Winter Movie: Gotchard & Geats', ja: '仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ' }, year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
-            { id: 't3', title: { zh: '少女與戰車 最終章 第4話', en: 'Girls und Panzer das Finale: Part 4', ja: 'ガールズ＆パンツァー 最終章 第4話' }, year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
-            { id: 't4', title: { zh: '新・幪面超人', en: 'Shin Kamen Rider', ja: 'シン・仮面ライダー' }, year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't5', title: { zh: '幪面超人 Geats × Revice Battle Royale', en: 'Kamen Rider Geats x Revice: Battle Royale', ja: '仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル' }, year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
-            { id: 't6', title: { zh: '幪面超人 Revice & 咚兄弟 Movie Battle Family', en: 'Kamen Rider Revice & Donbrothers', ja: '劇場版 仮面ライダーリバイスVSドンブラザーズ' }, year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80' },
-            { id: 't7', title: { zh: '電影 五等分的新娘', en: 'The Quintessential Quintuplets the Movie', ja: '映画 ５等分の花嫁' }, year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
-            { id: 't8', title: { zh: '幪面超人 BEYOND GENERATIONS', en: 'Kamen Rider: Beyond Generations', ja: '仮面ライダー ビヨンド・ジェネレーションズ' }, year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
-            { id: 't9', title: { zh: '黃金拼圖 Thank you!!', en: 'KINMOZA! Thank you!!', ja: '劇場版 きんいろモザイク Thank you!!' }, year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
-            { id: 't10', title: { zh: '漁港的肉子', en: 'Fortune Favors Lady Nikuko', ja: '漁港の肉子ちゃん' }, year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
-            { id: 't11', title: { zh: 'Saber+全界者 超級英雄戰記', en: 'Saber + Zenkaiger: Super Hero Senki', ja: 'セイバー＋ゼンカイジャー スーパーヒーロー戦記' }, year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
-            { id: 't12', title: { zh: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', en: 'Zero-One Others: Kamen Rider Vulcan & Valkyrie', ja: 'ゼロワン Others 仮面ライダーバルカン＆バルキリー' }, year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
-            { id: 't13', title: { zh: '美少女的謊言：龍與雀斑公主 製作特輯', en: 'Belle Making of', ja: '竜とそばかすの姫 メイキング' }, year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
-            { id: 't14', title: { zh: '尋找小魔女DoReMi', en: 'Looking for Magical Doremi', ja: '魔女見習いをさがして' }, year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' },
-            { id: 't15', title: { zh: 'SHIROBAKO 白箱劇場版', en: 'SHIROBAKO the Movie', ja: '劇場版 SHIROBAKO' }, year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80' },
-            { id: 't16', title: { zh: '來自深淵：深沉靈魂的黎明', en: 'Made in Abyss: Dawn of the Deep Soul', ja: '劇場版メイドインアビス 深き魂の黎明' }, year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
-            { id: 't17', title: { zh: '數碼暴龍 Last Evolution 絆', en: 'Digimon Adventure Last Evolution Kizuna', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆' }, year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
-            { id: 't18', title: { zh: '7 Days War (七日戰爭)', en: '7 Days War', ja: 'ぼくらの7日間戦争' }, year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't19', title: { zh: '新幹線戰士 來自未來的高速光號F', en: 'Shinkansen Henkei Robo Shinkalion', ja: '劇場版新幹線変形ロボ シンカリオ' }, year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
-            { id: 't20', title: { zh: '幪面超人 ZI-O Over Quartzer', en: 'Kamen Rider Zi-O the Movie: Over Quartzer', ja: '劇場版 仮面ライダージオウ Over Quartzer' }, year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't21', title: { zh: '為美好的世界獻上祝福！紅傳說', en: 'KonoSuba: Legend of Crimson', ja: '映画 この素晴らしい世界に祝福を！紅伝説' }, year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
-            { id: 't22', title: { zh: 'PSYCHO-PASS心靈判官 Sinners of the System', en: 'Psycho-Pass: Sinners of the System', ja: 'PSYCHO-PASS サイコパス Sinners of the System' }, year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
-            { id: 't23', title: { zh: '幼女戰記 劇場版', en: 'Saga of Tanya the Evil the Movie', ja: '劇場版 幼女戦記' }, year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
-            { id: 't24', title: { zh: '幪面超人 Heisei Generations Forever', en: 'Kamen Rider Heisei Generations Forever', ja: '仮面ライダー平成ジェネレーションズ FOREVER' }, year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
-            { id: 't25', title: { zh: 'Fate/stay night [Heaven\'s Feel] II', en: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', ja: '劇場版 Fate/stay night [Heaven\'s Feel] II. lost butterfly' }, year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
-            { id: 't26', title: { zh: '龍珠超 布洛尼', en: 'Dragon Ball Super: Broly', ja: 'ドラゴンボール超 ブロリー' }, year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
-            { id: 't27', title: { zh: '劇場版 幪面超人 Build / 宇宙戰隊九連者', en: 'Kamen Rider Build the Movie / Kyuranger', ja: '劇場版 仮面ライダービルド Be The One' }, year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
-            { id: 't28', title: { zh: '中二病也想談戀愛！-Take On Me-', en: 'Love, Chunibyo & Other Delusions! Take On Me', ja: '映画 中二病でも恋がしたい! -Take On Me-' }, year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' }
-        ];
-
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
             if (window.scrollY > 300) {
@@ -481,8 +450,8 @@
             
             grid.innerHTML = filtered.map((p) => `
                 <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer rounded-3xl overflow-hidden transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between" onmousemove="handleCardMouseMove(event, this)">
-                    <div class="overflow-hidden aspect-[16/10] bg-black relative">
-                        <img src="${p.image}" alt="${p.title[langKey]}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
+                    <div class="overflow-hidden aspect-[16/10] bg-black/60 relative flex items-center justify-center p-6">
+                        <img src="${p.image}" alt="${p.title[langKey]}" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition duration-700 shadow-xl opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-8">
                         <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${p.category[langKey]}</span>
