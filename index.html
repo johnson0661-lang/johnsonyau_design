@@ -195,7 +195,8 @@
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
                 <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-all">全部專案</button>
                 <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface</button>
-                <button onclick="filterProjects('Pop-up Store 與展覽', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up</button>
+                <button onclick="filterProjects('展覽與視覺企劃', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
+                <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up</button>
                 <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
                 <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
             </div>
@@ -283,7 +284,8 @@
                     <div class="flex flex-wrap gap-1.5 text-xs" id="admin-proj-filter-btns">
                         <button onclick="filterAdminProjects('all', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition">全部</button>
                         <button onclick="filterAdminProjects('Typeface 本地化', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Typeface</button>
-                        <button onclick="filterAdminProjects('Pop-up Store 與展覽', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Pop-up</button>
+                        <button onclick="filterAdminProjects('展覽與視覺企劃', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">展覽</button>
+                        <button onclick="filterAdminProjects('Pop-up Store', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Pop-up</button>
                         <button onclick="filterAdminProjects('實體包裝設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">包裝設計</button>
                         <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">其他</button>
                     </div>
@@ -458,7 +460,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                filterAll: "全部專案", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "包裝設計", filterOther: "其他"
+                filterAll: "全部專案", filterType: "Typeface", filterExhibition: "展覽", filterPopup: "Pop-up", filterPkg: "包裝設計", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -469,7 +471,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                filterAll: "All Projects", filterType: "Typeface", filterPopup: "Pop-up", filterPkg: "Packaging", filterOther: "Others"
+                filterAll: "All Projects", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up", filterPkg: "Packaging", filterOther: "Others"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -480,7 +482,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterPopup: "ポップアップ", filterPkg: "パッケージ", filterOther: "その他"
+                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップ", filterPkg: "パッケージ", filterOther: "その他"
             }
         };
 
@@ -505,18 +507,30 @@
             },
             { 
                 id: '2', 
-                title: { zh: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', en: 'ULTRAMAN The Hero Premiere Exhibition & Pop-up', ja: 'ULTRAMAN The Hero Premiere 展示＆ポップアップ' }, 
-                category: { zh: 'Pop-up Store 與展覽', en: 'Pop-up & Exhibition', ja: '展示・ポップアップ' }, 
+                title: { zh: 'ULTRAMAN The Hero Premiere 展覽與視覺企劃', en: 'ULTRAMAN The Hero Premiere Exhibition', ja: 'ULTRAMAN The Hero Premiere 展示' }, 
+                category: { zh: '展覽與視覺企劃', en: 'Exhibition', ja: '展覧会' }, 
                 image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
                 gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
                 description: { 
-                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現。', 
-                    en: 'Led the spatial planning, visual direction, and limited merchandise development for the Ultraman Pop-up Store at Langham Place in 2025.', 
-                    ja: '2025年にランガム・プレイスで開催されたウルトラマンポップアップストアの空間動線計画、ビジュアル、限定グッズ開発を主導。' 
+                    zh: '主導 Ultraman 展覽之視覺統籌與現場展品空間規劃，完美重現經典特攝美學。', 
+                    en: 'Led the visual coordination and exhibition space planning for Ultraman.', 
+                    ja: 'ウルトラマン展のビジュアル統括と空間計画を担当。' 
                 } 
             },
             { 
                 id: '3', 
+                title: { zh: 'ULTRAMAN Pop-up Store 空間動線規劃', en: 'ULTRAMAN Pop-up Store Planning', ja: 'ウルトラマン ポップアップストア' }, 
+                category: { zh: 'Pop-up Store', en: 'Pop-up Store', ja: 'ポップアップストア' }, 
+                image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=1200&q=80', 
+                gallery: '', 
+                description: { 
+                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。', 
+                    en: 'Led spatial planning and limited merchandise development for Ultraman Pop-up at Langham Place.', 
+                    ja: 'ランガム・プレイスでのウルトラマンポップアップストアの動線計画とグッズ開発を主導。' 
+                } 
+            },
+            { 
+                id: '4', 
                 title: { zh: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', en: 'SPY×FAMILY CODE: White - Physical Packaging Design', ja: '劇場版『SPY×FAMILY CODE: White』パッケージデザイン' }, 
                 category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
                 image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80', 
@@ -525,18 +539,6 @@
                     zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求。', 
                     en: 'Developed a series of physical F&B packaging items for film promotion, perfectly blending character IP aesthetics with mass production requirements.', 
                     ja: '映画プロモーション用の飲食パッケージシリーズ（紙コップ、ホットドッグボックス、ポップコーンバケットなど）を開発。' 
-                } 
-            },
-            { 
-                id: '4', 
-                title: { zh: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', en: 'EVANGELION:3.0+1.11 - Collector Edition Blu-ray Packaging', ja: '『シン・エヴァンゲリオン劇場版』豪華版BDパッケージ' }, 
-                category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
-                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
-                description: { 
-                    zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學。', 
-                    en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set.', 
-                    ja: '日本のサプライヤーと連携し、4K UHD + Blu-ray豪華版セットの素材、コスト、パッケージング工程を統括。' 
                 } 
             }
         ];
@@ -690,6 +692,7 @@
 
             document.getElementById('btn-all').textContent = t.filterAll;
             document.getElementById('btn-type').textContent = t.filterType;
+            document.getElementById('btn-exhibition').textContent = t.filterExhibition;
             document.getElementById('btn-popup').textContent = t.filterPopup;
             document.getElementById('btn-pkg').textContent = t.filterPkg;
             document.getElementById('btn-other').textContent = t.filterOther;
@@ -897,9 +900,9 @@
             document.getElementById('edit-title-zh').value = '';
             document.getElementById('edit-title-en').value = '';
             document.getElementById('edit-title-ja').value = '';
-            document.getElementById('edit-cat-zh').value = '其他';
-            document.getElementById('edit-cat-en').value = 'Others';
-            document.getElementById('edit-cat-ja').value = 'その他';
+            document.getElementById('edit-cat-zh').value = '展覽與視覺企劃';
+            document.getElementById('edit-cat-en').value = 'Exhibition';
+            document.getElementById('edit-cat-ja').value = '展覧会';
             document.getElementById('edit-image').value = 'image/';
             document.getElementById('edit-gallery').value = '';
             document.getElementById('edit-desc-zh').value = '';
