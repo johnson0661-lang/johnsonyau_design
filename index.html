@@ -318,7 +318,13 @@
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增專案
                     </button>
                 </div>
-                <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50"></div>
+                <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px]"></div>
+                <!-- 後台專案分頁控制 -->
+                <div id="admin-project-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
+                    <button onclick="prevAdminProjPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
+                    <span id="admin-project-page-indicator">1 / 1</span>
+                    <button onclick="nextAdminProjPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">下一頁</button>
+                </div>
             </div>
 
             <!-- 電影翻譯管理面板 -->
@@ -326,7 +332,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-apple-gray">篩選年份:</span>
-                        <select id="admin-year-filter" onchange="renderAdminTransLists()" class="px-3 py-1.5 bg-apple-lightgray text-white text-xs border border-apple-border rounded-xl outline-none">
+                        <select id="admin-year-filter" onchange="adminTransPageIndex=0; renderAdminTransLists()" class="px-3 py-1.5 bg-apple-lightgray text-white text-xs border border-apple-border rounded-xl outline-none">
                             <option value="all">全部年份</option>
                         </select>
                     </div>
@@ -334,7 +340,13 @@
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
                     </button>
                 </div>
-                <div id="admin-trans-list" class="space-y-3 divide-y divide-apple-border/50"></div>
+                <div id="admin-trans-list" class="space-y-3 divide-y divide-apple-border/50 min-h-[300px]"></div>
+                <!-- 後台電影翻譯分頁控制 -->
+                <div id="admin-trans-pagination" class="flex items-center justify-between pt-4 border-t border-apple-border/50 text-xs text-apple-gray">
+                    <button onclick="prevAdminTransPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">上一頁</button>
+                    <span id="admin-trans-page-indicator">1 / 1</span>
+                    <button onclick="nextAdminTransPage()" class="px-4 py-2 rounded-xl bg-apple-lightgray border border-apple-border text-white hover:bg-white hover:text-black transition">下一頁</button>
+                </div>
             </div>
 
             <!-- 關於我管理面板 -->
@@ -363,7 +375,7 @@
         </div>
     </div>
 
-    <!-- Edit Project Modal (已加入 YouTube Link 欄位) -->
+    <!-- Edit Project Modal -->
     <div id="edit-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
             <button onclick="closeEditModal()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
@@ -409,7 +421,7 @@
                     <input type="text" id="edit-gallery" placeholder="例如: image/a.jpg, image/b.jpg" class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block text-apple-gray mb-1 font-semibold">YouTube 影片連結 (選填，例如: https://youtu.be/...)</label>
+                    <label class="block text-apple-gray mb-1 font-semibold">YouTube 影片連結 (選填)</label>
                     <input type="text" id="edit-youtube" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-4 py-2.5 bg-apple-lightgray border border-apple-border rounded-xl text-white text-xs focus:border-white outline-none">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -619,6 +631,12 @@
         let transPageIndex = 0;
         let transItemsPerPage = 8;
         let transAutoPlayTimer = null;
+
+        // 後台分頁變數
+        let adminProjPageIndex = 0;
+        let adminProjPerPage = 10;
+        let adminTransPageIndex = 0;
+        let adminTransPerPage = 10;
 
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
@@ -906,6 +924,8 @@
             } else {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
+                adminProjPageIndex = 0;
+                adminTransPageIndex = 0;
                 renderAdminLists('all');
                 renderAdminTransLists();
                 loadYearFilterOptions();
@@ -944,6 +964,7 @@
         let adminProjFilter = 'all';
         function filterAdminProjects(category, btnElement) {
             adminProjFilter = category;
+            adminProjPageIndex = 0; // 重設回第一頁
             document.querySelectorAll('.admin-filter-btn').forEach(btn => {
                 btn.className = "admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition";
             });
@@ -959,7 +980,16 @@
                 return cat === filter;
             });
 
-            document.getElementById('admin-project-list').innerHTML = filtered.map(p => `
+            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
+            if (adminProjPageIndex >= totalPages) adminProjPageIndex = totalPages - 1;
+            if (adminProjPageIndex < 0) adminProjPageIndex = 0;
+
+            const startIdx = adminProjPageIndex * adminProjPerPage;
+            const pageItems = filtered.slice(startIdx, startIdx + adminProjPerPage);
+
+            document.getElementById('admin-project-page-indicator').textContent = `${adminProjPageIndex + 1} / ${totalPages}`;
+
+            document.getElementById('admin-project-list').innerHTML = pageItems.map(p => `
                 <div class="py-3 flex items-center justify-between text-xs">
                     <div class="flex items-center space-x-3">
                         <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
@@ -972,6 +1002,26 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function nextAdminProjPage() {
+            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => {
+                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
+                return cat === adminProjFilter;
+            });
+            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
+            adminProjPageIndex = (adminProjPageIndex + 1) % totalPages;
+            renderAdminLists(adminProjFilter);
+        }
+
+        function prevAdminProjPage() {
+            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => {
+                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
+                return cat === adminProjFilter;
+            });
+            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1;
+            adminProjPageIndex = (adminProjPageIndex - 1 + totalPages) % totalPages;
+            renderAdminLists(adminProjFilter);
         }
 
         function loadYearFilterOptions() {
@@ -999,7 +1049,16 @@
 
             const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
 
-            document.getElementById('admin-trans-list').innerHTML = filteredTrs.map(tr => {
+            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
+            if (adminTransPageIndex >= totalPages) adminTransPageIndex = totalPages - 1;
+            if (adminTransPageIndex < 0) adminTransPageIndex = 0;
+
+            const startIdx = adminTransPageIndex * adminTransPerPage;
+            const pageTrs = filteredTrs.slice(startIdx, startIdx + adminTransPerPage);
+
+            document.getElementById('admin-trans-page-indicator').textContent = `${adminTransPageIndex + 1} / ${totalPages}`;
+
+            document.getElementById('admin-trans-list').innerHTML = pageTrs.map(tr => {
                 let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
                 return `
                     <div class="py-3 flex items-center justify-between text-xs">
@@ -1018,6 +1077,24 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function nextAdminTransPage() {
+            const yearFilter = document.getElementById('admin-year-filter').value;
+            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a));
+            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
+            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
+            adminTransPageIndex = (adminTransPageIndex + 1) % totalPages;
+            renderAdminTransLists();
+        }
+
+        function prevAdminTransPage() {
+            const yearFilter = document.getElementById('admin-year-filter').value;
+            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a));
+            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
+            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1;
+            adminTransPageIndex = (adminTransPageIndex - 1 + totalPages) % totalPages;
+            renderAdminTransLists();
         }
 
         function loadAboutForm() {
