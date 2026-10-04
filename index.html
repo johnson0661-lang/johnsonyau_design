@@ -280,90 +280,6 @@
     </div>
 
     <script>
-        // 點、線、面互動背景 Canvas 邏輯
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const particleCount = 55;
-        let mouseX = -1000;
-        let mouseY = -1000;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.6;
-                this.vy = (Math.random() - 0.5) * 0.6;
-                this.radius = Math.random() * 2 + 1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(41, 151, 255, 0.6)';
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateBg() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 繪製點與線
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 130) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(41, 151, 255, ${0.18 * (1 - dist / 130)})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.stroke();
-                    }
-                }
-
-                // 滑鼠互動連線（面與動態感）
-                const mDist = Math.sqrt((particles[i].x - mouseX) ** 2 + (particles[i].y - mouseY) ** 2);
-                if (mDist < 160) {
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(mouseX, mouseY);
-                    ctx.strokeStyle = `rgba(138, 43, 226, ${0.3 * (1 - mDist / 160)})`;
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
-            }
-            requestAnimationFrame(animateBg);
-        }
-        animateBg();
-
         const ADMIN_PASSWORD = 'johnson2026';
         let currentLangIndex = 0; 
         const langs = ['zh', 'en', 'ja'];
@@ -413,8 +329,8 @@
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'images/digimon.jpg', 
-                gallery: '', 
+                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
@@ -658,8 +574,6 @@
             }
         }
 
-        let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
-
         function toggleAdminModal(show = null) {
             const modal = document.getElementById('admin-modal');
             const isHidden = show !== null ? !show : modal.classList.contains('hidden');
@@ -667,8 +581,8 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             } else {
-                modal.classList.remove('hidden');
                 modal.classList.add('flex');
+                modal.classList.remove('hidden');
                 renderAdminLists();
             }
         }
@@ -687,6 +601,88 @@
                 </div>
             `).join('');
         }
+
+        // 點、線、面互動背景 Canvas 邏輯
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 55;
+        let mouseX = -1000;
+        let mouseY = -1000;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(41, 151, 255, 0.6)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(41, 151, 255, ${0.18 * (1 - dist / 130)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+
+                const mDist = Math.sqrt((particles[i].x - mouseX) ** 2 + (particles[i].y - mouseY) ** 2);
+                if (mDist < 160) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.strokeStyle = `rgba(138, 43, 226, ${0.3 * (1 - mDist / 160)})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProjects();
