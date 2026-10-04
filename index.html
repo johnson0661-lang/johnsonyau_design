@@ -193,7 +193,7 @@
                 <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
-                <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-all">全部專案</button>
+                <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
                 <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
                 <button onclick="filterProjects('展覽與視覺企劃', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
                 <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
@@ -462,7 +462,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                filterAll: "全部專案", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "Pop-up Store", filterPkg: "包裝設計", filterMerch: "周邊設計", filterOther: "其他"
+                filterFeatured: "精選作品", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "Pop-up Store", filterPkg: "包裝設計", filterMerch: "周邊設計", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -473,7 +473,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                filterAll: "All Projects", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up Store", filterPkg: "Packaging", filterMerch: "Merchandise", filterOther: "Others"
+                filterFeatured: "Featured", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up", filterPkg: "Packaging", filterMerch: "Merchandise", filterOther: "Others"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -484,7 +484,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップストア", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterOther: "その他"
+                filterFeatured: "厳選作品", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップ", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterOther: "その他"
             }
         };
 
@@ -593,17 +593,25 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function renderProjects(filter = 'all') {
+        function renderProjects(filter = 'featured') {
             currentFilterCategory = filter;
             const grid = document.getElementById('project-grid');
             if (!grid) return;
             const langKey = langs[currentLangIndex];
-            const filtered = filter === 'all' ? projects : projects.filter(p => {
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
-                return cat === filter;
-            });
+
+            let listToRender = [];
+            if (filter === 'featured') {
+                // 隨機抽選 4 個精選作品
+                let shuffled = [...projects].sort(() => 0.5 - Math.random());
+                listToRender = shuffled.slice(0, 4);
+            } else {
+                listToRender = projects.filter(p => {
+                    let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category;
+                    return cat === filter;
+                });
+            }
             
-            grid.innerHTML = filtered.map((p) => {
+            grid.innerHTML = listToRender.map((p) => {
                 let pTitle = typeof p.title === 'object' ? (p.title[langKey] || p.title.zh) : p.title;
                 let pCat = typeof p.category === 'object' ? (p.category[langKey] || p.category.zh) : p.category;
                 return `
@@ -692,7 +700,7 @@
             document.getElementById('trans-sub').textContent = t.transSub;
             document.getElementById('about-title').textContent = t.aboutTitle;
 
-            document.getElementById('btn-all').textContent = t.filterAll;
+            document.getElementById('btn-featured').textContent = t.filterFeatured;
             document.getElementById('btn-type').textContent = t.filterType;
             document.getElementById('btn-exhibition').textContent = t.filterExhibition;
             document.getElementById('btn-popup').textContent = t.filterPopup;
@@ -706,7 +714,7 @@
             renderAbout();
         }
 
-        let currentFilterCategory = 'all';
+        let currentFilterCategory = 'featured';
 
         function filterProjects(category, btnElement) {
             currentFilterCategory = category;
@@ -1118,7 +1126,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            renderProjects();
+            renderProjects('featured');
             renderTranslations();
             renderAbout();
             const observer = new IntersectionObserver((entries) => {
