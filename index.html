@@ -223,7 +223,7 @@
                     <input type="text" id="edit-title-zh" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (英文 English)</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (英文 ENGLISH)</label>
                     <input type="text" id="edit-title-en" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
@@ -231,28 +231,11 @@
                     <input type="text" id="edit-title-ja" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">分類</label>
-                    <select id="edit-category" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                        <option value="Typeface 本地化">Typeface 本地化</option>
-                        <option value="Pop-up Store 與展覽">Pop-up Store 與展覽</option>
-                        <option value="實體包裝設計">實體包裝設計</option>
-                        <option value="F&B 商業平面">F&B 商業平面</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片網址 (Main Image URL)</label>
-                    <input type="url" id="edit-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細圖庫網址 (多張請用半形逗號 , 分隔)</label>
-                    <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                </div>
-                <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (繁體中文)</label>
                     <textarea id="edit-desc-zh" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (英文 English)</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (英文 ENGLISH)</label>
                     <textarea id="edit-desc-en" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
                 </div>
                 <div>
@@ -267,22 +250,30 @@
         </div>
     </div>
 
-    <!-- Translation Editor Modal -->
+    <!-- Translation Editor Modal (支援三語電影名稱) -->
     <div id="trans-editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯電影翻譯紀錄</h3>
+        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯電影翻譯紀錄 (三語)</h3>
             <form id="trans-form" onsubmit="saveTranslation(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="trans-edit-id">
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱</label>
-                    <input type="text" id="trans-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱 (繁體中文)</label>
+                    <input type="text" id="trans-title-zh" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱 (英文 ENGLISH)</label>
+                    <input type="text" id="trans-title-en" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱 (日文 日本語)</label>
+                    <input type="text" id="trans-title-ja" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
                     <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">年份</label>
                     <input type="text" id="trans-year" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">海報圖片網址 (Image URL)</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">海報圖片網址 (IMAGE URL)</label>
                     <input type="url" id="trans-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
@@ -412,33 +403,33 @@
         ];
 
         let translations = [
-            { id: 't1', title: '幪面超人 555 20th PARADISE REGAINED', year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't2', title: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
-            { id: 't3', title: '少女與戰車 最終章 第4話', year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
-            { id: 't4', title: '新・幪面超人', year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
-            { id: 't5', title: '幪面超人 Geats × Revice Battle Royale', year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
-            { id: 't6', title: '幪面超人 Revice & 咚兄弟 Movie Battle Family', year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80' },
-            { id: 't7', title: '電影 五等分的新娘', year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
-            { id: 't8', title: '幪面超人 BEYOND GENERATIONS', year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
-            { id: 't9', title: '黃金拼圖 Thank you!!', year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
-            { id: 't10', title: '漁港的肉子', year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
-            { id: 't11', title: 'Saber+全界者 超級英雄戰記', year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
-            { id: 't12', title: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
-            { id: 't13', title: '美少女的謊言：龍與雀斑公主 (Belle) 製作特輯', year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
-            { id: 't14', title: '尋找小魔女DoReMi', year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' },
-            { id: 't15', title: 'SHIROBAKO 白箱劇場版', year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80' },
+            { id: 't1', title: { zh: '幪面超人 555 20th PARADISE REGAINED', en: 'Kamen Rider 555 20th: Paradise Regained', ja: '仮面ライダー555 20th パラダイス・リゲインド' }, year: '2024', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't2', title: { zh: '幪面超人 THE WINTER MOVIE 歌查德與極狐 最強克米GOTCHA大作戰', en: 'Kamen Rider The Winter Movie: Gotchard & Geats', ja: '仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ' }, year: '2023', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
+            { id: 't3', title: { zh: '少女與戰車 最終章 第4話', en: 'Girls und Panzer das Finale: Part 4', ja: 'ガールズ＆パンツァー 最終章 第4話' }, year: '2023', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
+            { id: 't4', title: { zh: '新・幪面超人', en: 'Shin Kamen Rider', ja: 'シン・仮面ライダー' }, year: '2023', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
+            { id: 't5', title: { zh: '幪面超人 Geats × Revice Battle Royale', en: 'Kamen Rider Geats x Revice: Battle Royale', ja: '仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル' }, year: '2022', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
+            { id: 't6', title: { zh: '幪面超人 Revice & 咚兄弟 Movie Battle Family', en: 'Kamen Rider Revice & Donbrothers', ja: '劇場版 仮面ライダーリバイスVSドンブラザーズ' }, year: '2022', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80' },
+            { id: 't7', title: { zh: '電影 五等分的新娘', en: 'The Quintessential Quintuplets the Movie', ja: '映画 ５等分の花嫁' }, year: '2022', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
+            { id: 't8', title: { zh: '幪面超人 BEYOND GENERATIONS', en: 'Kamen Rider: Beyond Generations', ja: '仮面ライダー ビヨンド・ジェネレーションズ' }, year: '2021', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
+            { id: 't9', title: { zh: '黃金拼圖 Thank you!!', en: 'KINMOZA! Thank you!!', ja: '劇場版 きんいろモザイク Thank you!!' }, year: '2021', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
+            { id: 't10', title: { zh: '漁港的肉子', en: 'Fortune Favors Lady Nikuko', ja: '漁港の肉子ちゃん' }, year: '2021', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
+            { id: 't11', title: { zh: 'Saber+全界者 超級英雄戰記', en: 'Saber + Zenkaiger: Super Hero Senki', ja: 'セイバー＋ゼンカイジャー スーパーヒーロー戦記' }, year: '2021', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
+            { id: 't12', title: { zh: 'Zero-One Others 幪面超人 Vulcan & Valkyrie', en: 'Zero-One Others: Kamen Rider Vulcan & Valkyrie', ja: 'ゼロワン Others 仮面ライダーバルカン＆バルキリー' }, year: '2021', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
+            { id: 't13', title: { zh: '美少女的謊言：龍與雀斑公主 製作特輯', en: 'Belle Making of', ja: '竜とそばかすの姫 メイキング' }, year: '2021', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
+            { id: 't14', title: { zh: '尋找小魔女DoReMi', en: 'Looking for Magical Doremi', ja: '魔女見習いをさがして' }, year: '2020', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' },
+            { id: 't15', title: { zh: 'SHIROBAKO 白箱劇場版', en: 'SHIROBAKO the Movie', ja: '劇場版 SHIROBAKO' }, year: '2020', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80' },
             { id: 't16', title: '來自深淵：深沉靈魂的黎明', year: '2020', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80' },
             { id: 't17', title: '數碼暴龍 Last Evolution 絆', year: '2020', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80' },
             { id: 't18', title: '7 Days War (七日戰爭)', year: '2019', image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80' },
             { id: 't19', title: '新幹線戰士 來自未來的高速光號F', year: '2019', image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
             { id: 't20', title: '幪面超人 ZI-O Over Quartzer', year: '2019', image: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80' },
             { id: 't21', title: '為美好的世界獻上祝福！紅傳說', year: '2019', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
-            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System Case 1, 2, 3', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
+            { id: 't22', title: 'PSYCHO-PASS心靈判官 Sinners of the System', year: '2019', image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80' },
             { id: 't23', title: '幼女戰記 劇場版', year: '2019', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80' },
             { id: 't24', title: '幪面超人 Heisei Generations Forever', year: '2018', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80' },
-            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II. lost butterfly', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
+            { id: 't25', title: 'Fate/stay night [Heaven\'s Feel] II', year: '2019', image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80' },
             { id: 't26', title: '龍珠超 布洛尼', year: '2018', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
-            { id: 't27', title: '劇場版 幪面超人 Build Be The One / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
+            { id: 't27', title: '劇場版 幪面超人 Build / 宇宙戰隊九連者', year: '2017', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80' },
             { id: 't28', title: '中二病也想談戀愛！-Take On Me-', year: '2018', image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80' }
         ];
 
@@ -475,24 +466,34 @@
 
         function renderTranslations() {
             const grid = document.getElementById('translation-grid');
+            const langKey = langs[currentLangIndex];
             const zoomText = currentLangIndex === 1 ? "Click to Zoom" : currentLangIndex === 2 ? "クリックして拡大" : "點擊放大檢視";
 
-            grid.innerHTML = translations.map(tr => `
-                <div class="card-glass rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
-                    <div onclick="openPosterModal('${tr.title.replace(/'/g, "\\'")}', '${tr.year}', '${tr.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
-                        <img src="${tr.image}" alt="${tr.title}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
-                            <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                                <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${zoomText}
-                            </span>
+            grid.innerHTML = translations.map(tr => {
+                let displayTitle = '';
+                if (typeof tr.title === 'object') {
+                    displayTitle = tr.title[langKey] || tr.title.zh;
+                } else {
+                    displayTitle = tr.title;
+                }
+
+                return `
+                    <div class="card-glass rounded-3xl overflow-hidden border border-apple-border shadow-sm flex flex-col justify-between hover:border-white/40 hover:-translate-y-1.5 transition duration-500">
+                        <div onclick="openPosterModal('${displayTitle.replace(/'/g, "\\'")}', '${tr.year}', '${tr.image}')" class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 cursor-pointer group">
+                            <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-xl">
+                                <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                                    <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${zoomText}
+                                </span>
+                            </div>
+                            <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                         </div>
-                        <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
+                        <div class="p-6">
+                            <h4 class="text-base font-semibold text-white">${displayTitle}</h4>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <h4 class="text-base font-semibold text-white">${tr.title}</h4>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function openPosterModal(title, year, image) {
@@ -580,31 +581,34 @@
                 </div>
             `).join('');
 
-            document.getElementById('admin-translation-list').innerHTML = translations.map(t => `
-                <div class="py-3 flex items-center justify-between text-xs">
-                    <div class="flex items-center space-x-3">
-                        <img src="${t.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
-                        <span class="font-medium text-white truncate max-w-[200px]">${t.title}</span>
+            document.getElementById('admin-translation-list').innerHTML = translations.map(t => {
+                const tTitle = typeof t.title === 'object' ? (t.title.zh || '') : t.title;
+                return `
+                    <div class="py-3 flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-3">
+                            <img src="${t.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
+                            <span class="font-medium text-white truncate max-w-[200px]">${tTitle}</span>
+                        </div>
+                        <div class="space-x-1.5">
+                            <button type="button" onclick="openEditorForEditTranslation('${t.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
+                        </div>
                     </div>
-                    <div class="space-x-1.5">
-                        <button type="button" onclick="openEditorForEditTranslation('${t.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function openEditorForEditProject(id) {
             document.getElementById('edit-id').value = id;
             const p = projects.find(item => item.id == id);
             if (!p) return;
-            document.getElementById('edit-title-zh').value = p.title.zh;
-            document.getElementById('edit-title-en').value = p.title.en;
-            document.getElementById('edit-title-ja').value = p.title.ja;
+            document.getElementById('edit-title-zh').value = p.title.zh || '';
+            document.getElementById('edit-title-en').value = p.title.en || '';
+            document.getElementById('edit-title-ja').value = p.title.ja || '';
             document.getElementById('edit-image').value = p.image;
             document.getElementById('edit-gallery').value = p.gallery || '';
-            document.getElementById('edit-desc-zh').value = p.description.zh;
-            document.getElementById('edit-desc-en').value = p.description.en;
-            document.getElementById('edit-desc-ja').value = p.description.ja;
+            document.getElementById('edit-desc-zh').value = p.description.zh || '';
+            document.getElementById('edit-desc-en').value = p.description.en || '';
+            document.getElementById('edit-desc-ja').value = p.description.ja || '';
             document.getElementById('editor-modal').classList.remove('hidden');
             document.getElementById('editor-modal').classList.add('flex');
         }
@@ -635,7 +639,14 @@
             document.getElementById('trans-edit-id').value = id;
             const t = translations.find(item => item.id == id);
             if (!t) return;
-            document.getElementById('trans-title').value = t.title;
+            
+            const zhVal = typeof t.title === 'object' ? (t.title.zh || '') : t.title;
+            const enVal = typeof t.title === 'object' ? (t.title.en || '') : t.title;
+            const jaVal = typeof t.title === 'object' ? (t.title.ja || '') : t.title;
+
+            document.getElementById('trans-title-zh').value = zhVal;
+            document.getElementById('trans-title-en').value = enVal;
+            document.getElementById('trans-title-ja').value = jaVal;
             document.getElementById('trans-year').value = t.year;
             document.getElementById('trans-image').value = t.image;
             document.getElementById('trans-editor-modal').classList.remove('hidden');
@@ -652,7 +663,11 @@
             const id = document.getElementById('trans-edit-id').value;
             const idx = translations.findIndex(t => t.id == id);
             if (idx !== -1) {
-                translations[idx].title = document.getElementById('trans-title').value;
+                translations[idx].title = {
+                    zh: document.getElementById('trans-title-zh').value,
+                    en: document.getElementById('trans-title-en').value,
+                    ja: document.getElementById('trans-title-ja').value
+                };
                 translations[idx].year = document.getElementById('trans-year').value;
                 translations[idx].image = document.getElementById('trans-image').value;
             }
