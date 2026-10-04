@@ -164,29 +164,31 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="max-w-5xl mx-auto px-6 pt-56 pb-48 text-center relative reveal-up active">
-        <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
-            Multimedia Design & IP Localization
-        </span>
-        <h1 class="hero-title text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08] text-center">
-            極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray">精準視覺敘事。</span>
-        </h1>
-        <p class="hero-desc text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
-            專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
-        </p>
-        <div class="flex justify-center gap-4">
-            <a href="#works" class="btn-works px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition shadow-2xl hover:scale-105 transform duration-300">
-                探索精選專案
-            </a>
-            <a href="#translation" class="btn-trans px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition hover:border-white/50 shadow-lg">
-                電影翻譯紀錄
-            </a>
+    <!-- Hero Section (重心垂直置中，大幅加寬上下留白，杜絕下方標題外洩) -->
+    <section class="min-h-[85vh] max-w-5xl mx-auto px-6 pt-32 pb-44 flex flex-col justify-center items-center text-center relative reveal-up active">
+        <div>
+            <span class="hero-tag inline-block text-xs uppercase tracking-widest text-apple-accent font-semibold mb-6 px-4 py-1.5 rounded-full bg-apple-lightgray/80 border border-apple-border shadow-lg backdrop-blur-md">
+                Multimedia Design & IP Localization
+            </span>
+            <h1 class="hero-title text-5xl md:text-8xl font-semibold tracking-tight text-white mb-8 leading-[1.08] text-center">
+                極致美學，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-apple-gray">精準視覺敘事。</span>
+            </h1>
+            <p class="hero-desc text-lg md:text-xl text-apple-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
+                專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#works" class="btn-works px-8 py-4 bg-white text-black rounded-full text-sm font-medium hover:bg-stone-200 transition shadow-2xl hover:scale-105 transform duration-300">
+                    探索精選專案
+                </a>
+                <a href="#translation" class="btn-trans px-8 py-4 bg-apple-lightgray text-white border border-apple-border rounded-full text-sm font-medium hover:bg-apple-border transition hover:border-white/50 shadow-lg">
+                    電影翻譯紀錄
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- Works Section (無分格線、極致留白) -->
-    <section id="works" class="max-w-7xl mx-auto px-6 py-48 reveal-up">
+    <!-- Works Section (極致留白、無分格線) -->
+    <section id="works" class="max-w-7xl mx-auto px-6 py-56 reveal-up">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-24">
             <div>
                 <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Selected Projects</h2>
@@ -202,8 +204,8 @@
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- Translation Section (無分格線、極致留白) -->
-    <section id="translation" class="max-w-7xl mx-auto px-6 py-48 reveal-up">
+    <!-- Translation Section (極致留白、無分格線) -->
+    <section id="translation" class="max-w-7xl mx-auto px-6 py-56 reveal-up">
         <div class="mb-24">
             <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
             <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
@@ -212,8 +214,8 @@
         <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </section>
 
-    <!-- About Section (無分格線、極致留白) -->
-    <section id="about" class="bg-[#030308]/90 backdrop-blur-2xl py-56 reveal-up">
+    <!-- About Section (極致留白、無分格線) -->
+    <section id="about" class="bg-[#030308]/90 backdrop-blur-2xl py-64 reveal-up">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center">
                 <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden border border-apple-border shadow-2xl bg-black group">
