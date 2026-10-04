@@ -96,10 +96,10 @@
     <main class="max-w-7xl mx-auto px-6 py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：主圖 -->
+            <!-- 左側：主圖 (加入 p-6 或 p-8 確保圖片自動縮小並四周留白) -->
             <div class="lg:col-span-6 space-y-4 sticky top-28">
-                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black relative flex items-center justify-center cursor-pointer group card-glass" onclick="openLightbox(document.getElementById('p-image').src)">
-                    <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain group-hover:scale-105 transition duration-500">
+                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black/60 relative flex items-center justify-center p-8 cursor-pointer group card-glass" onclick="openLightbox(document.getElementById('p-image').src)">
+                    <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500 shadow-xl">
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-3xl pointer-events-none">
                         <span id="zoom-text" class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
                             <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
@@ -232,7 +232,7 @@
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'images/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.jpg', 
+                image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
                 gallery: '', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
@@ -320,8 +320,8 @@
                 document.getElementById('gallery-container').classList.remove('hidden');
                 const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
                 document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
-                    <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group card-glass" onclick="openLightbox('${gUrl}')">
-                        <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
+                    <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black/60 relative flex items-center justify-center p-6 cursor-pointer group card-glass" onclick="openLightbox('${gUrl}')">
+                        <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500 shadow-xl">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
                             <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
                                 <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> ${ui.zoom}
