@@ -102,13 +102,9 @@
             <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-4 px-4 py-1.5 bg-white border border-minimal-border shadow-hard"></span>
             <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
         </div>
-
-        <!-- 主媒體容器 (加入 Crop Marks 與大量 Margin/Padding) -->
+<!-- 主媒體容器 (已移除黑色外框及陰影) -->
         <div class="relative w-full mb-16">
-            <div class="crop-mark crop-mark-tl"></div><div class="crop-mark crop-mark-tr"></div>
-            <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
-            
-            <div id="media-container" class="relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden p-8 md:p-20">
+            <div id="media-container" class="relative z-10 w-full bg-transparent transition duration-300 flex items-center justify-center overflow-hidden p-4 md:p-12">
                 <!-- 動態填入圖片或 YouTube iframe -->
             </div>
         </div>
@@ -221,16 +217,16 @@
 
             const mediaContainer = document.getElementById('media-container'); const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
 
-            if (ytEmbedUrl) {
-                // 如果是影片，調整 Container 的內距
-                mediaContainer.className = "relative z-10 w-full bg-white border border-minimal-accent shadow-hard flex items-center justify-center p-4 md:p-8";
+           if (ytEmbedUrl) {
+                // 如果是影片
+                mediaContainer.className = "relative z-10 w-full flex items-center justify-center p-4 md:p-8";
                 mediaContainer.innerHTML = `<div class="w-full aspect-video bg-[#111] shadow-hard"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
             } else {
-                // 圖片加入極大內距 (Padding) 以重現手稿感
-                mediaContainer.className = "relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden p-8 md:p-20";
+                // 圖片純粹大圖展示，移除黑色實線外框與白底框
+                mediaContainer.className = "relative z-10 w-full transition duration-300 flex items-center justify-center overflow-hidden py-6";
                 mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain cursor-pointer transition hover:scale-[1.02]">
-                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
+                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[70vh] w-auto object-contain cursor-pointer transition hover:scale-[1.01]">
+                    <div class="absolute bottom-2 right-2 px-3 py-1.5 bg-minimal-accent text-white text-[11px] font-medium opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
                         <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
                     </div>
                 `;
