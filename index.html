@@ -845,29 +845,39 @@
             if(container) container.innerHTML = aboutData[langs[currentLangIndex]] || aboutData.zh; 
         }
 
-        function switchLanguage() { 
-            currentLangIndex = (currentLangIndex + 1) % langs.length; 
-            const langKey = langs[currentLangIndex]; 
-            const t = translationsDict[langKey]; 
+        // 套用指定語言並更新介面
+        function applyLanguage(langKey) {
+            const langIndex = langs.indexOf(langKey);
+            if (langIndex !== -1) currentLangIndex = langIndex;
             
+            // 記住用戶選擇，F5 重新整理唔會洗走
+            localStorage.setItem('portfolio_user_lang', langKey);
+
+            const t = translationsDict[langKey] || translationsDict.zh;
+            
+            // 更新右上方按鈕字眼 (EN / 日 / 繁)
             const langBtn = document.getElementById('lang-btn');
-            if (langBtn) langBtn.textContent = langNames[langKey]; 
+            if (langBtn) langBtn.textContent = langNames[langKey];
             
+            // 導覽列
             if(document.querySelector('.nav-works')) document.querySelector('.nav-works').textContent = t.navWorks; 
             if(document.querySelector('.nav-trans')) document.querySelector('.nav-trans').textContent = t.navTrans; 
             if(document.querySelector('.nav-about')) document.querySelector('.nav-about').textContent = t.navAbout; 
             
+            // Hero 區塊
             if(document.querySelector('.hero-tag')) document.querySelector('.hero-tag').textContent = t.heroTag; 
             if(document.querySelector('.hero-title')) document.querySelector('.hero-title').innerHTML = t.heroTitle; 
             if(document.querySelector('.hero-desc')) document.querySelector('.hero-desc').innerHTML = t.heroDesc; 
             if(document.querySelector('.btn-works')) document.querySelector('.btn-works').textContent = t.btnWorks; 
             if(document.querySelector('.btn-trans')) document.querySelector('.btn-trans').textContent = t.btnTrans; 
             
+            // 標題與副標題
             if(document.getElementById('works-heading')) document.getElementById('works-heading').textContent = t.worksHeading; 
             if(document.getElementById('trans-heading')) document.getElementById('trans-heading').textContent = t.transHeading; 
             if(document.getElementById('trans-sub')) document.getElementById('trans-sub').textContent = t.transSub; 
             if(document.getElementById('about-title')) document.getElementById('about-title').textContent = t.aboutTitle; 
             
+            // 篩選按鈕
             if(document.getElementById('btn-featured')) document.getElementById('btn-featured').textContent = t.filterFeatured; 
             if(document.getElementById('btn-type')) document.getElementById('btn-type').textContent = t.filterType; 
             if(document.getElementById('btn-exhibition')) document.getElementById('btn-exhibition').textContent = t.filterExhibition; 
@@ -877,10 +887,18 @@
             if(document.getElementById('btn-video')) document.getElementById('btn-video').textContent = t.filterVideo; 
             if(document.getElementById('btn-other')) document.getElementById('btn-other').textContent = t.filterOther; 
             
+            // 重新渲染動態卡片內容
             renderProjects(); 
             renderTranslations(); 
             renderAbout(); 
-        }        
+        }
+
+        // 點擊換語言按鈕時觸發（循環切換）
+        function switchLanguage() { 
+            currentLangIndex = (currentLangIndex + 1) % langs.length; 
+            const nextLang = langs[currentLangIndex];
+            applyLanguage(nextLang);
+        }
 
         // 鍵盤快捷鍵：Ctrl/Cmd + Shift + L
         document.addEventListener('keydown', (e) => { 
@@ -1412,6 +1430,11 @@
         });
 
        window.addEventListener('DOMContentLoaded', () => { 
+           // 讀取並套用之前保存的語言（F5 不會跳回預設）
+            const savedLang = localStorage.getItem('portfolio_user_lang') || 'zh';
+            const savedIndex = langs.indexOf(savedLang);
+            if (savedIndex !== -1) currentLangIndex = savedIndex;
+            applyLanguage(savedLang);
             // 1. 原本的資料載入與滾動觸發
             fetchCloudData(); 
             const observer = new IntersectionObserver((entries) => { 
