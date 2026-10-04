@@ -54,12 +54,12 @@
     <main class="max-w-7xl mx-auto px-6 py-24">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：主圖 (改用 object-contain 防止裁剪，點擊可放大) -->
+            <!-- 左側：主圖 (移除白色框框與邊線，改為純黑沈浸式背景) -->
             <div class="lg:col-span-6 space-y-4 sticky top-28">
-                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black/80 border border-apple-border shadow-2xl relative flex items-center justify-center p-3 cursor-pointer group" onclick="openLightbox(document.getElementById('p-image').src)">
-                    <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
-                        <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black relative flex items-center justify-center cursor-pointer group" onclick="openLightbox(document.getElementById('p-image').src)">
+                    <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-3xl pointer-events-none">
+                        <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
                             <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
                         </span>
                     </div>
@@ -90,7 +90,7 @@
 
         </div>
 
-        <!-- 底部：更多細節與視覺展示圖庫 (同樣支援點擊放大，不被裁剪) -->
+        <!-- 底部：更多細節與視覺展示圖庫 (同樣移除白框，統一放大字眼) -->
         <div id="gallery-container" class="mt-28 border-t border-apple-border/50 pt-16 hidden">
             <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
             <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
@@ -162,18 +162,17 @@
             document.getElementById('gallery-container').classList.remove('hidden');
             const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
             document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
-                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black/80 border border-apple-border shadow-lg relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
+                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
                     <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
-                        <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
-                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
+                        <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
                         </span>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Lightbox 燈箱控制函數
         function openLightbox(imgSrc) {
             document.getElementById('lightbox-img').src = imgSrc;
             const modal = document.getElementById('lightbox-modal');
@@ -187,7 +186,6 @@
             modal.classList.remove('flex');
         }
 
-        // 支援 Esc 鍵關閉燈箱
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
