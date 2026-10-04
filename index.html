@@ -57,8 +57,9 @@
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
-                <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
-                    <span id="lang-btn-text">EN</span>
+                <!-- 三語切換按鈕 -->
+                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
+                    EN
                 </button>
             </nav>
             <div class="md:hidden"></div>
@@ -94,11 +95,11 @@
                 <h3 id="works-heading" class="text-4xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
-                <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm">全部專案</button>
-                <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface 本地化</button>
-                <button onclick="filterProjects('Pop-up Store 與展覽')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Pop-up 展覽</button>
-                <button onclick="filterProjects('實體包裝設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">實體包裝</button>
-                <button onclick="filterProjects('F&B 商業平面')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">F&B 商業平面</button>
+                <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm" id="btn-all">全部專案</button>
+                <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface 本地化</button>
+                <button onclick="filterProjects('Pop-up Store 與展覽')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up 展覽</button>
+                <button onclick="filterProjects('實體包裝設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">實體包裝</button>
+                <button onclick="filterProjects('F&B 商業平面')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-fb">F&B 商業平面</button>
             </div>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
@@ -128,8 +129,8 @@
                     <h3 id="about-title" class="text-3xl font-semibold text-white tracking-tight">專業背景與聯絡方式</h3>
                 </div>
                 <div id="about-desc" class="text-apple-gray font-normal leading-relaxed text-base space-y-4">
-                    <p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑[cite: 16]。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理）[cite: 16]，擅長結合日式美學與精準的商業視覺傳達。</p>
-                    <p>精通 Typeface 本地化設計[cite: 18]、大型展覽及 Pop-up Store 空間動線規劃[cite: 23, 24]、實體周邊與包裝開發[cite: 21, 22]，並具備日語 N1 實力[cite: 16]。</p>
+                    <p>畢業於香港知專設計學院（HKDI）視覺傳達高級文憑。長年深耕日本動漫 IP 授權與多媒體設計領域（Neofilms Limited 多媒體設計經理），擅長結合日式美學與精準的商業視覺傳達。</p>
+                    <p>精通 Typeface 本地化設計、大型展覽及 Pop-up Store 空間動線規劃、實體周邊與包裝開發，並具備日語 N1 實力。</p>
                 </div>
                 <div class="pt-4 flex items-center space-x-4">
                     <a href="mailto:johnson0661@gmail.com" class="px-6 py-3.5 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow-xl flex items-center">
@@ -157,8 +158,120 @@
         </div>
     </div>
 
+    <!-- Password Prompt Modal -->
+    <div id="password-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center">
+            <h3 class="text-lg font-semibold text-white mb-4">請輸入管理員密碼</h3>
+            <form onsubmit="verifyPassword(event)" class="space-y-4">
+                <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none text-center">
+                <div class="flex space-x-2">
+                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2.5 bg-apple-lightgray text-apple-gray rounded-xl text-xs font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-white text-black rounded-xl text-xs font-medium">確認登入</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
+                <div class="space-x-2">
+                    <button onclick="openEditorForNewProject()" class="px-4 py-2 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow">+ 新增專案</button>
+                    <button onclick="openEditorForNewTranslation()" class="px-4 py-2 bg-apple-lightgray text-white rounded-full text-xs font-medium hover:bg-apple-border transition border border-apple-border">+ 新增翻譯紀錄</button>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">專案列表</h4>
+                    <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                </div>
+                <div class="pt-4 border-t border-apple-border/50">
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">電影翻譯紀錄列表</h4>
+                    <div id="admin-translation-list" class="space-y-2 divide-y divide-apple-border/50"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Editor Modal -->
+    <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容</h3>
+            <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題</label>
+                    <input type="text" id="edit-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">分類</label>
+                    <select id="edit-category" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                        <option value="Typeface 本地化">Typeface 本地化</option>
+                        <option value="Pop-up Store 與展覽">Pop-up Store 與展覽</option>
+                        <option value="實體包裝設計">實體包裝設計</option>
+                        <option value="F&B 商業平面">F&B 商業平面</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片網址 (Main Image URL)</label>
+                    <input type="url" id="edit-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細圖庫網址 (多張請用半形逗號 , 分隔)</label>
+                    <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹說明</label>
+                    <textarea id="edit-description" rows="4" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="px-5 py-2.5 bg-white text-black rounded-full font-medium">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Translation Editor Modal -->
+    <div id="trans-editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
+        <div class="card-glass border border-apple-border rounded-3xl max-w-md w-full p-8 relative shadow-2xl">
+            <h3 class="text-xl font-semibold text-white mb-6">編輯電影翻譯紀錄</h3>
+            <form id="trans-form" onsubmit="saveTranslation(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="trans-edit-id">
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">電影名稱</label>
+                    <input type="text" id="trans-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">年份</label>
+                    <input type="text" id="trans-year" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">海報圖片網址 (Image URL)</label>
+                    <input type="url" id="trans-image" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">翻譯備註</label>
+                    <textarea id="trans-desc" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeTransEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
+                    <button type="submit" class="px-5 py-2.5 bg-white text-black rounded-full font-medium">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        let currentLang = 'zh';
+        const ADMIN_PASSWORD = 'johnson2026';
+        let currentLangIndex = 0; // 0: 繁, 1: EN, 2: 日
+        const langs = ['zh', 'en', 'ja'];
+        const langNames = { zh: 'EN', en: '日', ja: '繁' };
 
         const translationsDict = {
             zh: {
@@ -182,14 +295,26 @@
                 transSub: "Click any movie poster to view high-resolution details. Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
                 aboutDesc: "<p>Higher Diploma in Visual Communication from HKDI. Years of expertise in Japanese anime IP licensing and multimedia design (Multimedia Design Manager at Neofilms Limited), excelling in Japanese aesthetics and commercial visual communication.</p><p>Proficient in Typeface localization, exhibition/pop-up spatial planning, packaging development, with Japanese N1 fluency.</p>"
+            },
+            ja: {
+                navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
+                heroTag: "マルチメディアデザイン & IPローカライズ",
+                heroTitle: "究極の美学、<br><span class='text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-300 to-apple-gray'>精緻なビジュアルストーリー。</span>",
+                heroDesc: "日本アニメIPライセンス販促物、タイポグラフィローカライズ、ポップアップストア空間設計、パッケージ開発、日本語字幕・映画翻訳に特化。",
+                btnWorks: "プロジェクトを見る", btnTrans: "翻訳実績を見る",
+                worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
+                transSub: "映画ポスターをクリックすると高画質で表示されます。文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
+                aboutTitle: "専門的な背景と連絡先",
+                aboutDesc: "<p>香港知専設計学院（HKDI）視覚伝達専攻修了。長年にわたり日本アニメIPライセンスおよびマルチメディアデザイン分野（Neofilms Limited マルチメディアデザインマネージャー）に従事し、日本的美学と精確な商業ビジュアル表現を融合。</p><p>タイポグラフィのローカライズ、大型展示・ポップアップストアの空間動線設計、パッケージ開発に精通。日本語能力試験N1取得。</p>"
             }
         };
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'zh' ? 'en' : 'zh';
-            document.getElementById('lang-btn-text').textContent = currentLang === 'zh' ? 'EN' : '繁';
+        function switchLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            const langKey = langs[currentLangIndex];
+            document.getElementById('lang-btn').textContent = langNames[langKey];
             
-            const t = translationsDict[currentLang];
+            const t = translationsDict[langKey];
             document.querySelector('.nav-works').textContent = t.navWorks;
             document.querySelector('.nav-trans').textContent = t.navTrans;
             document.querySelector('.nav-about').textContent = t.navAbout;
@@ -203,13 +328,60 @@
             document.getElementById('trans-sub').textContent = t.transSub;
             document.getElementById('about-title').textContent = t.aboutTitle;
             document.getElementById('about-desc').innerHTML = t.aboutDesc;
+
+            // 將當前語言存入 localStorage 帶去 project.html
+            localStorage.setItem('portfolio_lang', langKey);
         }
 
         let projects = [
-            { id: '1', title: '數碼暴龍 Last Evolution 絆 - 字體在地化', category: 'Typeface 本地化', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' },
-            { id: '2', title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', category: 'Pop-up Store 與展覽', image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' },
-            { id: '3', title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' },
-            { id: '4', title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', category: '實體包裝設計', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' }
+            { 
+                id: '1', 
+                title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
+                category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
+                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。', 
+                    en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media[cite: 18].', 
+                    ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現[cite: 18]。' 
+                } 
+            },
+            { 
+                id: '2', 
+                title: { zh: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', en: 'ULTRAMAN The Hero Premiere Exhibition & Pop-up', ja: 'ULTRAMAN The Hero Premiere 展示＆ポップアップ' }, 
+                category: { zh: 'Pop-up Store 與展覽', en: 'Pop-up & Exhibition', ja: '展示・ポップアップ' }, 
+                image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。', 
+                    en: 'Led the spatial planning, visual direction, and limited merchandise development for the Ultraman Pop-up Store at Langham Place in 2025[cite: 23].', 
+                    ja: '2025年にランガム・プレイスで開催されたウルトラマンポップアップストアの空間動線計画、ビジュアル、限定グッズ開発を主導[cite: 23]。' 
+                } 
+            },
+            { 
+                id: '3', 
+                title: { zh: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', en: 'SPY×FAMILY CODE: White - Physical Packaging Design', ja: '劇場版『SPY×FAMILY CODE: White』パッケージデザイン' }, 
+                category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
+                image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。', 
+                    en: 'Developed a series of physical F&B packaging items for film promotion, perfectly blending character IP aesthetics with mass production requirements[cite: 21].', 
+                    ja: '映画プロモーション用の飲食パッケージシリーズ（紙コップ、ホットドッグボックス、ポップコーンバケットなど）を開発[cite: 21]。' 
+                } 
+            },
+            { 
+                id: '4', 
+                title: { zh: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', en: 'EVANGELION:3.0+1.11 - Collector Edition Blu-ray Packaging', ja: '『シン・エヴァンゲリオン劇場版』豪華版BDパッケージ' }, 
+                category: { zh: '實體包裝設計', en: 'Packaging Design', ja: 'パッケージデザイン' }, 
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80', 
+                description: { 
+                    zh: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。', 
+                    en: 'Coordinated with Japanese vendors to oversee materials, costs, and packaging craftsmanship for the 4K UHD + Blu-ray collector set[cite: 22].', 
+                    ja: '日本のサプライヤーと連携し、4K UHD + Blu-ray豪華版セットの素材、コスト、パッケージング工程を統括[cite: 22]。' 
+                } 
+            }
         ];
 
         let translations = [
@@ -245,15 +417,17 @@
 
         function renderProjects(filter = 'all') {
             const grid = document.getElementById('project-grid');
-            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
-            grid.innerHTML = filtered.map((p, index) => `
-                <div onclick="location.href='project.html?id=${p.id}'" class="group cursor-pointer card-glass rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between">
+            const langKey = langs[currentLangIndex];
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.category.zh === filter || p.category.en === filter);
+            
+            grid.innerHTML = filtered.map((p) => `
+                <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="group cursor-pointer card-glass rounded-3xl overflow-hidden border border-apple-border hover:border-white/60 hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 col-span-1 md:col-span-2 flex flex-col justify-between">
                     <div class="overflow-hidden aspect-[16/10] bg-black relative">
-                        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
+                        <img src="${p.image}" alt="${p.title[langKey]}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-8">
-                        <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${p.category}</span>
-                        <h4 class="text-xl font-semibold text-white group-hover:text-stone-300 transition">${p.title}</h4>
+                        <span class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">${p.category[langKey]}</span>
+                        <h4 class="text-xl font-semibold text-white group-hover:text-stone-300 transition">${p.title[langKey]}</h4>
                     </div>
                 </div>
             `).join('');
@@ -296,15 +470,207 @@
         }
 
         function filterProjects(category) {
-            currentFilter = category;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.textContent.trim() === category || (category === 'all' && btn.textContent.trim() === '全部專案')) {
-                    btn.className = "filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium text-xs shadow-sm";
-                } else {
-                    btn.className = "filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium text-xs border border-apple-border";
-                }
-            });
             renderProjects(category);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+                e.preventDefault();
+                openPasswordModal();
+            }
+            if (e.key === 'Escape') {
+                closePosterModal();
+                closePasswordModal();
+                toggleAdminModal(false);
+                closeEditor();
+                closeTransEditor();
+            }
+        });
+
+        function openPasswordModal() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('password-modal').classList.add('flex');
+            document.getElementById('admin-password-input').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('password-modal').classList.add('hidden');
+            document.getElementById('password-modal').classList.remove('flex');
+        }
+
+        function verifyPassword(e) {
+            e.preventDefault();
+            const inputVal = document.getElementById('admin-password-input').value;
+            if (inputVal === ADMIN_PASSWORD) {
+                closePasswordModal();
+                toggleAdminModal(true);
+            } else {
+                alert('密碼錯誤！');
+                document.getElementById('admin-password-input').value = '';
+            }
+        }
+
+        function toggleAdminModal(show = null) {
+            const modal = document.getElementById('admin-modal');
+            const isHidden = show !== null ? !show : modal.classList.contains('hidden');
+            if (isHidden) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            } else {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                renderAdminLists();
+            }
+        }
+
+        function renderAdminLists() {
+            const langKey = langs[currentLangIndex];
+            document.getElementById('admin-project-list').innerHTML = projects.map(p => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-3">
+                        <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
+                        <span class="font-medium text-white">${p.title[langKey] || p.title.zh}</span>
+                    </div>
+                    <div class="space-x-1.5">
+                        <button type="button" onclick="openEditorForEditProject('${p.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
+                        <button type="button" onclick="deleteProject('${p.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('admin-translation-list').innerHTML = translations.map(t => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-3">
+                        <img src="${t.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
+                        <span class="font-medium text-white truncate max-w-[200px]">${t.title}</span>
+                    </div>
+                    <div class="space-x-1.5">
+                        <button type="button" onclick="openEditorForEditTranslation('${t.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
+                        <button type="button" onclick="deleteTranslation('${t.id}')" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 rounded-lg">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEditorForNewProject() {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-category').value = 'Typeface 本地化';
+            document.getElementById('edit-image').value = '';
+            document.getElementById('edit-gallery').value = '';
+            document.getElementById('edit-description').value = '';
+            document.getElementById('editor-modal').classList.remove('hidden');
+            document.getElementById('editor-modal').classList.add('flex');
+        }
+
+        function openEditorForEditProject(id) {
+            document.getElementById('edit-id').value = id;
+            const p = projects.find(item => item.id == id);
+            if (!p) return;
+            document.getElementById('edit-title').value = p.title.zh;
+            document.getElementById('edit-category').value = p.category.zh;
+            document.getElementById('edit-image').value = p.image;
+            document.getElementById('edit-gallery').value = p.gallery || '';
+            document.getElementById('edit-description').value = p.description.zh;
+            document.getElementById('editor-modal').classList.remove('hidden');
+            document.getElementById('editor-modal').classList.add('flex');
+        }
+
+        function closeEditor() {
+            document.getElementById('editor-modal').classList.add('hidden');
+            document.getElementById('editor-modal').classList.remove('flex');
+        }
+
+        function saveProject(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const titleText = document.getElementById('edit-title').value;
+            const categoryText = document.getElementById('edit-category').value;
+            const image = document.getElementById('edit-image').value;
+            const gallery = document.getElementById('edit-gallery').value;
+            const descText = document.getElementById('edit-description').value;
+
+            const newProj = {
+                id: id || Date.now().toString(),
+                title: { zh: titleText, en: titleText, ja: titleText },
+                category: { zh: categoryText, en: categoryText, ja: categoryText },
+                image: image,
+                gallery: gallery,
+                description: { zh: descText, en: descText, ja: descText }
+            };
+
+            if (id) {
+                const idx = projects.findIndex(p => p.id == id);
+                if (idx !== -1) projects[idx] = newProj;
+            } else {
+                projects.unshift(newProj);
+            }
+            closeEditor();
+            renderProjects();
+            renderAdminLists();
+        }
+
+        function deleteProject(id) {
+            if (confirm('確定刪除此專案？')) {
+                projects = projects.filter(p => p.id != id);
+                renderProjects();
+                renderAdminLists();
+            }
+        }
+
+        function openEditorForNewTranslation() {
+            document.getElementById('trans-edit-id').value = '';
+            document.getElementById('trans-title').value = '';
+            document.getElementById('trans-year').value = '2026';
+            document.getElementById('trans-image').value = '';
+            document.getElementById('trans-desc').value = '';
+            document.getElementById('trans-editor-modal').classList.remove('hidden');
+            document.getElementById('trans-editor-modal').classList.add('flex');
+        }
+
+        function openEditorForEditTranslation(id) {
+            document.getElementById('trans-edit-id').value = id;
+            const t = translations.find(item => item.id == id);
+            if (!t) return;
+            document.getElementById('trans-title').value = t.title;
+            document.getElementById('trans-year').value = t.year;
+            document.getElementById('trans-image').value = t.image;
+            document.getElementById('trans-desc').value = t.desc;
+            document.getElementById('trans-editor-modal').classList.remove('hidden');
+            document.getElementById('trans-editor-modal').classList.add('flex');
+        }
+
+        function closeTransEditor() {
+            document.getElementById('trans-editor-modal').classList.add('hidden');
+            document.getElementById('trans-editor-modal').classList.remove('flex');
+        }
+
+        function saveTranslation(e) {
+            e.preventDefault();
+            const id = document.getElementById('trans-edit-id').value;
+            const title = document.getElementById('trans-title').value;
+            const year = document.getElementById('trans-year').value;
+            const image = document.getElementById('trans-image').value;
+            const desc = document.getElementById('trans-desc').value;
+
+            if (id) {
+                const idx = translations.findIndex(t => t.id == id);
+                if (idx !== -1) translations[idx] = { id, title, year, image, desc };
+            } else {
+                translations.unshift({ id: Date.now().toString(), title, year, image, desc });
+            }
+            closeTransEditor();
+            renderTranslations();
+            renderAdminLists();
+        }
+
+        function deleteTranslation(id) {
+            if (confirm('確定刪除此翻譯紀錄？')) {
+                translations = translations.filter(t => t.id != id);
+                renderTranslations();
+                renderAdminLists();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
