@@ -57,7 +57,6 @@
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
-                <!-- 三語切換按鈕 -->
                 <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
                     EN
                 </button>
@@ -96,10 +95,9 @@
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
                 <button onclick="filterProjects('all')" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-sm" id="btn-all">全部專案</button>
-                <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface 本地化</button>
-                <button onclick="filterProjects('Pop-up Store 與展覽')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up 展覽</button>
-                <button onclick="filterProjects('實體包裝設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">實體包裝</button>
-                <button onclick="filterProjects('F&B 商業平面')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-fb">F&B 商業平面</button>
+                <button onclick="filterProjects('Typeface 本地化')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Typeface</button>
+                <button onclick="filterProjects('Pop-up Store 與展覽')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">Pop-up</button>
+                <button onclick="filterProjects('實體包裝設計')" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border">包裝設計</button>
             </div>
         </div>
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
@@ -205,7 +203,7 @@
             <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-id">
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (繁體)</label>
                     <input type="text" id="edit-title" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
@@ -226,7 +224,7 @@
                     <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹說明</label>
+                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹說明 (繁體)</label>
                     <textarea id="edit-description" rows="4" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
@@ -269,7 +267,7 @@
 
     <script>
         const ADMIN_PASSWORD = 'johnson2026';
-        let currentLangIndex = 0; // 0: 繁, 1: EN, 2: 日
+        let currentLangIndex = 0; // 0: zh, 1: en, 2: ja
         const langs = ['zh', 'en', 'ja'];
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
 
@@ -329,8 +327,8 @@
             document.getElementById('about-title').textContent = t.aboutTitle;
             document.getElementById('about-desc').innerHTML = t.aboutDesc;
 
-            // 將當前語言存入 localStorage 帶去 project.html
             localStorage.setItem('portfolio_lang', langKey);
+            renderProjects();
         }
 
         let projects = [
