@@ -11,12 +11,12 @@
                 extend: {
                     colors: {
                         apple: {
-                            bg: '#000000',
-                            card: '#161617',
+                            bg: '#020205',
+                            card: '#161619',
                             dark: '#f5f5f7',
                             gray: '#86868b',
                             lightgray: '#1d1d1f',
-                            border: '#333336',
+                            border: '#333338',
                             accent: '#2997ff'
                         }
                     },
@@ -29,14 +29,52 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .apple-glass { background: rgba(0, 0, 0, 0.75); backdrop-filter: saturate(200%) blur(30px); }
-        .card-glass { background: rgba(22, 22, 23, 0.65); backdrop-filter: blur(20px); }
+        /* Apple 旗艦級純淨藍調呼吸燈光背景 + 幼細製圖網格 */
+        body {
+            background-color: #020205;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(41, 151, 255, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 15% 35%, rgba(0, 113, 227, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(41, 151, 255, 0.1) 0%, transparent 45%),
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+            background-attachment: fixed;
+            animation: bgBreath 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgBreath {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+            100% { filter: brightness(1); }
+        }
+
+        .apple-glass { 
+            background: rgba(2, 2, 5, 0.85); 
+            backdrop-filter: saturate(200%) blur(35px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-glass { 
+            background: rgba(22, 22, 25, 0.65); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-fade {
+            animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
     </style>
 </head>
-<body class="bg-apple-bg text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white">
+<body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white">
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
+    <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" id="back-link" class="flex items-center text-apple-gray hover:text-white transition">
                 <i class="fa-solid fa-arrow-left mr-2"></i> 返回主頁
@@ -47,7 +85,7 @@
                 </a>
             </div>
             <div>
-                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium">
+                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
                 </button>
             </div>
@@ -60,7 +98,7 @@
             
             <!-- 左側：主圖 -->
             <div class="lg:col-span-6 space-y-4 sticky top-28">
-                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black relative flex items-center justify-center cursor-pointer group" onclick="openLightbox(document.getElementById('p-image').src)">
+                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black relative flex items-center justify-center cursor-pointer group card-glass" onclick="openLightbox(document.getElementById('p-image').src)">
                     <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-3xl pointer-events-none">
                         <span id="zoom-text" class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
@@ -86,7 +124,7 @@
                 </div>
 
                 <div class="pt-8 flex flex-wrap gap-4 items-center">
-                    <a href="index.html#works" id="back-works" class="inline-flex items-center px-6 py-3.5 rounded-full bg-apple-lightgray text-white text-xs font-medium border border-apple-border hover:bg-apple-border transition">
+                    <a href="index.html#works" id="back-works" class="inline-flex items-center px-6 py-3.5 rounded-full bg-apple-lightgray text-white text-xs font-medium border border-apple-border hover:bg-apple-border transition shadow-sm">
                         <i class="fa-solid fa-arrow-left mr-2"></i> 返回瀏覽其他專案
                     </a>
                     <a href="mailto:johnson0661@gmail.com" id="email-btn" class="inline-flex items-center px-6 py-3.5 rounded-full bg-white text-black text-xs font-medium hover:bg-stone-200 transition shadow-xl">
@@ -98,14 +136,14 @@
         </div>
 
         <!-- 底部：更多細節圖庫 -->
-        <div id="gallery-container" class="mt-28 border-t border-apple-border/50 pt-16 hidden">
+        <div id="gallery-container" class="mt-28 border-t border-apple-border/40 pt-16 hidden">
             <h2 id="gallery-heading" class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
             <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
     </main>
 
     <!-- 燈箱放大 Modal -->
-    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4" onclick="closeLightbox()">
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4 modal-fade" onclick="closeLightbox()">
         <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
             <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border shadow-lg">
                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -115,110 +153,19 @@
         </div>
     </div>
 
-    <!-- Password Prompt Modal -->
-    <div id="password-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center">
-            <h3 class="text-lg font-semibold text-white mb-4">請輸入管理員密碼</h3>
-            <form onsubmit="verifyPassword(event)" class="space-y-4">
-                <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none text-center">
-                <div class="flex space-x-2">
-                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2.5 bg-apple-lightgray text-apple-gray rounded-xl text-xs font-medium border border-apple-border">取消</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-white text-black rounded-xl text-xs font-medium">確認登入</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Modal -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
-            <button onclick="toggleAdminModal(false)" class="absolute top-6 right-6 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
-            </div>
-            <div class="space-y-6">
-                <div>
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-3">當前專案列表</h4>
-                    <div id="admin-project-list" class="space-y-2 divide-y divide-apple-border/50"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Project Editor Modal -->
-    <div id="editor-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden items-center justify-center p-4">
-        <div class="card-glass border border-apple-border rounded-3xl max-w-lg w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold text-white mb-6">編輯專案內容 (圖片上載與三語)</h3>
-            <form id="project-form" onsubmit="saveProject(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="edit-id">
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">封面主圖片 (可輸入網址 或 選擇檔案自動壓縮)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="edit-image" required placeholder="https:// 或上載圖片" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                        <label class="px-4 py-3 bg-apple-accent text-white rounded-xl cursor-pointer hover:bg-blue-600 transition flex items-center justify-center whitespace-nowrap font-medium shadow">
-                            <i class="fa-solid fa-upload mr-1.5"></i> 選擇檔案
-                            <input type="file" accept="image/*" class="hidden" onchange="handleImageCompression(event, 'edit-image')">
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細圖庫 (可用逗號分隔網址，或批次上載多張圖片)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="edit-gallery" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                        <label class="px-4 py-3 bg-apple-accent text-white rounded-xl cursor-pointer hover:bg-blue-600 transition flex items-center justify-center whitespace-nowrap font-medium shadow">
-                            <i class="fa-solid fa-images mr-1.5"></i> 批次上載
-                            <input type="file" accept="image/*" multiple class="hidden" onchange="handleMultipleGalleryUpload(event)">
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (繁體中文)</label>
-                    <input type="text" id="edit-title-zh" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (英文 ENGLISH)</label>
-                    <input type="text" id="edit-title-en" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">標題 (日文 日本語)</label>
-                    <input type="text" id="edit-title-ja" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none">
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (繁體中文)</label>
-                    <textarea id="edit-desc-zh" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (英文 ENGLISH)</label>
-                    <textarea id="edit-desc-en" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase tracking-wider text-apple-gray mb-1">詳細介紹 (日文 日本語)</label>
-                    <textarea id="edit-desc-ja" rows="3" required class="w-full px-4 py-3 bg-apple-lightgray border border-apple-border rounded-xl text-white text-sm focus:border-white outline-none"></textarea>
-                </div>
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeEditor()" class="px-5 py-2.5 bg-apple-lightgray text-white rounded-full font-medium border border-apple-border">取消</button>
-                    <button type="submit" class="px-5 py-2.5 bg-white text-black rounded-full font-medium">儲存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
+    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/40">
         <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
     </footer>
 
     <script>
-        const ADMIN_PASSWORD = 'johnson2026';
         let defaultProjects = [
             { 
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
                 category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
-                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', 
+                image: 'images/digimon.jpg', 
+                gallery: '', 
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
@@ -263,7 +210,6 @@
             }
         ];
 
-        // 從 localStorage 讀取最新數據
         let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -306,7 +252,7 @@
                 document.getElementById('gallery-container').classList.remove('hidden');
                 const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
                 document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
-                    <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
+                    <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black relative flex items-center justify-center p-2 cursor-pointer group card-glass" onclick="openLightbox('${gUrl}')">
                         <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
                             <span class="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
@@ -339,191 +285,11 @@
             modal.classList.remove('flex');
         }
 
-        // 單張圖片壓縮函式（主圖用）
-        function handleImageCompression(event, targetInputId) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 1200;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > MAX_WIDTH) {
-                        height = Math.round((height * MAX_WIDTH) / width);
-                        width = MAX_WIDTH;
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                    document.getElementById(targetInputId).value = dataUrl;
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 嚴格同步的批次圖庫上載函式
-        function handleMultipleGalleryUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            const galleryInput = document.getElementById('edit-gallery');
-            let existingUrls = galleryInput.value ? galleryInput.value.split(',').map(u => u.trim()).filter(u => u.length > 0) : [];
-            let fileArray = Array.from(files);
-
-            function processNext(index) {
-                if (index >= fileArray.length) {
-                    galleryInput.value = existingUrls.join(', ');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 1200;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height = Math.round((height * MAX_WIDTH) / width);
-                            width = MAX_WIDTH;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                        existingUrls.push(dataUrl);
-                        processNext(index + 1);
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(fileArray[index]);
-            }
-
-            processNext(0);
-        }
-
         document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
-                e.preventDefault();
-                openPasswordModal();
-            }
             if (e.key === 'Escape') {
                 closeLightbox();
-                closePasswordModal();
-                toggleAdminModal(false);
-                closeEditor();
             }
         });
-
-        function openPasswordModal() {
-            document.getElementById('admin-password-input').value = '';
-            document.getElementById('password-modal').classList.remove('hidden');
-            document.getElementById('password-modal').classList.add('flex');
-            document.getElementById('admin-password-input').focus();
-        }
-
-        function closePasswordModal() {
-            document.getElementById('password-modal').classList.add('hidden');
-            document.getElementById('password-modal').classList.remove('flex');
-        }
-
-        function verifyPassword(e) {
-            e.preventDefault();
-            const inputVal = document.getElementById('admin-password-input').value;
-            if (inputVal === ADMIN_PASSWORD) {
-                closePasswordModal();
-                toggleAdminModal(true);
-            } else {
-                alert('密碼錯誤！');
-                document.getElementById('admin-password-input').value = '';
-            }
-        }
-
-        function toggleAdminModal(show = null) {
-            const modal = document.getElementById('admin-modal');
-            const isHidden = show !== null ? !show : modal.classList.contains('hidden');
-            if (isHidden) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            } else {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                renderAdminList();
-            }
-        }
-
-        function renderAdminList() {
-            const langKey = langs[currentLangIndex];
-            document.getElementById('admin-project-list').innerHTML = projects.map(p => `
-                <div class="py-3 flex items-center justify-between text-xs">
-                    <div class="flex items-center space-x-3">
-                        <img src="${p.image}" class="w-9 h-9 object-cover rounded-xl bg-apple-lightgray border border-apple-border">
-                        <span class="font-medium text-white">${p.title[langKey] || p.title.zh}</span>
-                    </div>
-                    <div>
-                        <button type="button" onclick="openEditorForEditProject('${p.id}')" class="px-3 py-1.5 bg-apple-lightgray text-white rounded-lg border border-apple-border">編輯</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openEditorForEditProject(id) {
-            document.getElementById('edit-id').value = id;
-            const p = projects.find(item => item.id == id);
-            if (!p) return;
-            document.getElementById('edit-image').value = p.image || '';
-            document.getElementById('edit-gallery').value = p.gallery || '';
-            document.getElementById('edit-title-zh').value = p.title.zh || '';
-            document.getElementById('edit-title-en').value = p.title.en || '';
-            document.getElementById('edit-title-ja').value = p.title.ja || '';
-            document.getElementById('edit-desc-zh').value = p.description.zh || '';
-            document.getElementById('edit-desc-en').value = p.description.en || '';
-            document.getElementById('edit-desc-ja').value = p.description.ja || '';
-            document.getElementById('editor-modal').classList.remove('hidden');
-            document.getElementById('editor-modal').classList.add('flex');
-        }
-
-        function closeEditor() {
-            document.getElementById('editor-modal').classList.add('hidden');
-            document.getElementById('editor-modal').classList.remove('flex');
-        }
-
-        function saveProject(e) {
-            e.preventDefault();
-            const id = document.getElementById('edit-id').value;
-            const idx = projects.findIndex(p => p.id == id);
-            if (idx !== -1) {
-                projects[idx].image = document.getElementById('edit-image').value;
-                projects[idx].gallery = document.getElementById('edit-gallery').value;
-                projects[idx].title.zh = document.getElementById('edit-title-zh').value;
-                projects[idx].title.en = document.getElementById('edit-title-en').value;
-                projects[idx].title.ja = document.getElementById('edit-title-ja').value;
-                projects[idx].description.zh = document.getElementById('edit-desc-zh').value;
-                projects[idx].description.en = document.getElementById('edit-desc-en').value;
-                projects[idx].description.ja = document.getElementById('edit-desc-ja').value;
-                
-                // 同步儲存到 localStorage
-                localStorage.setItem('portfolio_projects', JSON.stringify(projects));
-            }
-            closeEditor();
-            updateProjectContent();
-            renderAdminList();
-        }
 
         document.addEventListener('DOMContentLoaded', () => {
             updateProjectContent();
