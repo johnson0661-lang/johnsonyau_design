@@ -39,6 +39,30 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
+        /* 開場動畫遮罩與 Logo 特效 */
+    #intro-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: #FAFAFA;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+
+    #intro-logo {
+        opacity: 0;
+        transform: scale(0.92);
+        animation: introFade 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes introFade {
+        0% { opacity: 0; transform: scale(0.92); }
+        50% { opacity: 1; transform: scale(1); }
+        85% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(1.04); }
+    }
         body {
             background-color: #FAFAFA;
             color: #222222;
@@ -101,6 +125,19 @@
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-minimal-accent selection:text-white overflow-x-hidden relative">
+    <!-- 開場 Logo 遮罩 (第一次進入主頁時觸發) -->
+    <div id="intro-overlay">
+        <div class="relative flex flex-col items-center">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+            
+            <div class="p-8">
+                <img id="intro-logo" src="logo.png" alt="Johnson Yau" class="logo-invert h-12 md:h-16 w-auto object-contain" onerror="this.src='https://via.placeholder.com/180x60?text=JOHNSON+YAU'">
+            </div>
+        </div>
+    </div>
 
     <div id="toast-container"></div>
 
@@ -1362,6 +1399,7 @@
         });
 
         window.addEventListener('DOMContentLoaded', () => { 
+            // 1. 原本的載入資料與滾動動畫邏輯
             fetchCloudData(); 
             const observer = new IntersectionObserver((entries) => { 
                 entries.forEach(entry => { 
@@ -1369,6 +1407,24 @@
                 }); 
             }, { threshold: 0.15 }); 
             document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); 
+
+            // 2. 開場 Logo 動畫控制邏輯（第一次進入才播放）
+            const overlay = document.getElementById('intro-overlay');
+            if (overlay) {
+                const hasSeenIntro = sessionStorage.getItem('has_seen_intro');
+                if (hasSeenIntro) {
+                    overlay.style.display = 'none';
+                } else {
+                    sessionStorage.setItem('has_seen_intro', 'true');
+                    setTimeout(() => {
+                        overlay.style.opacity = '0';
+                        setTimeout(() => {
+                            overlay.style.visibility = 'hidden';
+                            overlay.remove();
+                        }, 800);
+                    }, 1600);
+                }
+            }
         });
     </script>
 </body>
