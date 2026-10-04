@@ -74,17 +74,19 @@
             opacity: 0;
             transform: scale(1.06);
         }
-        /* 開場 Loading 閃爍字樣 */
+ /* 開場 Loading 閃爍字樣 (日式極簡高質感版) */
     .intro-loading-text {
-        font-family: inherit;
-        letter-spacing: 0.35em;
-        font-size: 10px;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.45em; /* 超寬字距，呼應 SCROLL DOWN */
+        text-indent: 0.45em;   /* 補償最尾一個字的間距，保持絕對置中 */
         color: #888888;
-        font-weight: 600;
         text-transform: uppercase;
         animation: introBlink 1.4s infinite ease-in-out;
+        margin-top: 14px;
+        display: block;
     }
-
     @keyframes introBlink {
         0%, 100% { opacity: 0.25; }
         50% { opacity: 1; }
