@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專案詳情 | Johnson Yau Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: {
+                            bg: '#000000',
+                            card: '#161617',
+                            dark: '#f5f5f7',
+                            gray: '#86868b',
+                            lightgray: '#1d1d1f',
+                            border: '#333336',
+                            accent: '#2997ff'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Helvetica", "Arial", 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .apple-glass { background: rgba(0, 0, 0, 0.75); backdrop-filter: saturate(200%) blur(30px); }
+        .card-glass { background: rgba(22, 22, 23, 0.65); backdrop-filter: blur(20px); }
+    </style>
+</head>
+<body class="bg-apple-bg text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 apple-glass border-b border-apple-border/50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
+            <a href="index.html" class="flex items-center text-apple-gray hover:text-white transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> 返回主頁
+            </a>
+            <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                <a href="index.html" class="group">
+                    <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain">
+                </a>
+            </div>
+            <div class="w-16"></div>
+        </div>
+    </header>
+
+    <!-- Project Detail Container -->
+    <main class="max-w-4xl mx-auto px-6 py-20">
+        <div class="card-glass border border-apple-border rounded-3xl p-8 md:p-14 shadow-2xl">
+            <span id="p-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-3 block"></span>
+            <h1 id="p-title" class="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tight"></h1>
+            
+            <!-- Main Featured Image -->
+            <div class="w-full h-[450px] rounded-2xl overflow-hidden bg-black mb-10 border border-apple-border shadow-2xl">
+                <img id="p-image" src="" alt="Main Image" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Detailed Description Section -->
+            <div class="mb-12">
+                <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-4">專案介紹與設計理念 (Case Study)</h2>
+                <div id="p-description" class="text-apple-dark text-base md:text-lg leading-relaxed whitespace-pre-line space-y-4"></div>
+            </div>
+
+            <!-- Multi-Image Gallery Showcase -->
+            <div id="gallery-container" class="border-t border-apple-border/50 pt-8 hidden">
+                <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-6">更多專案細節與視覺展示</h2>
+                <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
+        <p>&copy; 2026 Johnson Yau. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 與主頁相同的專案資料庫（或可共用）
+        const projects = [
+            { 
+                id: '1', 
+                title: '數碼暴龍 Last Evolution 絆 - 字體在地化', 
+                category: 'Typeface 本地化', 
+                image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+                description: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性[cite: 18]。' 
+            },
+            { 
+                id: '2', 
+                title: 'ULTRAMAN The Hero Premiere 展覽與 Pop-up', 
+                category: 'Pop-up Store 與展覽', 
+                image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
+                description: '主導 2025 於朗豪坊舉辦之 Ultraman Pop-up Store 空間動線規劃、視覺與限定周邊開發。全面統籌供應商對接、成本預算與現場視覺呈現[cite: 23]。' 
+            },
+            { 
+                id: '3', 
+                title: '《劇場版 SPY×FAMILY CODE: White》實體包裝設計', 
+                category: '實體包裝設計', 
+                image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
+                description: '為電影宣傳開發一系列實體餐飲包裝，包括飲品紙杯、熱狗盒、爆米花桶及金屬收藏桶。精準融合角色 IP 風格與實用量產需求[cite: 21]。' 
+            },
+            { 
+                id: '4', 
+                title: '《新・福音戰士劇場版:||》豪華版藍光影碟包裝', 
+                category: '實體包裝設計', 
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=800&q=80',
+                description: '對接日本供應商，統籌 4K UHD + Blu-ray 豪華版影碟套裝之物料、成本與包裝工藝。極致呈現收藏級質感與日系美學[cite: 22]。' 
+            },
+            { 
+                id: '5', 
+                title: '板前壽司 & 上膳食堂聖誕餐牌宣傳品', 
+                category: 'F&B 商業平面', 
+                image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
+                description: '負責 F&B 餐飲集團之季節性宣傳海報、餐牌設計及宣傳物料。捕捉美食質感並配合強烈促銷視覺，提升顧客消費意欲[cite: 19, 20]。' 
+            },
+            { 
+                id: '6', 
+                title: '《蠟筆小新》2025 期間限定店視覺規劃', 
+                category: 'Pop-up Store 與展覽', 
+                image: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=1200&q=80', 
+                gallery: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80',
+                description: 'AIRSIDE 蠟筆小新 Pop-up Store 之空間平面佈局、打卡位與限定周邊企劃。創造沉浸式粉絲體驗與高效能的零售動線。' 
+            }
+        ];
+
+        // 讀取網址中的 id 參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id') || '1';
+
+        const project = projects.find(p => p.id === projectId) || projects[0];
+
+        // 填入資料到頁面
+        document.getElementById('p-category').textContent = project.category;
+        document.getElementById('p-title').textContent = project.title;
+        document.getElementById('p-image').src = project.image;
+        document.getElementById('p-description').textContent = project.description;
+
+        // 處理多圖圖庫
+        if (project.gallery && project.gallery.trim() !== '') {
+            document.getElementById('gallery-container').classList.remove('hidden');
+            const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
+            const galleryGrid = document.getElementById('p-gallery');
+            galleryGrid.innerHTML = galleryUrls.map(gUrl => `
+                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black border border-apple-border shadow-lg">
+                    <img src="${gUrl}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
