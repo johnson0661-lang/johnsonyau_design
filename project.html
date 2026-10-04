@@ -71,9 +71,13 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 apple-glass">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
-            <a href="index.html" class="group flex items-center">
-                <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
-            </a>
+            <div class="flex items-center space-x-6">
+                <a href="index.html" class="group flex items-center">
+                    <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
+                </a>
+                <span class="text-apple-border">/</span>
+                <span id="nav-category-badge" class="px-3 py-1 rounded-full bg-apple-lightgray text-apple-accent font-medium border border-apple-border shadow-sm">載入中...</span>
+            </div>
             <div class="flex items-center space-x-6">
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
@@ -85,7 +89,7 @@
         </div>
     </header>
 
-    <!-- Main Project Content (參考設計排版) -->
+    <!-- Main Project Content -->
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
         
         <!-- 專案頂部標題與分類 -->
@@ -99,13 +103,21 @@
             <img id="main-preview-img" src="" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl">
         </div>
 
-        <!-- 下方：左右分欄（左側細節圖+分頁點 / 右側詳細文案） -->
+        <!-- 下方：左右分欄（左側細節圖+左右切換按鈕 / 右側詳細文案） -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：細節圖展示與紅色分頁導航點 -->
+            <!-- 左側：細節圖展示與切換控制 -->
             <div class="lg:col-span-6 space-y-6">
-                <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10]">
+                <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10] relative group">
                     <img id="gallery-active-img" src="" alt="Gallery Detail" class="w-full h-full object-contain rounded-2xl shadow-lg transition duration-500">
+                    
+                    <!-- 左右切換按鈕 (上一頁 / 下一頁) -->
+                    <button onclick="prevGalleryImage()" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <button onclick="nextGalleryImage()" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
                 </div>
 
                 <!-- 桃紅色分頁導航圓點 Pagination Dots -->
@@ -150,18 +162,6 @@
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
                     ja: '日本公式のデザイン要素に基づき、繁体字の劇中およびポスター用カスタムフォントを制作・最適化。原作の雰囲気を忠実に再現。' 
                 } 
-            },
-            { 
-                id: '2', 
-                title: { zh: 'ULTRAMAN The Hero Premiere 展覽與視覺企劃', en: 'ULTRAMAN The Hero Premiere Exhibition', ja: 'ULTRAMAN The Hero Premiere 展示' }, 
-                category: { zh: '展覽與視覺企劃', en: 'Exhibition', ja: '展覧会' }, 
-                image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80', 
-                gallery: 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=800&q=80, https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80', 
-                description: { 
-                    zh: '主導 Ultraman 展覽之視覺統籌與現場展品空間規劃，完美重現經典特攝美學。', 
-                    en: 'Led the visual coordination and exhibition space planning for Ultraman.', 
-                    ja: 'ウルトラマン展のビジュアル統括と空間計画を担当。' 
-                } 
             }
         ];
 
@@ -200,6 +200,7 @@
             document.getElementById('page-title').textContent = title + ' | Johnson Yau';
             document.getElementById('project-title').textContent = title;
             document.getElementById('project-category').textContent = category;
+            document.getElementById('nav-category-badge').textContent = category;
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
             document.getElementById('main-preview-img').src = currentProjectData.image;
 
@@ -231,6 +232,18 @@
 
         function setGalleryIndex(idx) {
             activeGalleryIndex = idx;
+            updateGalleryDisplay();
+        }
+
+        function prevGalleryImage() {
+            if (galleryImages.length === 0) return;
+            activeGalleryIndex = (activeGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateGalleryDisplay();
+        }
+
+        function nextGalleryImage() {
+            if (galleryImages.length === 0) return;
+            activeGalleryIndex = (activeGalleryIndex + 1) % galleryImages.length;
             updateGalleryDisplay();
         }
 
