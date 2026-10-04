@@ -143,19 +143,19 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white overflow-x-hidden">
 
-    <!-- Header -->
+    <!-- Header (完美置中導覽列) -->
     <header class="sticky top-0 z-50 apple-glass">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
-            <a href="index.html" class="group flex items-center">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
+            <a href="index.html" class="group flex items-center z-10">
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
             </a>
-            <nav class="hidden md:flex items-center space-x-8 text-apple-gray">
+            <nav class="hidden md:flex items-center space-x-8 text-apple-gray absolute left-1/2 -translate-x-1/2">
                 <a href="index.html#works" class="nav-works hover:text-white transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-white transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-white transition">關於我</a>
             </nav>
-            <div>
-                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
+            <div class="z-10">
+                <button onclick="switchLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
                 </button>
             </div>
@@ -193,7 +193,6 @@
                 <h3 id="works-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">實戰專案分類</h3>
             </div>
             <div class="flex flex-col md:flex-row md:items-center gap-4 mt-6 md:mt-0">
-                <!-- 篩選按鈕列 -->
                 <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs">
                     <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-featured">精選作品</button>
                     <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
@@ -203,7 +202,6 @@
                     <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
                     <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
                 </div>
-                <!-- 上一頁 / 下一頁 按鈕 -->
                 <div id="pagination-controls" class="hidden items-center space-x-2 shrink-0">
                     <button onclick="prevPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -220,12 +218,24 @@
 
     <!-- Translation Section -->
     <section id="translation" class="max-w-7xl mx-auto px-6 py-40 reveal-up">
-        <div class="mb-16">
-            <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
-            <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
-            <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+            <div>
+                <h2 class="text-xs uppercase tracking-widest text-apple-gray font-semibold mb-2">Translation Works</h2>
+                <h3 id="trans-heading" class="text-4xl md:text-5xl font-semibold tracking-tight text-white">日文字幕 > 繁體中文字幕電影翻譯紀錄</h3>
+                <p id="trans-sub" class="text-sm text-apple-gray mt-3">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+            </div>
+            <!-- 電影翻譯分頁控制按鈕 -->
+            <div id="trans-pagination-controls" class="hidden items-center space-x-2 shrink-0 mt-6 md:mt-0">
+                <button onclick="prevTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="上一頁">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <span id="trans-page-indicator" class="text-xs text-apple-gray px-2 font-medium">1 / 1</span>
+                <button onclick="nextTransPage()" class="w-10 h-10 rounded-full bg-apple-lightgray border border-apple-border text-white flex items-center justify-center hover:bg-white hover:text-black transition shadow-md" title="下一頁">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
         </div>
-        <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+        <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" onmouseenter="pauseTransAutoPlay()" onmouseleave="startTransAutoPlay()"></div>
     </section>
 
     <!-- About Section -->
@@ -598,6 +608,11 @@
         let itemsPerPage = 4;
         let autoPlayTimer = null;
 
+        // 電影翻譯分頁變數
+        let transPageIndex = 0;
+        let transItemsPerPage = 8;
+        let transAutoPlayTimer = null;
+
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top');
             if (window.scrollY > 300) {
@@ -613,7 +628,7 @@
 
         function filterProjects(category, btnElement) {
             currentFilterCategory = category;
-            currentPageIndex = 0; // 重設為第一頁
+            currentPageIndex = 0;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.className = "filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border text-xs";
             });
@@ -625,7 +640,6 @@
 
         function getFilteredProjects() {
             if (currentFilterCategory === 'featured') {
-                // 精選作品隨機打亂
                 return [...projects].sort(() => 0.5 - Math.random());
             } else {
                 return projects.filter(p => {
@@ -648,7 +662,6 @@
             if (currentPageIndex >= totalPages) currentPageIndex = 0;
             if (currentPageIndex < 0) currentPageIndex = totalPages - 1;
 
-            // 顯示或隱藏分頁按鈕（如果大於4個項目或者大於1頁就顯示）
             if (allFiltered.length > itemsPerPage) {
                 paginationControls.classList.remove('hidden');
                 paginationControls.classList.add('flex');
@@ -699,38 +712,54 @@
                 if (allFiltered.length > itemsPerPage) {
                     nextPage();
                 }
-            }, 7000); // 每 7 秒自動下一頁
+            }, 7000);
         }
 
         function pauseAutoPlay() {
             if (autoPlayTimer) clearInterval(autoPlayTimer);
         }
 
-        function handleCardMouseMove(e, card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--x', `${x}px`);
-            card.style.setProperty('--y', `${y}px`);
-        }
-
-        function renderTranslations() {
-            const grid = document.getElementById('translation-grid');
-            if (!grid) return;
-            const langKey = langs[currentLangIndex];
-
-            const sortedTranslations = [...translations].sort((a, b) => {
+        // 電影翻譯分頁與自動輪播
+        function getSortedTranslations() {
+            return [...translations].sort((a, b) => {
                 const yearA = parseInt(a.year) || 0;
                 const yearB = parseInt(b.year) || 0;
                 if (yearB !== yearA) {
                     return yearB - yearA;
                 }
+                const langKey = langs[currentLangIndex];
                 const titleA = (typeof a.title === 'object' ? (a.title[langKey] || a.title.zh) : a.title) || '';
                 const titleB = (typeof b.title === 'object' ? (b.title[langKey] || b.title.zh) : b.title) || '';
                 return titleA.localeCompare(titleB, 'zh-HK');
             });
+        }
 
-            grid.innerHTML = sortedTranslations.map(tr => {
+        function renderTranslations() {
+            const grid = document.getElementById('translation-grid');
+            const transControls = document.getElementById('trans-pagination-controls');
+            const transIndicator = document.getElementById('trans-page-indicator');
+            if (!grid) return;
+            const langKey = langs[currentLangIndex];
+
+            const sortedTrs = getSortedTranslations();
+            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
+
+            if (transPageIndex >= totalPages) transPageIndex = 0;
+            if (transPageIndex < 0) transPageIndex = totalPages - 1;
+
+            if (sortedTrs.length > transItemsPerPage) {
+                transControls.classList.remove('hidden');
+                transControls.classList.add('flex');
+                transIndicator.textContent = `${transPageIndex + 1} / ${totalPages}`;
+            } else {
+                transControls.classList.add('hidden');
+                transControls.classList.remove('flex');
+            }
+
+            const startIdx = transPageIndex * transItemsPerPage;
+            const pageTrs = sortedTrs.slice(startIdx, startIdx + transItemsPerPage);
+
+            grid.innerHTML = pageTrs.map(tr => {
                 let displayTitle = '';
                 if (typeof tr.title === 'object') {
                     displayTitle = tr.title[langKey] || tr.title.zh;
@@ -750,6 +779,42 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function nextTransPage() {
+            const sortedTrs = getSortedTranslations();
+            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
+            transPageIndex = (transPageIndex + 1) % totalPages;
+            renderTranslations();
+        }
+
+        function prevTransPage() {
+            const sortedTrs = getSortedTranslations();
+            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
+            transPageIndex = (transPageIndex - 1 + totalPages) % totalPages;
+            renderTranslations();
+        }
+
+        function startTransAutoPlay() {
+            if (transAutoPlayTimer) clearInterval(transAutoPlayTimer);
+            transAutoPlayTimer = setInterval(() => {
+                const sortedTrs = getSortedTranslations();
+                if (sortedTrs.length > transItemsPerPage) {
+                    nextTransPage();
+                }
+            }, 8000); // 電影翻譯每 8 秒自動下一頁
+        }
+
+        function pauseTransAutoPlay() {
+            if (transAutoPlayTimer) clearInterval(transAutoPlayTimer);
+        }
+
+        function handleCardMouseMove(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--x', `${x}px`);
+            card.style.setProperty('--y', `${y}px`);
         }
 
         function renderAbout() {
@@ -1195,6 +1260,7 @@
             renderTranslations();
             renderAbout();
             startAutoPlay();
+            startTransAutoPlay();
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
