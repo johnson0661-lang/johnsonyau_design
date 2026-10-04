@@ -264,7 +264,6 @@
     <!-- Admin Modal (綜合後台管理) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4">
         <div class="card-glass border border-apple-border rounded-3xl max-w-4xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl modal-fade">
-            <!-- 標題列與關閉按鈕，確保有足夠右側留白防止碰撞 -->
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-apple-border pb-4 gap-4 pr-12">
                 <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理中心</h3>
                 <div class="flex flex-wrap gap-2">
@@ -282,7 +281,7 @@
                 <div class="flex justify-between items-center">
                     <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">實戰專案列表</h4>
                     <button type="button" onclick="openNewProjectModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
-                        <i class="fa-solid fa-plus mr-1.5"></i> 新眾專案
+                        <i class="fa-solid fa-plus mr-1.5"></i> 新增專案
                     </button>
                 </div>
                 <div id="admin-project-list" class="space-y-3 divide-y divide-apple-border/50"></div>
@@ -291,7 +290,7 @@
             <!-- 電影翻譯管理面板 -->
             <div id="admin-trans-panel" class="space-y-4 hidden">
                 <div class="flex justify-between items-center">
-                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表</h4>
+                    <h4 class="text-xs uppercase tracking-wider text-apple-gray font-semibold">電影翻譯紀錄列表 (自動按年份由新到舊排列)</h4>
                     <button type="button" onclick="openNewTransModal()" class="px-4 py-2 bg-apple-accent text-white rounded-xl text-xs font-medium hover:bg-blue-600 transition shadow-md flex items-center">
                         <i class="fa-solid fa-plus mr-1.5"></i> 新增電影翻譯
                     </button>
@@ -615,7 +614,10 @@
             if (!grid) return;
             const langKey = langs[currentLangIndex];
 
-            grid.innerHTML = translations.map(tr => {
+            // 按照年份由新到舊排序 (例如 2024 -> 2023 -> 2022 -> 2021)
+            const sortedTranslations = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+
+            grid.innerHTML = sortedTranslations.map(tr => {
                 let displayTitle = '';
                 if (typeof tr.title === 'object') {
                     displayTitle = tr.title[langKey] || tr.title.zh;
@@ -625,7 +627,7 @@
 
                 return `
                     <div class="spotlight-card rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between transition duration-500" onmousemove="handleCardMouseMove(event, this)">
-                        <div class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3 group">
+                        <div class="w-full aspect-[2/3] bg-[#0c0c0e] relative flex items-center justify-center p-3">
                             <img src="${tr.image}" alt="${displayTitle}" class="max-w-full max-h-full object-contain rounded-xl shadow-lg transition duration-500">
                             <span class="absolute top-4 left-4 text-[11px] font-semibold px-2.5 py-1 bg-black/80 backdrop-blur-md text-apple-accent rounded-full border border-apple-border pointer-events-none">${tr.year}</span>
                         </div>
@@ -784,7 +786,8 @@
         }
 
         function renderAdminTransLists() {
-            document.getElementById('admin-trans-list').innerHTML = translations.map(tr => {
+            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            document.getElementById('admin-trans-list').innerHTML = sortedTrs.map(tr => {
                 let titleZh = typeof tr.title === 'object' ? tr.title.zh : tr.title;
                 return `
                     <div class="py-3 flex items-center justify-between text-xs">
