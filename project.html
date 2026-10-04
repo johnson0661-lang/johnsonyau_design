@@ -86,7 +86,6 @@
             </a>
 
             <div class="flex items-center space-x-6">
-                <!-- 簡約純圖標上下篇切換按鈕 (已徹底移除文字) -->
                 <div class="flex items-center space-x-2 border-r border-apple-border pr-6">
                     <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 rounded-full bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center justify-center shadow-sm" title="上一個同分類作品">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -96,7 +95,6 @@
                     </button>
                 </div>
 
-                <!-- 支援三語設定的返回列表按鈕 -->
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
                     <i class="fa-solid fa-arrow-left mr-1.5"></i> <span id="back-text">返回作品列表</span>
                 </a>
@@ -110,24 +108,19 @@
     <!-- Main Project Content -->
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
         
-        <!-- 專案頂部標題與分類 -->
         <div class="mb-8">
             <span id="project-category" class="text-xs font-semibold tracking-wider uppercase text-apple-accent mb-2 block">Category</span>
             <h1 id="project-title" class="text-3xl md:text-5xl font-semibold tracking-tight text-white leading-tight"></h1>
         </div>
 
-        <!-- 上方：大尺寸主圖展示區 -->
-        <div onclick="openLightbox(document.getElementById('main-preview-img').src)" class="card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl cursor-pointer group relative">
-            <img id="main-preview-img" src="" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
-            <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
-                <i class="fa-solid fa-expand mr-1"></i> 點擊放大
-            </div>
+        <!-- 上方：主圖或 YouTube 影片播放區 -->
+        <div id="media-container" class="card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl relative">
+            <!-- 動態填入圖片或 YouTube iframe -->
         </div>
 
         <!-- 下方：左右分欄 -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：細節圖展示與切換控制 -->
             <div class="lg:col-span-6 space-y-6">
                 <div class="card-glass rounded-3xl overflow-hidden p-4 bg-black/60 border border-apple-border flex items-center justify-center aspect-[16/10] relative group">
                     <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain rounded-2xl shadow-lg transition duration-500 cursor-pointer">
@@ -136,7 +129,6 @@
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
 
-                    <!-- 左右切換按鈕 -->
                     <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-white hover:text-black shadow-xl">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
@@ -145,11 +137,9 @@
                     </button>
                 </div>
 
-                <!-- 桃紅色分頁導航點 -->
                 <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
             </div>
 
-            <!-- 右側：專案詳細文案 -->
             <div class="lg:col-span-6 space-y-6">
                 <h3 id="case-study-heading" class="text-xs uppercase tracking-widest text-apple-gray font-semibold">Design Concept & Case Study</h3>
                 <div id="project-description" class="text-apple-gray font-normal leading-relaxed text-base space-y-4"></div>
@@ -158,7 +148,7 @@
         </div>
     </main>
 
-    <!-- 圖片點擊放大燈箱 -->
+    <!-- 燈箱 Modal -->
     <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4">
         <button onclick="closeLightbox()" class="absolute top-6 right-6 text-apple-gray hover:text-white w-10 h-10 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border z-10 shadow-xl">
             <i class="fa-solid fa-xmark text-sm"></i>
@@ -174,13 +164,7 @@
     <script>
         const langs = ['zh', 'en', 'ja'];
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
-        
-        // 三語返回列表按鈕字串
-        const backTexts = {
-            zh: "返回作品列表",
-            en: "Back to Projects",
-            ja: "プロジェクト一覧に戻る"
-        };
+        const backTexts = { zh: "返回作品列表", en: "Back to Projects", ja: "プロジェクト一覧に戻る" };
 
         let currentLangIndex = 0;
         let currentProjectData = null;
@@ -197,6 +181,7 @@
                 category: { zh: '字體設計', en: 'Typeface', ja: 'タイポグラフィ' }, 
                 image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
                 gallery: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
+                youtube: '',
                 description: { 
                     zh: '基於日本官方設計元素，原創並優化繁體中文劇集與海報專屬 Typeface。細緻還原原作氛圍，確保字體在不同宣傳媒介上的視覺衝擊力與易讀性。', 
                     en: 'Created and optimized custom Traditional Chinese typeface based on official Japanese design elements, ensuring visual impact and readability across various promotional media.', 
@@ -266,6 +251,21 @@
             window.location.href = `project.html?id=${targetProj.id}&lang=${langKey}`;
         }
 
+        function extractYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            let videoId = '';
+            if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0];
+            } else if (url.includes('watch?v=')) {
+                videoId = url.split('watch?v=')[1]?.split('&')[0];
+            } else if (url.includes('embed/')) {
+                videoId = url.split('embed/')[1]?.split('?')[0];
+            } else {
+                videoId = url.trim();
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        }
+
         function renderProjectContent() {
             if (!currentProjectData) return;
             const langKey = langs[currentLangIndex];
@@ -284,7 +284,7 @@
                 else if (norm === '包裝設計') category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
                 else if (norm === '周邊設計') category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
                 else if (norm === '影片剪接') category = langKey === 'en' ? 'Video Editing' : (langKey === 'ja' ? 'ビデオ編集' : '影片剪接');
-                else category = langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : '其他');
+                else category = langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : 'その他');
             }
 
             const description = typeof currentProjectData.description === 'object' ? (currentProjectData.description[langKey] || currentProjectData.description.zh) : currentProjectData.description;
@@ -293,10 +293,31 @@
             document.getElementById('project-title').textContent = title;
             document.getElementById('project-category').textContent = category;
             document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`;
-            document.getElementById('main-preview-img').src = currentProjectData.image;
-
-            // 更新三語返回按鈕文字
             document.getElementById('back-text').textContent = backTexts[langKey];
+
+            // 檢查是否有填寫 YouTube 連結
+            const mediaContainer = document.getElementById('media-container');
+            const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
+
+            if (ytEmbedUrl) {
+                // 如果有 YouTube 連結，顯示內嵌影片播放器
+                mediaContainer.innerHTML = `
+                    <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-xl bg-black">
+                        <iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                `;
+                mediaContainer.className = "card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 bg-black/60 border border-apple-border shadow-2xl relative";
+            } else {
+                // 如果無 YouTube 連結，維持原本的主圖展示並支援點擊放大
+                mediaContainer.innerHTML = `
+                    <img id="main-preview-img" src="${currentProjectData.image}" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain rounded-2xl shadow-xl transition group-hover:scale-[1.01]">
+                    <div class="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] backdrop-blur-md border border-white/20 opacity-0 group-hover:opacity-100 transition shadow-lg pointer-events-none">
+                        <i class="fa-solid fa-expand mr-1"></i> 點擊放大
+                    </div>
+                `;
+                mediaContainer.className = "card-glass rounded-3xl overflow-hidden mb-10 p-4 md:p-8 flex items-center justify-center bg-black/60 border border-apple-border shadow-2xl cursor-pointer group relative";
+                mediaContainer.onclick = () => openLightbox(currentProjectData.image);
+            }
 
             galleryImages = [];
             if (currentProjectData.image) galleryImages.push(currentProjectData.image);
