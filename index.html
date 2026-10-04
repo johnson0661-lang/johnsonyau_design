@@ -195,7 +195,6 @@
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl font-semibold text-white"><i class="fa-solid fa-gear mr-2"></i> 後台內容管理</h3>
                 <div class="space-x-2">
-                    <button onclick="openEditorForNewProject()" class="px-4 py-2 bg-white text-black rounded-full text-xs font-medium hover:bg-stone-200 transition shadow">+ 新增專案</button>
                     <button onclick="openEditorForNewTranslation()" class="px-4 py-2 bg-apple-lightgray text-white rounded-full text-xs font-medium hover:bg-apple-border transition border border-apple-border">+ 新增翻譯紀錄</button>
                 </div>
             </div>
@@ -604,11 +603,6 @@
             document.getElementById('edit-title-zh').value = p.title.zh || '';
             document.getElementById('edit-title-en').value = p.title.en || '';
             document.getElementById('edit-title-ja').value = p.title.ja || '';
-            document.getElementById('edit-image').value = p.image;
-            document.getElementById('edit-gallery').value = p.gallery || '';
-            document.getElementById('edit-desc-zh').value = p.description.zh || '';
-            document.getElementById('edit-desc-en').value = p.description.en || '';
-            document.getElementById('edit-desc-ja').value = p.description.ja || '';
             document.getElementById('editor-modal').classList.remove('hidden');
             document.getElementById('editor-modal').classList.add('flex');
         }
@@ -626,9 +620,6 @@
                 projects[idx].title.zh = document.getElementById('edit-title-zh').value;
                 projects[idx].title.en = document.getElementById('edit-title-en').value;
                 projects[idx].title.ja = document.getElementById('edit-title-ja').value;
-                projects[idx].description.zh = document.getElementById('edit-desc-zh').value;
-                projects[idx].description.en = document.getElementById('edit-desc-en').value;
-                projects[idx].description.ja = document.getElementById('edit-desc-ja').value;
             }
             closeEditor();
             renderProjects();
