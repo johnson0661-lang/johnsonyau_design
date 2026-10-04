@@ -78,16 +78,26 @@
 </head>
 <body class="text-apple-dark font-sans antialiased selection:bg-apple-accent selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Header (已移除中間分類文字) -->
+    <!-- Header (加入同分類上下篇切換箭嘴) -->
     <header class="sticky top-0 z-50 apple-glass">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
-            <a href="index.html" class="group flex items-center z-10">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
+            <a href="index.html" class="group flex items-center">
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-9 w-auto object-contain group-hover:scale-105 transition duration-300">
             </a>
 
-            <div class="flex items-center space-x-6 z-10 ml-auto">
+            <div class="flex items-center space-x-6">
+                <!-- 同分類上一個/下一個作品切換按鈕 -->
+                <div class="flex items-center space-x-2 border-r border-apple-border pr-6">
+                    <button onclick="prevProject()" id="prev-proj-btn" class="px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center shadow-sm" title="上一個同分類作品">
+                        <i class="fa-solid fa-chevron-left mr-1.5 text-[10px]"></i> <span id="prev-text">上一個</span>
+                    </button>
+                    <button onclick="nextProject()" id="next-proj-btn" class="px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition flex items-center shadow-sm" title="下一個同分類作品">
+                        <span id="next-text">下一個</span> <i class="fa-solid fa-chevron-right ml-1.5 text-[10px]"></i>
+                    </button>
+                </div>
+
                 <a href="index.html#works" class="text-apple-gray hover:text-white transition flex items-center">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
+                    <i class="fa-solid fa-arrow-left mr-1.5"></i> <span id="back-text">返回作品列表</span>
                 </a>
                 <button onclick="switchProjectLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-full bg-apple-lightgray text-white border border-apple-border hover:bg-apple-border transition font-medium shadow-sm">
                     EN
@@ -165,6 +175,9 @@
         const langNames = { zh: 'EN', en: '日', ja: '繁' };
         let currentLangIndex = 0;
         let currentProjectData = null;
+        let allProjects = [];
+        let sameCategoryProjects = [];
+        let currentIndexInCat = 0;
         let galleryImages = [];
         let activeGalleryIndex = 0;
 
@@ -189,9 +202,9 @@
         }
 
         function loadProject() {
-            const projects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
+            allProjects = JSON.parse(localStorage.getItem('portfolio_projects')) || defaultProjects;
             const id = getProjectIdFromURL();
-            currentProjectData = projects.find(p => p.id === id) || projects[0];
+            currentProjectData = allProjects.find(p => p.id === id) || allProjects[0];
 
             const langParam = new URLSearchParams(window.location.search).get('lang');
             if (langParam && langs.includes(langParam)) {
@@ -204,7 +217,47 @@
             }
 
             document.getElementById('lang-btn').textContent = langNames[langs[currentLangIndex]];
+            
+            // 計算同分類下的所有專案
+            calcSameCategoryProjects();
             renderProjectContent();
+        }
+
+        function getNormalizedCategory(cat) {
+            if (typeof cat === 'object') return cat.zh || '';
+            let catStr = String(cat || '').trim();
+            if (catStr === 'Typeface 本地化' || catStr === 'Typeface' || catStr === '字體設計') return '字體設計';
+            if (catStr === '展覽與視覺企劃' || catStr === '展覽' || catStr === 'Exhibition') return '展覽';
+            if (catStr === 'Pop-up Store' || catStr === '快閃店') return '快閃店';
+            if (catStr === '實體包裝設計' || catStr === '包裝設計' || catStr === 'Packaging Design') return '包裝設計';
+            if (catStr === '周邊設計' || catStr === 'Merchandise') return '周邊設計';
+            return catStr || '其他';
+        }
+
+        function calcSameCategoryProjects() {
+            if (!currentProjectData) return;
+            const currentNormCat = getNormalizedCategory(currentProjectData.category);
+            
+            // 找出所有同分類的專案
+            sameCategoryProjects = allProjects.filter(p => getNormalizedCategory(p.category) === currentNormCat);
+            currentIndexInCat = sameCategoryProjects.findIndex(p => p.id === currentProjectData.id);
+            if (currentIndexInCat === -1) currentIndexInCat = 0;
+        }
+
+        function prevProject() {
+            if (sameCategoryProjects.length <= 1) return;
+            currentIndexInCat = (currentIndexInCat - 1 + sameCategoryProjects.length) % sameCategoryProjects.length;
+            const targetProj = sameCategoryProjects[currentIndexInCat];
+            const langKey = langs[currentLangIndex];
+            window.location.href = `project.html?id=${targetProj.id}&lang=${langKey}`;
+        }
+
+        function nextProject() {
+            if (sameCategoryProjects.length <= 1) return;
+            currentIndexInCat = (currentIndexInCat + 1) % sameCategoryProjects.length;
+            const targetProj = sameCategoryProjects[currentIndexInCat];
+            const langKey = langs[currentLangIndex];
+            window.location.href = `project.html?id=${targetProj.id}&lang=${langKey}`;
         }
 
         function renderProjectContent() {
@@ -218,20 +271,13 @@
             if (typeof rawCat === 'object') {
                 category = rawCat[langKey] || rawCat.zh;
             } else {
-                let catStr = String(rawCat || '').trim();
-                if (catStr === 'Typeface 本地化' || catStr === 'Typeface' || catStr === '字體設計') {
-                    category = langKey === 'en' ? 'Typeface' : (langKey === 'ja' ? 'タイポグラフィ' : '字體設計');
-                } else if (catStr === '展覽與視覺企劃' || catStr === '展覽' || catStr === 'Exhibition') {
-                    category = langKey === 'en' ? 'Exhibition' : (langKey === 'ja' ? '展覧会' : '展覽與視覺企劃');
-                } else if (catStr === 'Pop-up Store' || catStr === '快閃店') {
-                    category = langKey === 'en' ? 'Pop-up Store' : (langKey === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
-                } else if (catStr === '實體包裝設計' || catStr === '包裝設計' || catStr === 'Packaging Design') {
-                    category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
-                } else if (catStr === '周邊設計' || catStr === 'Merchandise') {
-                    category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
-                } else {
-                    category = catStr || (langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : '其他'));
-                }
+                let norm = getNormalizedCategory(rawCat);
+                if (norm === '字體設計') category = langKey === 'en' ? 'Typeface' : (langKey === 'ja' ? 'タイポグラフィ' : '字體設計');
+                else if (norm === '展覽') category = langKey === 'en' ? 'Exhibition' : (langKey === 'ja' ? '展覧会' : '展覽與視覺企劃');
+                else if (norm === '快閃店') category = langKey === 'en' ? 'Pop-up Store' : (langKey === 'ja' ? 'ポップアップストア' : 'Pop-up Store');
+                else if (norm === '包裝設計') category = langKey === 'en' ? 'Packaging Design' : (langKey === 'ja' ? 'パッケージ設計' : '實體包裝設計');
+                else if (norm === '周邊設計') category = langKey === 'en' ? 'Merchandise' : (langKey === 'ja' ? 'グッズ設計' : '周邊設計');
+                else category = langKey === 'en' ? 'Others' : (langKey === 'ja' ? 'その他' : '其他');
             }
 
             const description = typeof currentProjectData.description === 'object' ? (currentProjectData.description[langKey] || currentProjectData.description.zh) : currentProjectData.description;
@@ -299,6 +345,10 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                prevProject();
+            } else if (e.key === 'ArrowRight') {
+                nextProject();
             }
         });
 
