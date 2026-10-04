@@ -26,6 +26,7 @@
                     boxShadow: {
                         'hard': '2px 2px 0px 0px rgba(17,17,17,0.7)',
                         'hard-hover': '4px 4px 0px 0px rgba(17,17,17,0.85)',
+                        'btn': '3px 3px 0px 0px rgba(160,160,160,1)', /* 正方形按鈕陰影 */
                     }
                 }
             }
@@ -52,13 +53,6 @@
             border-bottom: 1px solid #E5E5E5;
         }
 
-        /* 輕量級雜誌卡片 */
-        .card-light { 
-            background: #ffffff; 
-            border: 1px solid #111;
-            box-shadow: 2px 2px 0px 0px rgba(17,17,17,0.7);
-        }
-
         /* 裝飾性裁切角標 (Crop Marks) */
         .crop-mark { position: absolute; width: 10px; height: 10px; border-color: #d1d5db; border-style: solid; pointer-events: none; }
         .crop-mark-tl { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
@@ -75,7 +69,7 @@
         .logo-invert { filter: invert(1) grayscale(1); }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white min-h-screen flex flex-col justify-between">
+<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white min-h-screen flex flex-col justify-between relative">
 
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
@@ -109,20 +103,21 @@
             <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent leading-tight"></h1>
         </div>
 
-        <!-- 主媒體容器 (極簡框線與角標) -->
+        <!-- 主媒體容器 (加入 Crop Marks 與大量 Margin/Padding) -->
         <div class="relative w-full mb-16">
             <div class="crop-mark crop-mark-tl"></div><div class="crop-mark crop-mark-tr"></div>
             <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
             
-            <div id="media-container" class="relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden">
+            <div id="media-container" class="relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden p-8 md:p-20">
                 <!-- 動態填入圖片或 YouTube iframe -->
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div class="lg:col-span-7 space-y-6">
-                <div class="bg-white border border-minimal-accent flex items-center justify-center aspect-[16/10] relative group shadow-hard">
-                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer p-1">
+                <!-- 細節圖庫容器 (加入大量 Margin/Padding) -->
+                <div class="bg-white border border-minimal-accent flex items-center justify-center aspect-[16/10] relative group shadow-hard p-6 md:p-12">
+                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer">
                     
                     <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium border border-minimal-accent opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
@@ -150,6 +145,13 @@
             <i class="fa-solid fa-xmark text-sm"></i>
         </button>
         <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain border border-minimal-accent shadow-hard" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- 固定右下角的回頂部按鈕 -->
+    <div class="fixed bottom-8 right-8 z-40 flex flex-col items-center justify-end">
+        <button id="back-to-top" onclick="scrollToTop()" class="w-11 h-11 bg-white border border-[#dddddd] text-minimal-accent flex items-center justify-center transition-all duration-500 shadow-btn hover:bg-[#f8f8f8] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] opacity-0 pointer-events-none mt-auto">
+            <span class="text-xl font-light leading-none mb-0.5">&uarr;</span>
+        </button>
     </div>
 
     <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-[#F5F5F5] mt-12 font-medium tracking-widest">
@@ -220,10 +222,14 @@
             const mediaContainer = document.getElementById('media-container'); const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
 
             if (ytEmbedUrl) {
-                mediaContainer.innerHTML = `<div class="w-full aspect-video bg-[#111]"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+                // 如果是影片，調整 Container 的內距
+                mediaContainer.className = "relative z-10 w-full bg-white border border-minimal-accent shadow-hard flex items-center justify-center p-4 md:p-8";
+                mediaContainer.innerHTML = `<div class="w-full aspect-video bg-[#111] shadow-hard"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
             } else {
+                // 圖片加入極大內距 (Padding) 以重現手稿感
+                mediaContainer.className = "relative z-10 w-full bg-white border border-minimal-accent shadow-hard transition duration-300 flex items-center justify-center overflow-hidden p-8 md:p-20";
                 mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[70vh] w-auto object-contain cursor-pointer transition hover:opacity-90">
+                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[65vh] w-auto object-contain cursor-pointer transition hover:scale-[1.02]">
                     <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
                         <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
                     </div>
@@ -250,11 +256,24 @@
         function openLightbox(imgSrc) { if (!imgSrc) return; document.getElementById('lightbox-img').src = imgSrc; document.getElementById('lightbox-modal').classList.add('active'); }
         function closeLightbox() { document.getElementById('lightbox-modal').classList.remove('active'); }
 
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                btn.classList.remove('opacity-0', 'pointer-events-none');
+                btn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                btn.classList.add('opacity-0', 'pointer-events-none');
+                btn.classList.remove('opacity-100', 'pointer-events-auto');
+            }
+        });
+
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); else if (e.key === 'ArrowLeft') prevProject(); else if (e.key === 'ArrowRight') nextProject(); });
 
         function switchProjectLanguage() { currentLangIndex = (currentLangIndex + 1) % langs.length; const langKey = langs[currentLangIndex]; document.getElementById('lang-btn').textContent = langNames[langKey]; localStorage.setItem('portfolio_lang', langKey); renderProjectContent(); }
 
-        window.addEventListener('DOMContentLoaded', () => { loadProject(); });
+        window.addEventListener('DOMContentLoaded', () => { loadProject(); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.15 }); document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); });
     </script>
 </body>
 </html>
