@@ -26,7 +26,7 @@
                     boxShadow: {
                         'hard': '2px 2px 0px 0px rgba(17,17,17,0.7)',
                         'hard-hover': '4px 4px 0px 0px rgba(17,17,17,0.85)',
-                        'btn': '3px 3px 0px 0px rgba(160,160,160,1)', /* 正方形按鈕陰影 */
+                        'btn': '3px 3px 0px 0px rgba(160,160,160,1)',
                     }
                 }
             }
@@ -66,7 +66,7 @@
         #lightbox-modal { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #lightbox-modal.active { opacity: 1; pointer-events: auto; }
         
-        .logo-invert { filter: invert(1) grayscale(1); }
+        .logo-invert { filter: none !important; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-minimal-accent selection:text-white min-h-screen flex flex-col justify-between relative">
@@ -74,7 +74,7 @@
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
             <a href="index.html" class="group flex items-center">
-                <img src="logo.png" alt="Johnson Yau Logo" class="logo-invert h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+                <img src="logo.png" alt="Johnson Yau Logo" style="filter: brightness(0);" class="h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
 
             <div class="flex items-center space-x-6 font-medium">
@@ -98,7 +98,7 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
-<!-- 主媒體容器 (已移除黑色外框及陰影) -->
+        <!-- 主媒體容器 (已移除黑色外框及陰影) -->
         <div class="relative w-full mb-16">
             <div id="media-container" class="relative z-10 w-full bg-transparent transition duration-300 flex items-center justify-center overflow-hidden p-4 md:p-12">
                 <!-- 動態填入圖片或 YouTube iframe -->
@@ -106,36 +106,33 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <!-- 左邊：細節圖庫容器 (無粗黑框與陰影) -->
             <div class="lg:col-span-7 space-y-6">
-                <!-- 細節圖庫容器 (加入大量 Margin/Padding) -->
-                <div class="bg-white border border-minimal-accent flex items-center justify-center aspect-[16/10] relative group shadow-hard p-6 md:p-12">
+                <div class="bg-transparent flex items-center justify-center aspect-[16/10] relative group p-4 md:p-8">
                     <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer">
                     
-                    <div class="absolute bottom-6 right-6 px-4 py-2 bg-minimal-accent text-white text-[11px] font-medium border border-minimal-accent opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
+                    <div class="absolute bottom-4 right-4 px-3 py-1.5 bg-minimal-accent text-white text-[11px] font-medium opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
                         <i class="fa-solid fa-expand mr-1"></i> 點擊放大
                     </div>
 
-                    <button onclick="prevGalleryImage(event)" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
+                    <button onclick="prevGalleryImage(event)" class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white text-minimal-accent border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextGalleryImage(event)" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white text-minimal-accent border border-minimal-accent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
+                    <button onclick="nextGalleryImage(event)" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white text-minimal-accent border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
-                <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-4"></div>
+                <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
             </div>
-<div class="lg:col-span-5 space-y-6 pt-2">
-                <!-- 移至此處：分類標籤與大標題 -->
+
+            <!-- 右邊：分類標籤、大標題與詳細描述 (唯一乾淨版本) -->
+            <div class="lg:col-span-5 space-y-6 pt-2">
                 <div>
                     <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-3 px-3 py-1 bg-white border border-minimal-border shadow-hard"></span>
                     <h1 id="project-title" class="text-2xl md:text-3xl font-bold tracking-tight text-minimal-accent leading-snug"></h1>
                 </div>
 
                 <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">DESIGN CONCEPT & CASE STUDY</h3>
-                <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
-            </div>
-            <div class="lg:col-span-5 space-y-6 pt-2">
-                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">Design Concept & Case Study</h3>
                 <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
             </div>
         </div>
@@ -145,7 +142,7 @@
         <button onclick="closeLightbox()" class="absolute top-6 right-6 text-minimal-accent w-12 h-12 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white z-10">
             <i class="fa-solid fa-xmark text-sm"></i>
         </button>
-<img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain" onclick="event.stopPropagation()">
     </div>
 
     <!-- 固定右下角的回頂部按鈕 -->
@@ -222,12 +219,10 @@
 
             const mediaContainer = document.getElementById('media-container'); const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
 
-           if (ytEmbedUrl) {
-                // 如果是影片
+            if (ytEmbedUrl) {
                 mediaContainer.className = "relative z-10 w-full flex items-center justify-center p-4 md:p-8";
                 mediaContainer.innerHTML = `<div class="w-full aspect-video bg-[#111] shadow-hard"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
             } else {
-                // 圖片純粹大圖展示，移除黑色實線外框與白底框
                 mediaContainer.className = "relative z-10 w-full transition duration-300 flex items-center justify-center overflow-hidden py-6";
                 mediaContainer.innerHTML = `
                     <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[70vh] w-auto object-contain cursor-pointer transition hover:scale-[1.01]">
