@@ -194,9 +194,9 @@
             </div>
             <div id="filter-buttons" class="flex flex-wrap gap-2 mt-6 md:mt-0 text-xs">
                 <button onclick="filterProjects('all', this)" class="filter-btn active px-5 py-2.5 rounded-full bg-white text-black transition font-medium shadow-md" id="btn-all">全部專案</button>
-                <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">Typeface</button>
+                <button onclick="filterProjects('Typeface 本地化', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-type">字體設計</button>
                 <button onclick="filterProjects('展覽與視覺企劃', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-exhibition">展覽</button>
-                <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">Pop-up</button>
+                <button onclick="filterProjects('Pop-up Store', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-popup">快閃店</button>
                 <button onclick="filterProjects('實體包裝設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-pkg">包裝設計</button>
                 <button onclick="filterProjects('周邊設計', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-merch">周邊設計</button>
                 <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 rounded-full bg-apple-lightgray text-apple-gray hover:text-white transition font-medium border border-apple-border" id="btn-other">其他</button>
@@ -284,9 +284,9 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex flex-wrap gap-1.5 text-xs" id="admin-proj-filter-btns">
                         <button onclick="filterAdminProjects('all', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-white text-black font-medium transition">全部</button>
-                        <button onclick="filterAdminProjects('Typeface 本地化', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Typeface</button>
+                        <button onclick="filterAdminProjects('Typeface 本地化', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">字體設計</button>
                         <button onclick="filterAdminProjects('展覽與視覺企劃', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">展覽</button>
-                        <button onclick="filterAdminProjects('Pop-up Store', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">Pop-up</button>
+                        <button onclick="filterAdminProjects('Pop-up Store', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">快閃店</button>
                         <button onclick="filterAdminProjects('實體包裝設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">包裝設計</button>
                         <button onclick="filterAdminProjects('周邊設計', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">周邊設計</button>
                         <button onclick="filterAdminProjects('其他', this)" class="admin-filter-btn px-3 py-1.5 rounded-lg bg-apple-lightgray text-apple-gray hover:text-white border border-apple-border transition">其他</button>
@@ -462,7 +462,7 @@
                 worksHeading: "實戰專案分類", transHeading: "日文字幕 > 繁體中文字幕電影翻譯紀錄",
                 transSub: "精準還原語境、文化脈絡與情感細節之影視在地化作品。",
                 aboutTitle: "專業背景與聯絡方式",
-                filterAll: "全部專案", filterType: "Typeface", filterExhibition: "展覽", filterPopup: "Pop-up", filterPkg: "包裝設計", filterMerch: "周邊設計", filterOther: "其他"
+                filterAll: "全部專案", filterType: "字體設計", filterExhibition: "展覽", filterPopup: "Pop-up Store", filterPkg: "包裝設計", filterMerch: "周邊設計", filterOther: "其他"
             },
             en: {
                 navWorks: "Projects", navTrans: "Translation", navAbout: "About",
@@ -473,7 +473,7 @@
                 worksHeading: "Featured Projects", transHeading: "Japanese to Chinese Film Translation Archive",
                 transSub: "Cinematic localization accurately restoring context and emotional subtleties.",
                 aboutTitle: "Professional Background & Contact",
-                filterAll: "All Projects", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up", filterPkg: "Packaging", filterMerch: "Merchandise", filterOther: "Others"
+                filterAll: "All Projects", filterType: "Typeface", filterExhibition: "Exhibition", filterPopup: "Pop-up Store", filterPkg: "Packaging", filterMerch: "Merchandise", filterOther: "Others"
             },
             ja: {
                 navWorks: "プロジェクト", navTrans: "翻訳実績", navAbout: "プロフィール",
@@ -484,7 +484,7 @@
                 worksHeading: "実績プロジェクト", transHeading: "日本語字幕・映画翻訳実績",
                 transSub: "文脈や文化的背景、感情の機微を忠実に再現したローカライズ作品。",
                 aboutTitle: "専門的な背景と連絡先",
-                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップ", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterOther: "その他"
+                filterAll: "すべてのプロジェクト", filterType: "タイポグラフィ", filterExhibition: "展覧会", filterPopup: "ポップアップストア", filterPkg: "パッケージ", filterMerch: "グッズ設計", filterOther: "その他"
             }
         };
 
@@ -498,7 +498,7 @@
             { 
                 id: '1', 
                 title: { zh: '數碼暴龍 Last Evolution 絆 - 字體在地化', en: 'Digimon Adventure Last Evolution Kizuna - Typeface Localization', ja: 'デジモンアドベンチャー LAST EVOLUTION 絆 - タイポグラフィローカライズ' }, 
-                category: { zh: 'Typeface 本地化', en: 'Typeface Localization', ja: 'タイポグラフィ' }, 
+                category: { zh: '字體設計', en: 'Typeface', ja: 'タイポグラフィ' }, 
                 image: 'image/Digimon/Digimon Adventure Last Evolution Kizuna_Typeface-01.png', 
                 gallery: '', 
                 description: { 
