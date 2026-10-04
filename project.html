@@ -50,19 +50,24 @@
         </div>
     </header>
 
-    <!-- Project Detail Section (左右分欄排版) -->
+    <!-- Project Detail Section -->
     <main class="max-w-7xl mx-auto px-6 py-24">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 左側：主圖與圖片小字說明 (Col 6) -->
+            <!-- 左側：主圖 (改用 object-contain 防止裁剪，點擊可放大) -->
             <div class="lg:col-span-6 space-y-4 sticky top-28">
-                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black border border-apple-border shadow-2xl">
-                    <img id="p-image" src="" alt="Main Image" class="w-full h-full object-cover">
+                <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black/80 border border-apple-border shadow-2xl relative flex items-center justify-center p-3 cursor-pointer group" onclick="openLightbox(document.getElementById('p-image').src)">
+                    <img id="p-image" src="" alt="Main Image" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
+                        <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大檢視
+                        </span>
+                    </div>
                 </div>
-                <p class="text-xs text-apple-gray px-2">實戰專案主視覺呈現，完美對應日本官方授權與在地化設計規範。</p>
+                <p class="text-xs text-apple-gray px-2">實戰專案主視覺呈現，點擊圖片可放大檢視完整比例。</p>
             </div>
 
-            <!-- 右側：大標題與長篇設計理念 Case Study (Col 6) -->
+            <!-- 右側：大標題與長篇設計理念 Case Study -->
             <div class="lg:col-span-6 space-y-6">
                 <div>
                     <span id="p-category" class="text-xs font-semibold tracking-widest uppercase text-apple-accent mb-3 block"></span>
@@ -85,12 +90,23 @@
 
         </div>
 
-        <!-- 底部：更多細節與視覺展示圖庫 -->
+        <!-- 底部：更多細節與視覺展示圖庫 (同樣支援點擊放大，不被裁剪) -->
         <div id="gallery-container" class="mt-28 border-t border-apple-border/50 pt-16 hidden">
             <h2 class="text-xs uppercase tracking-wider text-apple-gray font-semibold mb-8 text-center">更多專案細節與視覺展示</h2>
             <div id="p-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
     </main>
+
+    <!-- 燈箱放大 Modal (Lightbox) -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-apple-gray hover:text-white w-9 h-9 rounded-full bg-apple-lightgray flex items-center justify-center transition border border-apple-border shadow-lg">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Zoomed Image" class="max-h-[80vh] w-auto object-contain rounded-2xl shadow-2xl border border-apple-border">
+            <p class="text-xs text-apple-gray mt-4">點擊任意空白處或按 Esc 鍵即可關閉放大檢視</p>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="py-16 text-center text-xs text-apple-gray border-t border-apple-border/50">
@@ -146,11 +162,37 @@
             document.getElementById('gallery-container').classList.remove('hidden');
             const galleryUrls = project.gallery.split(',').map(u => u.trim()).filter(u => u.length > 0);
             document.getElementById('p-gallery').innerHTML = galleryUrls.map(gUrl => `
-                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black border border-apple-border shadow-lg">
-                    <img src="${gUrl}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                <div class="overflow-hidden aspect-[16/10] rounded-2xl bg-black/80 border border-apple-border shadow-lg relative flex items-center justify-center p-2 cursor-pointer group" onclick="openLightbox('${gUrl}')">
+                    <img src="${gUrl}" class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center rounded-2xl pointer-events-none">
+                        <span class="px-3.5 py-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium border border-white/30 flex items-center shadow-xl">
+                            <i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i> 點擊放大
+                        </span>
+                    </div>
                 </div>
             `).join('');
         }
+
+        // Lightbox 燈箱控制函數
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // 支援 Esc 鍵關閉燈箱
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
     </script>
 </body>
 </html>
