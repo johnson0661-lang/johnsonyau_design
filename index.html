@@ -39,7 +39,62 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-        /* 開場動畫遮罩與 Logo 特效 (延長優雅版) */
+        /* --- 1. Loading 終止淡出樣式（徹底修復 1 秒回閃） --- */
+        #intro-overlay.fade-out {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease !important;
+        }
+
+        /* --- 2. 頂部 2px 極簡滾動進度條 --- */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: #111111;
+            z-index: 100;
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+
+        /* --- 3. 電影翻譯：懸浮海報預覽卡 (Desktop) --- */
+        .movie-hover-preview {
+            position: fixed;
+            pointer-events: none;
+            z-index: 50;
+            width: 190px;
+            height: 275px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.16);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.92);
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            background-size: cover;
+            background-position: center;
+            background-color: #f3f3f3;
+            border: 1px solid rgba(17, 17, 17, 0.1);
+        }
+        .movie-hover-preview.is-visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* --- 4. 滾動淡入動畫優化 --- */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 開場動畫遮罩與 Logo 特效 */
         #intro-overlay {
             position: fixed;
             inset: 0;
@@ -51,12 +106,12 @@
             transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s;
         }
 
-       #intro-logo {
-        opacity: 0;
-        transform: scale(0.9);
-        animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        filter: brightness(0); /* 強制將白色圖檔轉成純黑色 */
-    }
+        #intro-logo {
+            opacity: 0;
+            transform: scale(0.9);
+            animation: introFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            filter: brightness(0);
+        }
 
         @keyframes introFade {
             0% { opacity: 0; transform: scale(0.9); }
@@ -65,25 +120,23 @@
             100% { opacity: 0; transform: scale(1.06); }
         }
 
-       /* 開場 Loading：呼吸閃爍 + 結尾與 Logo 同步淡出 */
-    .intro-loading-text {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
-        animation: introBreathe 2s infinite ease-in-out, introTextFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-        will-change: opacity, transform;
-    }
+        .intro-loading-text {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Arial", sans-serif;
+            animation: introBreathe 2s infinite ease-in-out, introTextFade 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            will-change: opacity, transform;
+        }
 
-    @keyframes introBreathe {
-        0%, 100% { opacity: 0.15; filter: blur(0.2px); }
-        50% { opacity: 1; filter: blur(0px); }
-    }
+        @keyframes introBreathe {
+            0%, 100% { opacity: 0.15; filter: blur(0.2px); }
+            50% { opacity: 1; filter: blur(0px); }
+        }
 
-    /* 與 Logo (introFade) 相同的 3.2s 生命週期淡出動畫 */
-    @keyframes introTextFade {
-        0% { opacity: 0; transform: scale(0.96); }
-        30% { opacity: 1; transform: scale(1); }
-        75% { opacity: 1; transform: scale(1.01); }
-        100% { opacity: 0; transform: scale(1.04); }
-    }
+        @keyframes introTextFade {
+            0% { opacity: 0; transform: scale(0.96); }
+            30% { opacity: 1; transform: scale(1); }
+            75% { opacity: 1; transform: scale(1.01); }
+            100% { opacity: 0; transform: scale(1.04); }
+        }
 
         body {
             background-color: #FAFAFA;
@@ -127,17 +180,6 @@
             text-orientation: mixed;
         }
 
-        .image-overlay { opacity: 0; background: rgba(250, 250, 250, 0.85); transition: opacity 0.3s ease; }
-        .spotlight-card:hover .image-overlay { opacity: 1; }
-        
-        .view-btn { transform: translateY(10px); opacity: 0; transition: all 0.3s ease; border: 1px solid #111; color: #111; font-weight: 500; background: transparent; }
-        .spotlight-card:hover .view-btn { transform: translateY(0); opacity: 1; background: #111; color: #FAFAFA; }
-
-        .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .reveal-up.active { opacity: 1; transform: translateY(0); }
-
-        .logo-invert { filter: none !important; }
-
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { background: #111; color: #FAFAFA; padding: 12px 24px; border: 1px solid #111; font-size: 13px; font-weight: 500; box-shadow: 2px 2px 0 0 rgba(0,0,0,0.2); animation: toastEnter 0.4s ease forwards; display: flex; align-items: center; gap: 8px; }
         .custom-toast.error-toast { background: #b91c1c; border-color: #991b1b; }
@@ -147,7 +189,11 @@
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-minimal-accent selection:text-white overflow-x-hidden relative">
-    <!-- 開場 Logo 遮罩 (含 Loading... 呼吸動畫) -->
+
+    <!-- 頂部 2px 滾動進度條 -->
+    <div id="scroll-progress"></div>
+
+    <!-- 開場 Logo 遮罩 (含 Loading... 動畫) -->
     <div id="intro-overlay">
         <div class="relative flex flex-col items-center">
             <div class="crop-mark crop-mark-tl"></div>
@@ -167,9 +213,9 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
-           <a href="index.html" class="group flex items-center z-10">
-    <img src="logo.png" alt="Johnson Yau Logo" class="h-8 w-auto object-contain transition duration-300" style="filter: brightness(0) !important;" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
-</a>
+            <a href="index.html" class="group flex items-center z-10">
+                <img src="logo.png" alt="Johnson Yau Logo" class="h-8 w-auto object-contain transition duration-300" style="filter: brightness(0) !important;" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            </a>
             <nav class="hidden md:flex items-center space-x-10 text-minimal-gray absolute left-1/2 -translate-x-1/2 font-medium tracking-widest">
                 <a href="index.html#works" class="nav-works hover:text-minimal-accent transition">精選專案</a>
                 <a href="index.html#translation" class="nav-trans hover:text-minimal-accent transition">電影翻譯紀錄</a>
@@ -238,24 +284,32 @@
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" onmouseenter="pauseAutoPlay()" onmouseleave="startAutoPlay()"></div>
     </section>
 
-    <!-- Translation Section -->
-    <section id="translation" class="max-w-7xl mx-auto px-6 py-32 reveal-up relative">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 border-b border-minimal-border pb-6">
+    <!-- 電影翻譯區塊（極簡雜誌清單風 + 懸浮海報預覽） -->
+    <section id="translation" class="max-w-6xl mx-auto px-6 py-28 reveal-up relative">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-minimal-border pb-6">
             <div>
-                <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Translation Works</h2>
-                <h3 id="trans-heading" class="text-3xl md:text-4xl font-bold tracking-tight text-minimal-accent">日文字幕 &gt; 繁體中文字幕電影翻譯</h3>
-                <p id="trans-sub" class="text-sm text-minimal-gray mt-3 font-normal">精準還原語境、文化脈絡與情感細節之影視在地化作品。</p>
+                <span class="text-[10px] font-mono text-minimal-gray tracking-widest uppercase block mb-1">02 // TRANSLATION ARCHIVE</span>
+                <h2 class="text-2xl font-bold tracking-tight text-minimal-accent">電影翻譯紀錄</h2>
             </div>
-            <div id="trans-pagination-controls" class="hidden items-center space-x-3 shrink-0 self-end md:self-auto">
-                <button onclick="prevTransPage()" class="w-10 h-10 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                </button>
-                <button onclick="nextTransPage()" class="w-10 h-10 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
-                    <i class="fa-solid fa-chevron-right text-sm"></i>
-                </button>
-            </div>
+            <p class="text-xs text-minimal-gray font-mono mt-4 md:mt-0">
+                日語院線字幕 · 日本動漫 IP 本地化
+            </p>
         </div>
-        <div id="translation-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12" onmouseenter="pauseTransAutoPlay()" onmouseleave="startTransAutoPlay()"></div>
+
+        <!-- 電腦端懸浮海報畫布（滑鼠指向時跟隨游標） -->
+        <div id="movie-preview" class="movie-hover-preview hidden md:block"></div>
+
+        <!-- 電影清單容器 -->
+        <div id="translation-list" class="divide-y divide-minimal-border border-y border-minimal-border">
+            <!-- 由 JavaScript 動態生成 -->
+        </div>
+
+        <!-- 分頁控制 -->
+        <div id="trans-pagination-controls" class="hidden justify-center items-center gap-4 mt-12 font-mono text-xs">
+            <button id="trans-prev-page" class="px-4 py-2 border border-minimal-border hover:border-minimal-accent transition-colors">PREV</button>
+            <span id="trans-page-indicator" class="text-minimal-gray">1 / 1</span>
+            <button id="trans-next-page" class="px-4 py-2 border border-minimal-border hover:border-minimal-accent transition-colors">NEXT</button>
+        </div>
     </section>
 
     <!-- About Section -->
@@ -296,12 +350,12 @@
     </div>
 
     <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-minimal-lightgray">
-        <p class="font-medium tracking-widest">&copy; 2026 JOHNSON YAU. </p>
+        <p class="font-medium tracking-widest cursor-pointer select-none" ondblclick="openPasswordModal()">&copy; 2026 JOHNSON YAU.</p>
     </footer>
 
     <!-- Password Prompt Modal -->
     <div id="password-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white border border-minimal-accent rounded-none max-w-sm w-full p-8 relative shadow-hard text-center modal-fade">
+        <div class="bg-white border border-minimal-accent rounded-none max-w-sm w-full p-8 relative shadow-hard text-center">
             <h3 class="text-lg font-bold text-minimal-accent mb-4 border-b border-minimal-border pb-2">系統登入</h3>
             <form onsubmit="verifyPassword(event)" class="space-y-4">
                 <input type="password" id="admin-password-input" placeholder="輸入密碼" required class="w-full px-4 py-3 bg-minimal-lightgray border border-minimal-border text-minimal-accent text-sm focus:border-minimal-accent outline-none text-center transition">
@@ -315,7 +369,7 @@
 
     <!-- Admin Modal -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white border border-minimal-accent rounded-none max-w-5xl w-full p-8 relative max-h-[95vh] overflow-y-auto shadow-hard modal-fade">
+        <div class="bg-white border border-minimal-accent rounded-none max-w-5xl w-full p-8 relative max-h-[95vh] overflow-y-auto shadow-hard">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-minimal-border pb-4 gap-4 pr-12">
                 <h3 class="text-xl font-bold text-minimal-accent flex items-center"><i class="fa-solid fa-cloud text-minimal-gray mr-3"></i> 雲端管理中心</h3>
                 <div class="flex flex-wrap gap-2 items-center font-medium tracking-wider">
@@ -403,7 +457,7 @@
 
     <!-- Edit Project Modal -->
     <div id="edit-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white border border-minimal-accent rounded-none max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-hard modal-fade text-minimal-accent">
+        <div class="bg-white border border-minimal-accent rounded-none max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-hard text-minimal-accent">
             <button onclick="closeEditModal()" class="absolute top-6 right-6 text-minimal-accent w-10 h-10 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white z-10">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
@@ -502,7 +556,7 @@
 
     <!-- Edit Translation Modal -->
     <div id="trans-edit-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white border border-minimal-accent rounded-none max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-hard modal-fade text-minimal-accent">
+        <div class="bg-white border border-minimal-accent rounded-none max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto shadow-hard text-minimal-accent">
             <button onclick="closeTransEditModal()" class="absolute top-6 right-6 text-minimal-accent w-10 h-10 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
@@ -549,924 +603,1008 @@
 
     <!-- Script Logic -->
     <script>
-        const firebaseConfig = { 
-            apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM", 
-            authDomain: "johnsonportfolio-1262d.firebaseapp.com", 
-            projectId: "johnsonportfolio-1262d", 
-            storageBucket: "johnsonportfolio-1262d.firebasestorage.app", 
-            messagingSenderId: "656225433263", 
-            appId: "1:656225433263:web:545e29b1b5ec71c737065a" 
+        // ==========================================
+        // 1. Firebase 初始化與管理員設定
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM",
+            authDomain: "johnsonportfolio-1262d.firebaseapp.com",
+            projectId: "johnsonportfolio-1262d",
+            storageBucket: "johnsonportfolio-1262d.firebasestorage.app",
+            messagingSenderId: "656225433263",
+            appId: "1:656225433263:web:545e29b1b5ec71c737065a"
         };
-        firebase.initializeApp(firebaseConfig); 
+        firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        
-        // 密碼與驗證狀態
+
         const ADMIN_PASSWORD = 'johnson2026';
         let isAdminAuthenticated = false;
-        
-        let projects = []; 
-        let translations = []; 
-        let aboutData = { 
-            zh: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。", 
-            en: "Focused on Japanese anime IP licensing promotions, typography localization, pop-up exhibitions, packaging design, and Japanese film subtitling.", 
-            ja: "日本のアニメ・マンガIPの宣伝資料、ロゴのローカライズ、ポップアップストアの展示企画、パッケージデザイン、および日本語字幕付き映画の翻訳に注力しています。" 
-        };
-        
-        const langs = ['zh', 'en', 'ja']; 
-        const langNames = { zh: 'EN', en: '日', ja: '繁' }; 
+
+        // 語系與翻譯文字
+        const langs = ['zh', 'en', 'ja'];
         let currentLangIndex = 0;
 
-        const translationsDict = {
+        const langMap = {
             zh: {
-                navWorks: '精選專案', navTrans: '電影翻譯紀錄', navAbout: '關於我',
-                heroTag: 'Multimedia Design & IP Localization',
-                heroTitle: '簡約日式美學<br><span class="text-minimal-gray">精準視覺敘事</span>',
-                heroDesc: '專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class="hidden md:inline">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。',
-                btnWorks: '探索作品', btnTrans: '電影翻譯紀錄',
-                worksHeading: '專案分類',
-                transHeading: '日文字幕 > 繁體中文字幕電影翻譯',
-                transSub: '精準還原語境、文化脈絡與情感細節之影視在地化作品。',
-                aboutTitle: '自我介紹・聯絡方式',
-                filterFeatured: '精選作品', filterType: '字體設計', filterExhibition: '展覽', filterPopup: '快閃店', filterPkg: '包裝設計', filterMerch: '周邊設計', filterVideo: '影片剪接', filterOther: '其他'
+                siteTitle: "Johnson Yau | 多媒體設計與創意作品集",
+                navWorks: "精選專案",
+                navTrans: "電影翻譯紀錄",
+                navAbout: "關於我",
+                heroTag: "Multimedia Design & IP Localization",
+                heroTitle: "簡約日式美學<br><span class=\"text-minimal-gray\">精準視覺敘事</span>",
+                heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class=\"hidden md:inline\">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
+                btnWorks: "探索作品",
+                btnTrans: "電影翻譯紀錄",
+                worksHeading: "專案分類",
+                aboutTitle: "自我介紹・聯絡方式",
+                btnFeatured: "精選作品"
             },
             en: {
-                navWorks: 'Selected Projects', navTrans: 'Movie Localization', navAbout: 'About Me',
-                heroTag: 'Multimedia Design & IP Localization',
-                heroTitle: 'Minimalist Aesthetics<br><span class="text-minimal-gray">Precise Visual Storytelling</span>',
-                heroDesc: 'Specialized in Japanese ACG IP promotional materials, Typography Localization,<br class="hidden md:inline">Pop-up store exhibition planning, packaging design, and Japanese movie subtitling.',
-                btnWorks: 'Explore Portfolio', btnTrans: 'Subtitling Works',
-                worksHeading: 'Project Categories',
-                transHeading: 'Japanese to Traditional Chinese Subtitle Localization',
-                transSub: 'High-fidelity cinematic localization capturing cultural context and nuanced emotions.',
-                aboutTitle: 'Background & Contact',
-                filterFeatured: 'Featured', filterType: 'Typography', filterExhibition: 'Exhibition', filterPopup: 'Pop-up Store', filterPkg: 'Packaging', filterMerch: 'Merchandise', filterVideo: 'Video Editing', filterOther: 'Others'
+                siteTitle: "Johnson Yau | Multimedia Design & Creative Portfolio",
+                navWorks: "Selected Works",
+                navTrans: "Film Subtitles",
+                navAbout: "About Me",
+                heroTag: "Multimedia Design & IP Localization",
+                heroTitle: "Minimal Aesthetics<br><span class=\"text-minimal-gray\">Visual Narrative</span>",
+                heroDesc: "Specializing in Japanese anime IP promotion, typeface localization,<br class=\"hidden md:inline\">pop-up store exhibitions, packaging, and Japanese film subtitling.",
+                btnWorks: "Explore Works",
+                btnTrans: "Film Subtitles",
+                worksHeading: "Project Categories",
+                aboutTitle: "About Me & Contact",
+                btnFeatured: "Featured Works"
             },
             ja: {
-                navWorks: '実績紹介', navTrans: '映画字幕翻訳', navAbout: '自己紹介',
-                heroTag: 'Multimedia Design & IP Localization',
-                heroTitle: 'ミニマルな和の美学<br><span class="text-minimal-gray">繊細な視覚的表現</span>',
-                heroDesc: '日本アニメ・IP公式宣伝デザイン、フォントローカライズ、<br class="hidden md:inline">ポップアップストア企画、パッケージデザイン、映画字幕翻訳に注力しています。',
-                btnWorks: '実績を見る', btnTrans: '字幕翻訳実績',
-                worksHeading: 'プロジェクト分類',
-                transHeading: '日本語 ＞ 繁体字中国語 映画字幕翻訳',
-                transSub: '文脈、文化的背景、感情の細部を正確に再現した映像作品のローカライズ。',
-                aboutTitle: '自己紹介・お問い合わせ',
-                filterFeatured: '注目作品', filterType: 'フォント設計', filterExhibition: '展示会', filterPopup: 'ポップアップストア', filterPkg: 'パッケージ', filterMerch: 'グッズ', filterVideo: '動画編集', filterOther: 'その他'
+                siteTitle: "Johnson Yau | マルチメディアデザイン・制作実績",
+                navWorks: "プロジェクト",
+                navTrans: "映画字幕翻訳",
+                navAbout: "自己紹介",
+                heroTag: "Multimedia Design & IP Localization",
+                heroTitle: "ミニマルな日本美学<br><span class=\"text-minimal-gray\">視覚的な物語性</span>",
+                heroDesc: "日本アニメ・マンガIPのプロモーション、フォントローカライズ、<br class=\"hidden md:inline\">ポップアップ展示企画、パッケージデザイン、日本語字幕翻訳に注力。",
+                btnWorks: "作品を見る",
+                btnTrans: "字幕翻訳実績",
+                worksHeading: "カテゴリー",
+                aboutTitle: "自己紹介・お問い合わせ",
+                btnFeatured: "注目作品"
             }
         };
 
-        const categoryMap = {
-            '字體設計': { en: 'Typography', ja: 'フォント設計' },
-            '展覽': { en: 'Exhibition', ja: '展示会' },
-            '快閃店': { en: 'Pop-up Store', ja: 'ポップアップストア' },
-            '包裝設計': { en: 'Packaging', ja: 'パッケージ' },
-            '周邊設計': { en: 'Merchandise', ja: 'グッズ' },
-            '影片剪接': { en: 'Video Editing', ja: '動画編集' },
-            '其他': { en: 'Others', ja: 'その他' }
+        let aboutData = {
+            zh: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
+            en: "Focused on Japanese anime IP licensing promotions, typography localization, pop-up exhibitions, packaging design, and Japanese subtitle translation.",
+            ja: "日本のアニメ・マンガIPの宣伝資料、ロゴのローカライズ、ポップアップストアの展示企画、パッケージデザイン、および日本語字幕付き映画の翻訳に注力しています。"
         };
 
-        function onCategorySelectChange() {
-            const el = document.getElementById('edit-cat-zh');
-            if (!el) return;
-            const zhVal = el.value;
-            const mapped = categoryMap[zhVal] || { en: 'Others', ja: 'その他' };
-            const enInput = document.getElementById('edit-cat-en');
-            const jaInput = document.getElementById('edit-cat-ja');
-            if (enInput) enInput.value = mapped.en;
-            if (jaInput) jaInput.value = mapped.ja;
+        function getLocalized(val) {
+            if (!val) return '';
+            if (typeof val === 'object') {
+                const langKey = langs[currentLangIndex] || 'zh';
+                return val[langKey] || val.zh || val.en || Object.values(val)[0] || '';
+            }
+            return val;
         }
 
-        function previewAdminImage(inputId, imgId, iconId) {
-            const input = document.getElementById(inputId);
-            const img = document.getElementById(imgId);
-            const icon = iconId ? document.getElementById(iconId) : null;
-            if (!input || !img) return;
+        // ==========================================
+        // 2. 作品集與電影翻譯狀態
+        // ==========================================
+        let projects = [];
+        let currentFilter = 'featured';
+        let currentPageIndex = 0;
+        const itemsPerPage = 8;
 
-            const val = input.value ? input.value.trim() : '';
-            if (val && val !== 'image/' && val !== '') {
-                img.src = val;
-                img.classList.remove('hidden');
-                if (icon) icon.classList.add('hidden');
-            } else {
-                img.classList.add('hidden');
-                if (icon) icon.classList.remove('hidden');
+        let translations = [];
+        let transPageIndex = 0;
+        const transItemsPerPage = 12;
+
+        let adminProjPageIndex = 0;
+        const adminProjItemsPerPage = 6;
+        let adminCurrentFilter = 'all';
+
+        let adminTransPageIndex = 0;
+        const adminTransItemsPerPage = 6;
+
+        // 離線保底翻譯清單
+        const fallbackTranslations = [
+            { title: { zh: "假面騎士 555 20th PARADISE REGAINED", en: "Masked Rider 555 20th PARADISE REGAINED", ja: "仮面ライダー555 20th パラダイス・リゲインド" }, year: "2024", type: "日文字幕 ➔ 繁體中文", image: "https://johnson0661-lang.github.io/johnsonyau_design/assets/images/movies/faiz.jpg" },
+            { title: { zh: "假面騎士 THE WINTER MOVIE 歌查德與極狐", en: "Kamen Rider The Winter Movie Gotchard & Geats", ja: "仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "少女與戰車 最終章 第4話", en: "Girls und Panzer das Finale: Part 4", ja: "ガールズ＆パンツァー 最終章 第4話" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "新・假面騎士", en: "Shin Masked Rider", ja: "シン・仮面ライダー" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "假面騎士 Geats × Revice Battle Royale", en: "Kamen Rider Geats × Revice Battle Royale", ja: "仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "電影 五等分的新娘", en: "The Quintessential Quintuplets Movie", ja: "映画 五等分の花嫁" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "來自深淵 深沉靈魂的黎明", en: "Made in Abyss: Dawn of the Deep Soul", ja: "劇場版メイドインアビス 深き魂の黎明" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "數碼暴龍 Last Evolution 絆", en: "Digimon Adventure: Last Evolution Kizuna", ja: "デジモンアドベンチャー LAST EVOLUTION 絆" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "為美好的世界獻上祝福！紅傳說", en: "KonoSuba: Legend of Crimson", ja: "この素晴らしい世界に祝福を！紅伝説" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "Fate/stay night [Heaven's Feel] II. lost butterfly", en: "Fate/stay night [Heaven's Feel] II", ja: "劇場版 Fate/stay night [Heaven's Feel] II" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" }
+        ];
+
+        // ==========================================
+        // 3. Loading 動畫控制（徹底修復 1 秒回閃）
+        // ==========================================
+        function initLoader() {
+            const overlay = document.getElementById('intro-overlay');
+            if (!overlay) return;
+
+            setTimeout(() => {
+                overlay.classList.add('fade-out');
+                overlay.addEventListener('transitionend', () => {
+                    overlay.remove();
+                }, { once: true });
+
+                setTimeout(() => {
+                    if (document.getElementById('intro-overlay')) {
+                        overlay.remove();
+                    }
+                }, 900);
+            }, 2200);
+        }
+
+        // ==========================================
+        // 4. 滾動效果、進度條與回到頂部
+        // ==========================================
+        function initScrollEffects() {
+            window.addEventListener('scroll', () => {
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                if (totalHeight > 0) {
+                    const progress = (window.scrollY / totalHeight) * 100;
+                    const bar = document.getElementById('scroll-progress');
+                    if (bar) bar.style.width = `${progress}%`;
+                }
+
+                const scrollY = window.scrollY;
+                const backToTop = document.getElementById('back-to-top');
+                const indicator = document.getElementById('scroll-indicator');
+                if (scrollY > 280) {
+                    if (backToTop) {
+                        backToTop.classList.remove('opacity-0', 'pointer-events-none');
+                        backToTop.classList.add('opacity-100', 'pointer-events-auto');
+                    }
+                    if (indicator) {
+                        indicator.classList.remove('opacity-60');
+                        indicator.classList.add('opacity-0');
+                    }
+                } else {
+                    if (backToTop) {
+                        backToTop.classList.add('opacity-0', 'pointer-events-none');
+                        backToTop.classList.remove('opacity-100', 'pointer-events-auto');
+                    }
+                    if (indicator) {
+                        indicator.classList.add('opacity-60');
+                        indicator.classList.remove('opacity-0');
+                    }
+                }
+            });
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.05,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // 5. 語言切換
+        // ==========================================
+        function switchLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            const langKey = langs[currentLangIndex];
+            const nextLang = langs[(currentLangIndex + 1) % langs.length].toUpperCase();
+
+            const langBtn = document.getElementById('lang-btn');
+            if (langBtn) langBtn.textContent = nextLang;
+
+            const t = langMap[langKey] || langMap.zh;
+            document.title = t.siteTitle;
+            document.querySelectorAll('.nav-works').forEach(el => el.textContent = t.navWorks);
+            document.querySelectorAll('.nav-trans').forEach(el => el.textContent = t.navTrans);
+            document.querySelectorAll('.nav-about').forEach(el => el.textContent = t.navAbout);
+
+            const heroTag = document.querySelector('.hero-tag');
+            if (heroTag) heroTag.textContent = t.heroTag;
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) heroTitle.innerHTML = t.heroTitle;
+            const heroDesc = document.querySelector('.hero-desc');
+            if (heroDesc) heroDesc.innerHTML = t.heroDesc;
+            const btnWorks = document.querySelector('.btn-works');
+            if (btnWorks) btnWorks.textContent = t.btnWorks;
+            const btnTrans = document.querySelector('.btn-trans');
+            if (btnTrans) btnTrans.textContent = t.btnTrans;
+            const worksHeading = document.getElementById('works-heading');
+            if (worksHeading) worksHeading.textContent = t.worksHeading;
+            const aboutTitle = document.getElementById('about-title');
+            if (aboutTitle) aboutTitle.textContent = t.aboutTitle;
+            const btnFeatured = document.getElementById('btn-featured');
+            if (btnFeatured) btnFeatured.textContent = t.btnFeatured;
+
+            renderProjects();
+            renderTranslations();
+            renderAbout();
+        }
+
+        function renderAbout() {
+            const descEl = document.getElementById('about-desc');
+            if (!descEl) return;
+            const langKey = langs[currentLangIndex] || 'zh';
+            const text = aboutData[langKey] || aboutData.zh || '';
+            descEl.innerHTML = text.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('') || `<p>${text}</p>`;
+
+            const zhInput = document.getElementById('about-zh');
+            const enInput = document.getElementById('about-en');
+            const jaInput = document.getElementById('about-ja');
+            if (zhInput && !zhInput.value) zhInput.value = aboutData.zh || '';
+            if (enInput && !enInput.value) enInput.value = aboutData.en || '';
+            if (jaInput && !jaInput.value) jaInput.value = aboutData.ja || '';
+        }
+
+        // ==========================================
+        // 6. 電影翻譯：清單排版與懸浮海報預覽
+        // ==========================================
+        function renderTranslations() {
+            const container = document.getElementById('translation-list');
+            const preview = document.getElementById('movie-preview');
+            const transControls = document.getElementById('trans-pagination-controls');
+            if (!container) return;
+
+            const data = (translations && translations.length > 0) ? translations : fallbackTranslations;
+            const totalPages = Math.ceil(data.length / transItemsPerPage) || 1;
+
+            if (transPageIndex >= totalPages) transPageIndex = 0;
+            if (transPageIndex < 0) transPageIndex = totalPages - 1;
+
+            if (transControls) {
+                if (data.length > transItemsPerPage) {
+                    transControls.classList.remove('hidden');
+                    transControls.classList.add('flex');
+                    const indicator = document.getElementById('trans-page-indicator');
+                    if (indicator) indicator.textContent = `${transPageIndex + 1} / ${totalPages}`;
+                } else {
+                    transControls.classList.add('hidden');
+                    transControls.classList.remove('flex');
+                }
+            }
+
+            const startIdx = transPageIndex * transItemsPerPage;
+            const pageItems = data.slice(startIdx, startIdx + transItemsPerPage);
+
+            container.innerHTML = pageItems.map(item => {
+                const title = getLocalized(item.title);
+                const poster = item.image || 'https://via.placeholder.com/400x600?text=' + encodeURIComponent(title);
+                const typeText = item.type || '日文字幕 ➔ 繁體中文';
+                const yearText = item.year || '—';
+
+                return `
+                    <div class="movie-item group py-4 px-3 flex flex-col md:flex-row md:items-center justify-between cursor-pointer hover:bg-black/5 transition-colors relative"
+                         data-poster="${poster}">
+                        <div class="flex items-start md:items-center gap-4">
+                            <span class="text-xs font-mono text-minimal-gray w-12">${yearText}</span>
+                            <div>
+                                <h4 class="text-sm md:text-base font-semibold text-minimal-accent group-hover:translate-x-1 transition-transform">
+                                    ${title}
+                                </h4>
+                                <p class="text-xs text-minimal-gray font-light mt-0.5 md:hidden">
+                                    ${typeText}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="hidden md:flex items-center gap-6">
+                            <span class="text-xs font-mono text-minimal-gray">${typeText}</span>
+                            <span class="text-xs text-minimal-accent opacity-0 group-hover:opacity-100 transition-opacity font-mono">VIEW ↗</span>
+                        </div>
+
+                        <div class="mt-3 md:hidden flex items-center gap-3">
+                            <img src="${poster}" class="w-12 h-16 object-cover rounded border border-minimal-border shadow-sm" alt="${title}" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (preview) {
+                container.querySelectorAll('.movie-item').forEach(row => {
+                    row.addEventListener('mouseenter', () => {
+                        const posterUrl = row.getAttribute('data-poster');
+                        if (posterUrl) {
+                            preview.style.backgroundImage = `url('${posterUrl}')`;
+                            preview.classList.add('is-visible');
+                        }
+                    });
+
+                    row.addEventListener('mousemove', (e) => {
+                        preview.style.left = `${e.clientX + 130}px`;
+                        preview.style.top = `${e.clientY}px`;
+                    });
+
+                    row.addEventListener('mouseleave', () => {
+                        preview.classList.remove('is-visible');
+                    });
+                });
             }
         }
 
-        function showToast(message, type = 'info') {
+        // ==========================================
+        // 7. 作品集渲染、分類篩選與分頁
+        // ==========================================
+        function filterProjects(category, btn) {
+            currentFilter = category;
+            currentPageIndex = 0;
+            document.querySelectorAll('#filter-buttons .filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-minimal-accent', 'text-white');
+                b.classList.add('bg-white', 'text-minimal-gray');
+            });
+            if (btn) {
+                btn.classList.add('active', 'bg-minimal-accent', 'text-white');
+                btn.classList.remove('bg-white', 'text-minimal-gray');
+            }
+            renderProjects();
+        }
+
+        function getFilteredProjects() {
+            if (!projects || projects.length === 0) return [];
+            if (currentFilter === 'all') return projects;
+            if (currentFilter === 'featured') {
+                const featured = projects.filter(p => p.featured === true || p.isFeatured === true);
+                return featured.length > 0 ? featured : projects;
+            }
+            return projects.filter(p => {
+                const catZh = typeof p.category === 'object' ? (p.category.zh || '') : (p.category || '');
+                const catEn = typeof p.category === 'object' ? (p.category.en || '') : '';
+                const catJa = typeof p.category === 'object' ? (p.category.ja || '') : '';
+                return catZh.includes(currentFilter) || catEn.toLowerCase().includes(currentFilter.toLowerCase()) || catJa.includes(currentFilter);
+            });
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('project-grid');
+            const paginationControls = document.getElementById('pagination-controls');
+            if (!grid) return;
+
+            const langKey = langs[currentLangIndex] || 'zh';
+            const filtered = getFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+
+            if (currentPageIndex >= totalPages) currentPageIndex = 0;
+            if (currentPageIndex < 0) currentPageIndex = totalPages - 1;
+
+            if (paginationControls) {
+                if (filtered.length > itemsPerPage) {
+                    paginationControls.classList.remove('hidden');
+                    paginationControls.classList.add('flex');
+                } else {
+                    paginationControls.classList.add('hidden');
+                    paginationControls.classList.remove('flex');
+                }
+            }
+
+            const startIdx = currentPageIndex * itemsPerPage;
+            const pageItems = filtered.slice(startIdx, startIdx + itemsPerPage);
+
+            grid.innerHTML = pageItems.map(p => {
+                const pTitle = getLocalized(p.title);
+                const pCat = getLocalized(p.category);
+
+                return `
+                    <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" 
+                         class="spotlight-card group cursor-pointer col-span-1 md:col-span-2 relative">
+                        <div class="crop-mark crop-mark-tl"></div>
+                        <div class="crop-mark crop-mark-tr"></div>
+                        <div class="crop-mark crop-mark-bl"></div>
+                        <div class="crop-mark crop-mark-br"></div>
+                        
+                        <div class="img-container aspect-[16/9] bg-white relative flex items-center justify-center overflow-hidden z-10">
+                            <img src="${p.coverImage || ''}" alt="${pTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="p-4 border-t border-minimal-border flex justify-between items-center bg-white z-10 relative">
+                            <h3 class="font-bold text-minimal-accent group-hover:translate-x-1 transition-transform">${pTitle}</h3>
+                            <span class="text-xs font-mono text-minimal-gray">${pCat}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function prevPage() {
+            const filtered = getFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            currentPageIndex = (currentPageIndex - 1 + totalPages) % totalPages;
+            renderProjects();
+        }
+
+        function nextPage() {
+            const filtered = getFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            currentPageIndex = (currentPageIndex + 1) % totalPages;
+            renderProjects();
+        }
+
+        function startAutoPlay() {}
+        function pauseAutoPlay() {}
+
+        // ==========================================
+        // 8. 雲端資料同步 (Firebase Firestore)
+        // ==========================================
+        async function fetchCloudData() {
+            try {
+                if (typeof db !== 'undefined') {
+                    const projSnap = await db.collection('projects').orderBy('order', 'asc').get();
+                    if (!projSnap.empty) {
+                        projects = projSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        renderProjects();
+                    }
+
+                    const transSnap = await db.collection('translations').orderBy('year', 'desc').get();
+                    if (!transSnap.empty) {
+                        translations = transSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        renderTranslations();
+                    } else {
+                        renderTranslations();
+                    }
+
+                    const aboutSnap = await db.collection('site').doc('about').get();
+                    if (aboutSnap.exists) {
+                        aboutData = { ...aboutData, ...aboutSnap.data() };
+                        renderAbout();
+                    } else {
+                        renderAbout();
+                    }
+                } else {
+                    renderTranslations();
+                    renderAbout();
+                }
+            } catch (err) {
+                console.warn("Firebase 備用資料載入模式:", err);
+                renderTranslations();
+                renderAbout();
+            }
+        }
+
+        // ==========================================
+        // 9. 管理員後台控制邏輯
+        // ==========================================
+        function showToast(msg, isError = false) {
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
-            toast.className = `custom-toast ${type === 'error' ? 'error-toast' : ''}`;
-            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-check'}"></i> <span>${message}</span>`;
+            toast.className = `custom-toast ${isError ? 'error-toast' : ''}`;
+            toast.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${msg}</span>`;
             container.appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.add('toast-leave');
-                setTimeout(() => {
-                    if (toast.parentNode) toast.parentNode.removeChild(toast);
-                }, 400);
-            }, 3000);
+                setTimeout(() => toast.remove(), 400);
+            }, 2800);
         }
 
-        function exportDataJS() {
-            const dataObj = { projects, translations, aboutData };
-            const jsContent = `// Johnson Yau 作品集備份檔案\nwindow.PORTFOLIO_DATA = ${JSON.stringify(dataObj, null, 4)};`;
-            const blob = new Blob([jsContent], { type: 'application/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'data.js';
-            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-            showToast('備份檔案 (data.js) 已下載！');
+        function openPasswordModal() {
+            const modal = document.getElementById('password-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                const input = document.getElementById('admin-password-input');
+                if (input) { input.value = ''; input.focus(); }
+            }
+        }
+
+        function closePasswordModal() {
+            const modal = document.getElementById('password-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function verifyPassword(event) {
+            if (event) event.preventDefault();
+            const input = document.getElementById('admin-password-input');
+            if (input && input.value.trim() === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                closePasswordModal();
+                toggleAdminModal(true);
+                showToast('登入成功');
+            } else {
+                showToast('密碼錯誤，請重新輸入', true);
+            }
+        }
+
+        function toggleAdminModal(show) {
+            const modal = document.getElementById('admin-modal');
+            if (!modal) return;
+            if (show) {
+                if (!isAdminAuthenticated) { openPasswordModal(); return; }
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                renderAdminProjectsList();
+                renderAdminTransLists();
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
         }
 
         function adminLogout() {
             isAdminAuthenticated = false;
             toggleAdminModal(false);
-            showToast('已登出管理中心');
+            showToast('已登出管理系統');
         }
 
-        let currentFilterCategory = 'featured'; 
-        let currentPageIndex = 0; 
-        let itemsPerPage = 4; 
-        let autoPlayTimer = null;
-        let transPageIndex = 0; 
-        let transItemsPerPage = 8; 
-        let transAutoPlayTimer = null;
-        
-        let adminProjFilter = 'all'; 
-        let adminProjPageIndex = 0; 
-        let adminProjPerPage = 10; 
-        let adminTransPageIndex = 0; 
-        let adminTransPerPage = 10;
+        function switchAdminTab(tabName) {
+            const pPanel = document.getElementById('admin-projects-panel');
+            const tPanel = document.getElementById('admin-trans-panel');
+            const aPanel = document.getElementById('admin-about-panel');
+            const pBtn = document.getElementById('tab-projects-btn');
+            const tBtn = document.getElementById('tab-trans-btn');
+            const aBtn = document.getElementById('tab-about-btn');
 
-        async function fetchCloudData() {
-            try {
-                const aboutDoc = await db.collection('portfolio').doc('about').get(); 
-                if (aboutDoc.exists) aboutData = aboutDoc.data();
-                
-                const projSnapshot = await db.collection('projects').get(); 
-                if (!projSnapshot.empty) { 
-                    projects = projSnapshot.docs.map(doc => doc.data()); 
-                } else {
-                    const localProj = localStorage.getItem('local_projects');
-                    if (localProj) projects = JSON.parse(localProj);
+            [pPanel, tPanel, aPanel].forEach(p => p && p.classList.add('hidden'));
+            [pBtn, tBtn, aBtn].forEach(b => {
+                if (b) {
+                    b.classList.remove('bg-minimal-accent', 'text-white');
+                    b.classList.add('bg-white', 'text-minimal-gray');
                 }
-                
-                const transSnapshot = await db.collection('translations').get(); 
-                if (!transSnapshot.empty) { 
-                    translations = transSnapshot.docs.map(doc => doc.data()); 
-                } else {
-                    const localTrans = localStorage.getItem('local_translations');
-                    if (localTrans) translations = JSON.parse(localTrans);
-                }
-            } catch (error) { 
-                console.warn("Firebase 讀取受限，切換到本地緩存模式:", error);
-                const localProj = localStorage.getItem('local_projects');
-                if (localProj) projects = JSON.parse(localProj);
-                const localTrans = localStorage.getItem('local_translations');
-                if (localTrans) translations = JSON.parse(localTrans);
-                const localAbout = localStorage.getItem('local_about');
-                if (localAbout) aboutData = JSON.parse(localAbout);
+            });
+
+            if (tabName === 'projects' && pPanel && pBtn) {
+                pPanel.classList.remove('hidden');
+                pBtn.classList.add('bg-minimal-accent', 'text-white');
+                pBtn.classList.remove('bg-white', 'text-minimal-gray');
+                renderAdminProjectsList();
+            } else if (tabName === 'translations' && tPanel && tBtn) {
+                tPanel.classList.remove('hidden');
+                tBtn.classList.add('bg-minimal-accent', 'text-white');
+                tBtn.classList.remove('bg-white', 'text-minimal-gray');
+                renderAdminTransLists();
+            } else if (tabName === 'about' && aPanel && aBtn) {
+                aPanel.classList.remove('hidden');
+                aBtn.classList.add('bg-minimal-accent', 'text-white');
+                aBtn.classList.remove('bg-white', 'text-minimal-gray');
             }
-            renderProjects(); 
-            renderTranslations(); 
-            renderAbout();
         }
 
-        function getFilteredProjects() {
-            if (currentFilterCategory === 'featured') return [...projects].sort(() => 0.5 - Math.random());
-            return projects.filter(p => { 
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; 
-                return cat === currentFilterCategory; 
+        // 後台專案管理
+        function filterAdminProjects(cat, btn) {
+            adminCurrentFilter = cat;
+            adminProjPageIndex = 0;
+            document.querySelectorAll('#admin-proj-filter-btns .admin-filter-btn').forEach(b => {
+                b.classList.remove('bg-minimal-accent', 'text-white');
+                b.classList.add('bg-white', 'text-minimal-gray');
+            });
+            if (btn) {
+                btn.classList.add('bg-minimal-accent', 'text-white');
+                btn.classList.remove('bg-white', 'text-minimal-gray');
+            }
+            renderAdminProjectsList();
+        }
+
+        function getAdminFilteredProjects() {
+            if (adminCurrentFilter === 'all') return projects;
+            return projects.filter(p => {
+                const cat = typeof p.category === 'object' ? (p.category.zh || '') : (p.category || '');
+                return cat.includes(adminCurrentFilter);
             });
         }
 
-        function renderProjects() {
-            const grid = document.getElementById('project-grid'); 
-            const paginationControls = document.getElementById('pagination-controls');
-            if (!grid) return; 
-            const langKey = langs[currentLangIndex];
-            const allFiltered = getFilteredProjects(); 
-            const totalPages = Math.ceil(allFiltered.length / itemsPerPage) || 1;
-            
-            if (currentPageIndex >= totalPages) currentPageIndex = 0; 
-            if (currentPageIndex < 0) currentPageIndex = totalPages - 1;
-            
-            if (allFiltered.length > itemsPerPage) { 
-                paginationControls.classList.remove('hidden'); 
-                paginationControls.classList.add('flex'); 
-            } else { 
-                paginationControls.classList.add('hidden'); 
-                paginationControls.classList.remove('flex'); 
+        function renderAdminProjectsList() {
+            const listEl = document.getElementById('admin-project-list');
+            const indicator = document.getElementById('admin-project-page-indicator');
+            if (!listEl) return;
+            const filtered = getAdminFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / adminProjItemsPerPage) || 1;
+            if (adminProjPageIndex >= totalPages) adminProjPageIndex = 0;
+            if (indicator) indicator.textContent = `${adminProjPageIndex + 1} / ${totalPages}`;
+
+            const start = adminProjPageIndex * adminProjItemsPerPage;
+            const pageItems = filtered.slice(start, start + adminProjItemsPerPage);
+
+            if (pageItems.length === 0) {
+                listEl.innerHTML = `<div class="p-8 text-center text-minimal-gray">目前沒有專案項目</div>`;
+                return;
             }
-            
-            const startIdx = currentPageIndex * itemsPerPage; 
-            const pageItems = allFiltered.slice(startIdx, startIdx + itemsPerPage);
-            grid.innerHTML = pageItems.map((p) => {
-                let pTitle = typeof p.title === 'object' ? (p.title[langKey] || p.title.zh) : p.title; 
-                let pCat = typeof p.category === 'object' ? (p.category[langKey] || p.category.zh) : p.category;
+
+            listEl.innerHTML = pageItems.map(p => {
+                const pTitle = typeof p.title === 'object' ? (p.title.zh || p.title.en) : p.title;
+                const pCat = typeof p.category === 'object' ? (p.category.zh || p.category.en) : p.category;
                 return `
-                    <div onclick="location.href='project.html?id=${p.id}&lang=${langKey}'" class="spotlight-card group cursor-pointer col-span-1 md:col-span-2 relative">
-                        <div class="crop-mark crop-mark-tl"></div><div class="crop-mark crop-mark-tr"></div>
-                        <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
-                        
-                        <div class="img-container aspect-[16/9] bg-white relative flex items-center justify-center overflow-hidden z-10">
-                            <img src="${p.image || ''}" alt="${pTitle || ''}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" class="w-full h-full object-contain p-2 opacity-90 group-hover:opacity-100 transition duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 flex items-center justify-center image-overlay">
-                                <span class="view-btn px-8 py-2.5 text-sm">檢視專案</span>
+                    <div class="flex items-center justify-between p-3 bg-minimal-lightgray border border-minimal-border">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.coverImage || ''}" class="w-12 h-12 object-cover border border-minimal-border" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
+                            <div>
+                                <div class="font-bold text-sm text-minimal-accent">${pTitle}</div>
+                                <div class="text-xs text-minimal-gray font-mono">${pCat}</div>
                             </div>
                         </div>
-                        <div class="pt-4 relative z-10">
-                            <span class="text-[10px] font-bold tracking-widest uppercase text-minimal-gray mb-1 block">${pCat || ''}</span>
-                            <h4 class="text-xl font-bold text-minimal-accent leading-snug">${pTitle || ''}</h4>
+                        <div class="flex gap-2">
+                            <button onclick="openEditProjectModal('${p.id}')" class="px-3 py-1 bg-white border border-minimal-border text-xs hover:bg-minimal-accent hover:text-white transition">編輯</button>
+                            <button onclick="deleteProject('${p.id}')" class="px-3 py-1 bg-white border border-red-300 text-red-600 text-xs hover:bg-red-600 hover:text-white transition">刪除</button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function getSortedTranslations() {
-            return [...translations].sort((a, b) => {
-                const yearA = parseInt(a.year) || 0; 
-                const yearB = parseInt(b.year) || 0; 
-                if (yearB !== yearA) return yearB - yearA;
-                const langKey = langs[currentLangIndex]; 
-                const titleA = (typeof a.title === 'object' ? (a.title[langKey] || a.title.zh) : a.title) || ''; 
-                const titleB = (typeof b.title === 'object' ? (b.title[langKey] || b.title.zh) : b.title) || ''; 
-                return titleA.localeCompare(titleB, 'zh-HK');
-            });
+        function prevAdminProjPage() {
+            const filtered = getAdminFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / adminProjItemsPerPage) || 1;
+            adminProjPageIndex = (adminProjPageIndex - 1 + totalPages) % totalPages;
+            renderAdminProjectsList();
         }
 
-        function renderTranslations() {
-            const grid = document.getElementById('translation-grid'); 
-            const transControls = document.getElementById('trans-pagination-controls');
-            if (!grid) return; 
-            const langKey = langs[currentLangIndex];
-            const sortedTrs = getSortedTranslations(); 
-            const totalPages = Math.ceil(sortedTrs.length / transItemsPerPage) || 1;
+        function nextAdminProjPage() {
+            const filtered = getAdminFilteredProjects();
+            const totalPages = Math.ceil(filtered.length / adminProjItemsPerPage) || 1;
+            adminProjPageIndex = (adminProjPageIndex + 1) % totalPages;
+            renderAdminProjectsList();
+        }
+
+        function openNewProjectModal() {
+            document.getElementById('edit-modal-title').textContent = '新增專案';
+            document.getElementById('edit-id').value = '';
+            document.getElementById('edit-title-zh').value = '';
+            document.getElementById('edit-title-en').value = '';
+            document.getElementById('edit-title-ja').value = '';
+            document.getElementById('edit-cat-zh').value = '字體設計';
+            onCategorySelectChange();
+            document.getElementById('edit-image').value = '';
+            document.getElementById('preview-main').src = '';
+            document.getElementById('preview-main').classList.add('hidden');
+            document.getElementById('preview-main-icon').classList.remove('hidden');
+            document.getElementById('edit-gallery').value = '';
+            document.getElementById('edit-youtube').value = '';
+            document.getElementById('edit-desc-zh').value = '';
+            document.getElementById('edit-desc-en').value = '';
+            document.getElementById('edit-desc-ja').value = '';
+
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function openEditProjectModal(id) {
+            const p = projects.find(item => item.id === id);
+            if (!p) return;
+            document.getElementById('edit-modal-title').textContent = '編輯專案';
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('edit-title-zh').value = typeof p.title === 'object' ? (p.title.zh || '') : p.title;
+            document.getElementById('edit-title-en').value = typeof p.title === 'object' ? (p.title.en || '') : '';
+            document.getElementById('edit-title-ja').value = typeof p.title === 'object' ? (p.title.ja || '') : '';
             
-            if (transPageIndex >= totalPages) transPageIndex = 0; 
-            if (transPageIndex < 0) transPageIndex = totalPages - 1;
-            
-            if (sortedTrs.length > transItemsPerPage) { 
-                transControls.classList.remove('hidden'); 
-                transControls.classList.add('flex'); 
-            } else { 
-                transControls.classList.add('hidden'); 
-                transControls.classList.remove('flex'); 
+            const catZh = typeof p.category === 'object' ? (p.category.zh || '字體設計') : (p.category || '字體設計');
+            document.getElementById('edit-cat-zh').value = catZh;
+            onCategorySelectChange();
+
+            document.getElementById('edit-image').value = p.coverImage || '';
+            previewAdminImage('edit-image', 'preview-main', 'preview-main-icon');
+
+            document.getElementById('edit-gallery').value = Array.isArray(p.gallery) ? p.gallery.join(', ') : (p.gallery || '');
+            document.getElementById('edit-youtube').value = p.youtube || '';
+
+            document.getElementById('edit-desc-zh').value = typeof p.description === 'object' ? (p.description.zh || '') : (p.description || '');
+            document.getElementById('edit-desc-en').value = typeof p.description === 'object' ? (p.description.en || '') : '';
+            document.getElementById('edit-desc-ja').value = typeof p.description === 'object' ? (p.description.ja || '') : '';
+
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('edit-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
-
-            const startIdx = transPageIndex * transItemsPerPage; 
-            const pageTrs = sortedTrs.slice(startIdx, startIdx + transItemsPerPage);
-            grid.innerHTML = pageTrs.map(tr => {
-                let displayTitle = typeof tr.title === 'object' ? (tr.title[langKey] || tr.title.zh) : tr.title;
-                return `
-                    <div class="spotlight-card flex flex-col relative transition duration-300 p-2">
-                        <div class="img-container w-full aspect-[2/3] bg-white relative flex items-center justify-center p-2 z-10">
-                            <img src="${tr.image || ''}" alt="${displayTitle || ''}" onerror="this.src='https://via.placeholder.com/400x600?text=Movie'" class="w-full h-full object-cover">
-                            <span class="absolute -bottom-2 -right-2 text-[10px] font-bold px-3 py-1 bg-white text-minimal-accent border border-minimal-accent shadow-hard pointer-events-none">${tr.year || ''}</span>
-                        </div>
-                        <div class="pt-5 pb-2 text-center z-10">
-                            <h4 class="text-[13px] font-medium text-minimal-accent leading-snug">${displayTitle || ''}</h4>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
-        function filterProjects(c, b) { 
-            currentFilterCategory = c; 
-            currentPageIndex = 0; 
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.className="filter-btn px-5 py-2.5 bg-white text-minimal-gray hover:text-minimal-accent transition border border-minimal-border shadow-hard"); 
-            if(b) b.className="filter-btn active px-5 py-2.5 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard"; 
-            renderProjects(); 
-        }
-        
-        function prevPage() { currentPageIndex--; renderProjects(); } 
-        function nextPage() { currentPageIndex++; renderProjects(); }
-        function prevTransPage() { transPageIndex--; renderTranslations(); } 
-        function nextTransPage() { transPageIndex++; renderTranslations(); }
-        function startAutoPlay() { autoPlayTimer = setInterval(nextPage, 7000); } 
-        function pauseAutoPlay() { clearInterval(autoPlayTimer); }
-        function startTransAutoPlay() { transAutoPlayTimer = setInterval(nextTransPage, 8000); } 
-        function pauseTransAutoPlay() { clearInterval(transAutoPlayTimer); }
-        function renderAbout() { 
-            const container = document.getElementById('about-desc'); 
-            if(container) container.innerHTML = aboutData[langs[currentLangIndex]] || aboutData.zh; 
-        }
+        async function saveProject(event) {
+            if (event) event.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const projectData = {
+                title: {
+                    zh: document.getElementById('edit-title-zh').value.trim(),
+                    en: document.getElementById('edit-title-en').value.trim(),
+                    ja: document.getElementById('edit-title-ja').value.trim()
+                },
+                category: {
+                    zh: document.getElementById('edit-cat-zh').value.trim(),
+                    en: document.getElementById('edit-cat-en').value.trim(),
+                    ja: document.getElementById('edit-cat-ja').value.trim()
+                },
+                coverImage: document.getElementById('edit-image').value.trim(),
+                gallery: document.getElementById('edit-gallery').value.split(',').map(s => s.trim()).filter(Boolean),
+                youtube: document.getElementById('edit-youtube').value.trim(),
+                description: {
+                    zh: document.getElementById('edit-desc-zh').value.trim(),
+                    en: document.getElementById('edit-desc-en').value.trim(),
+                    ja: document.getElementById('edit-desc-ja').value.trim()
+                },
+                order: Date.now()
+            };
 
-        // 套用指定語言並更新介面
-        function applyLanguage(langKey) {
-            const langIndex = langs.indexOf(langKey);
-            if (langIndex !== -1) currentLangIndex = langIndex;
-            
-            // 記住用戶選擇，F5 重新整理唔會洗走
-            localStorage.setItem('portfolio_user_lang', langKey);
-
-            const t = translationsDict[langKey] || translationsDict.zh;
-            
-            // 更新右上方按鈕字眼 (EN / 日 / 繁)
-            const langBtn = document.getElementById('lang-btn');
-            if (langBtn) langBtn.textContent = langNames[langKey];
-            
-            // 導覽列
-            if(document.querySelector('.nav-works')) document.querySelector('.nav-works').textContent = t.navWorks; 
-            if(document.querySelector('.nav-trans')) document.querySelector('.nav-trans').textContent = t.navTrans; 
-            if(document.querySelector('.nav-about')) document.querySelector('.nav-about').textContent = t.navAbout; 
-            
-            // Hero 區塊
-            if(document.querySelector('.hero-tag')) document.querySelector('.hero-tag').textContent = t.heroTag; 
-            if(document.querySelector('.hero-title')) document.querySelector('.hero-title').innerHTML = t.heroTitle; 
-            if(document.querySelector('.hero-desc')) document.querySelector('.hero-desc').innerHTML = t.heroDesc; 
-            if(document.querySelector('.btn-works')) document.querySelector('.btn-works').textContent = t.btnWorks; 
-            if(document.querySelector('.btn-trans')) document.querySelector('.btn-trans').textContent = t.btnTrans; 
-            
-            // 標題與副標題
-            if(document.getElementById('works-heading')) document.getElementById('works-heading').textContent = t.worksHeading; 
-            if(document.getElementById('trans-heading')) document.getElementById('trans-heading').textContent = t.transHeading; 
-            if(document.getElementById('trans-sub')) document.getElementById('trans-sub').textContent = t.transSub; 
-            if(document.getElementById('about-title')) document.getElementById('about-title').textContent = t.aboutTitle; 
-            
-            // 篩選按鈕
-            if(document.getElementById('btn-featured')) document.getElementById('btn-featured').textContent = t.filterFeatured; 
-            if(document.getElementById('btn-type')) document.getElementById('btn-type').textContent = t.filterType; 
-            if(document.getElementById('btn-exhibition')) document.getElementById('btn-exhibition').textContent = t.filterExhibition; 
-            if(document.getElementById('btn-popup')) document.getElementById('btn-popup').textContent = t.filterPopup; 
-            if(document.getElementById('btn-pkg')) document.getElementById('btn-pkg').textContent = t.filterPkg; 
-            if(document.getElementById('btn-merch')) document.getElementById('btn-merch').textContent = t.filterMerch; 
-            if(document.getElementById('btn-video')) document.getElementById('btn-video').textContent = t.filterVideo; 
-            if(document.getElementById('btn-other')) document.getElementById('btn-other').textContent = t.filterOther; 
-            
-            // 重新渲染動態卡片內容
-            renderProjects(); 
-            renderTranslations(); 
-            renderAbout(); 
-        }
-
-        // 點擊換語言按鈕時觸發（循環切換）
-        function switchLanguage() { 
-            currentLangIndex = (currentLangIndex + 1) % langs.length; 
-            const nextLang = langs[currentLangIndex];
-            applyLanguage(nextLang);
-        }
-
-        // 鍵盤快捷鍵：Ctrl/Cmd + Shift + L
-        document.addEventListener('keydown', (e) => { 
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') { 
-                e.preventDefault(); 
-                if (isAdminAuthenticated) {
-                    toggleAdminModal(true);
+            try {
+                if (id) {
+                    await db.collection('projects').doc(id).set(projectData, { merge: true });
+                    const idx = projects.findIndex(p => p.id === id);
+                    if (idx !== -1) projects[idx] = { id, ...projectData };
                 } else {
-                    openPasswordModal(); 
+                    const docRef = await db.collection('projects').add(projectData);
+                    projects.unshift({ id: docRef.id, ...projectData });
                 }
-            } 
-            if (e.key === 'Escape') { 
-                closePasswordModal(); 
-                toggleAdminModal(false); 
-                closeEditModal(); 
-                closeTransEditModal(); 
-            } 
-        });
-
-        function openPasswordModal() { 
-            document.getElementById('admin-password-input').value = ''; 
-            document.getElementById('password-modal').classList.remove('hidden'); 
-            document.getElementById('password-modal').classList.add('flex'); 
-            document.getElementById('admin-password-input').focus(); 
+                closeEditModal();
+                renderProjects();
+                renderAdminProjectsList();
+                showToast('專案儲存成功');
+            } catch (err) {
+                console.error(err);
+                showToast('儲存失敗: ' + err.message, true);
+            }
         }
 
-        function closePasswordModal() { 
-            document.getElementById('password-modal').classList.add('hidden'); 
-            document.getElementById('password-modal').classList.remove('flex'); 
+        async function deleteProject(id) {
+            if (!confirm('確定要刪除此專案嗎？')) return;
+            try {
+                await db.collection('projects').doc(id).delete();
+                projects = projects.filter(p => p.id !== id);
+                renderProjects();
+                renderAdminProjectsList();
+                showToast('專案已刪除');
+            } catch (err) {
+                showToast('刪除失敗: ' + err.message, true);
+            }
         }
 
-        function verifyPassword(e) { 
-            e.preventDefault(); 
-            const inputVal = document.getElementById('admin-password-input').value; 
-            if (inputVal === ADMIN_PASSWORD) { 
-                isAdminAuthenticated = true; 
-                closePasswordModal(); 
-                toggleAdminModal(true); 
-                showToast('登入成功！'); 
-            } else { 
-                showToast('密碼錯誤！請重新輸入', 'error'); 
-                document.getElementById('admin-password-input').value = ''; 
-            } 
+        const catMapping = {
+            '字體設計': { en: 'Typography', ja: '文字デザイン' },
+            '展覽': { en: 'Exhibition', ja: '展示' },
+            '快閃店': { en: 'Pop-up Store', ja: 'ポップアップストア' },
+            '包裝設計': { en: 'Packaging', ja: 'パッケージデザイン' },
+            '周邊設計': { en: 'Merchandise', ja: 'グッズデザイン' },
+            '影片剪接': { en: 'Video Editing', ja: '映像編集' },
+            '其他': { en: 'Others', ja: 'その他' }
+        };
+
+        function onCategorySelectChange() {
+            const zh = document.getElementById('edit-cat-zh').value;
+            const mapping = catMapping[zh] || { en: zh, ja: zh };
+            document.getElementById('edit-cat-en').value = mapping.en;
+            document.getElementById('edit-cat-ja').value = mapping.ja;
         }
 
-        function toggleAdminModal(show = null) { 
-            const modal = document.getElementById('admin-modal'); 
-            const willOpen = show !== null ? show : modal.classList.contains('hidden'); 
-            
-            if (willOpen) {
-                if (!isAdminAuthenticated) {
-                    openPasswordModal(); 
-                    return;
-                }
-                modal.classList.remove('hidden'); 
-                modal.classList.add('flex'); 
-                adminProjPageIndex = 0; 
-                adminTransPageIndex = 0; 
-                renderAdminLists('all'); 
-                renderAdminTransLists(); 
-                loadYearFilterOptions(); 
-                loadAboutForm(); 
-            } else { 
-                modal.classList.add('hidden'); 
-                modal.classList.remove('flex'); 
-                renderProjects(); 
-                renderTranslations(); 
-            } 
+        function previewAdminImage(inputId, imgId, iconId) {
+            const url = document.getElementById(inputId).value.trim();
+            const img = document.getElementById(imgId);
+            const icon = document.getElementById(iconId);
+            if (url) {
+                img.src = url;
+                img.onload = () => { img.classList.remove('hidden'); icon.classList.add('hidden'); };
+                img.onerror = () => { img.classList.add('hidden'); icon.classList.remove('hidden'); };
+            } else {
+                img.src = '';
+                img.classList.add('hidden');
+                icon.classList.remove('hidden');
+            }
         }
 
-        function switchAdminTab(tab) { 
-            const pPanel = document.getElementById('admin-projects-panel'); 
-            const tPanel = document.getElementById('admin-trans-panel'); 
-            const aPanel = document.getElementById('admin-about-panel'); 
-            const pBtn = document.getElementById('tab-projects-btn'); 
-            const tBtn = document.getElementById('tab-trans-btn'); 
-            const aBtn = document.getElementById('tab-about-btn'); 
-            
-            pPanel.classList.add('hidden'); 
-            tPanel.classList.add('hidden'); 
-            aPanel.classList.add('hidden'); 
-            pBtn.className = tBtn.className = aBtn.className = "px-4 py-2 bg-white text-minimal-gray border border-minimal-border transition text-xs font-medium"; 
-            
-            if (tab === 'projects') { 
-                pPanel.classList.remove('hidden'); 
-                pBtn.className = "px-4 py-2 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard text-xs font-medium"; 
-            } else if (tab === 'translations') { 
-                tPanel.classList.remove('hidden'); 
-                tBtn.className = "px-4 py-2 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard text-xs font-medium"; 
-            } else if (tab === 'about') { 
-                aPanel.classList.remove('hidden'); 
-                aBtn.className = "px-4 py-2 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard text-xs font-medium"; 
-                loadAboutForm(); 
-            } 
-        }
-
-        function filterAdminProjects(category, btnElement) { 
-            adminProjFilter = category; 
-            adminProjPageIndex = 0; 
-            document.querySelectorAll('.admin-filter-btn').forEach(btn => { 
-                btn.className = "admin-filter-btn px-4 py-1.5 bg-white text-minimal-gray border border-minimal-border hover:text-minimal-accent transition"; 
-            }); 
-            if (btnElement) btnElement.className = "admin-filter-btn px-4 py-1.5 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard"; 
-            renderAdminLists(category); 
-        }
-        
-        function renderAdminLists(filter = 'all') {
-            const filtered = filter === 'all' ? projects : projects.filter(p => { 
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; 
-                return cat === filter; 
-            });
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; 
-            if (adminProjPageIndex >= totalPages) adminProjPageIndex = totalPages - 1; 
-            if (adminProjPageIndex < 0) adminProjPageIndex = 0; 
-            
-            const startIdx = adminProjPageIndex * adminProjPerPage; 
-            const pageItems = filtered.slice(startIdx, startIdx + adminProjPerPage);
-            document.getElementById('admin-project-page-indicator').textContent = `${adminProjPageIndex + 1} / ${totalPages}`;
-            document.getElementById('admin-project-list').innerHTML = pageItems.map(p => `
-                <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 border border-transparent hover:border-minimal-border transition">
-                    <div class="flex items-center space-x-4">
-                        <img src="${p.image || ''}" onerror="this.src='https://via.placeholder.com/50'" class="w-12 h-12 object-cover bg-white border border-minimal-accent shadow-hard">
-                        <span class="font-bold text-minimal-accent tracking-wide">${typeof p.title === 'object' ? (p.title.zh || p.title) : p.title}</span>
-                    </div>
-                    <div class="space-x-2 flex shrink-0 font-medium">
-                        <button type="button" onclick="openEditModal('${p.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition shadow-hard">編輯</button>
-                        <button type="button" onclick="duplicateProject('${p.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition shadow-hard">複製</button>
-                        <button type="button" onclick="deleteProject('${p.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-[#ffdfdf] hover:text-red-600 hover:border-red-600 transition shadow-hard">刪除</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function nextAdminProjPage() { 
-            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => { 
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; 
-                return cat === adminProjFilter; 
-            }); 
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; 
-            adminProjPageIndex = (adminProjPageIndex + 1) % totalPages; 
-            renderAdminLists(adminProjFilter); 
-        }
-
-        function prevAdminProjPage() { 
-            const filtered = adminProjFilter === 'all' ? projects : projects.filter(p => { 
-                let cat = typeof p.category === 'object' ? (p.category.zh || '') : p.category; 
-                return cat === adminProjFilter; 
-            }); 
-            const totalPages = Math.ceil(filtered.length / adminProjPerPage) || 1; 
-            adminProjPageIndex = (adminProjPageIndex - 1 + totalPages) % totalPages; 
-            renderAdminLists(adminProjFilter); 
-        }
-
-        function loadYearFilterOptions() { 
-            const years = [...new Set(translations.map(t => t.year))].filter(Boolean).sort((a, b) => parseInt(b) - parseInt(a)); 
-            const select = document.getElementById('admin-year-filter'); 
-            const currentVal = select.value; 
-            select.innerHTML = `<option value="all">全部年份</option>` + years.map(y => `<option value="${y}">${y}年</option>`).join(''); 
-            select.value = currentVal; 
+        // 後台電影翻譯管理
+        function getAdminFilteredTranslations() {
+            const yearSelect = document.getElementById('admin-year-filter');
+            const selectedYear = yearSelect ? yearSelect.value : 'all';
+            if (selectedYear === 'all') return translations;
+            return translations.filter(t => t.year === selectedYear);
         }
 
         function renderAdminTransLists() {
-            loadYearFilterOptions(); 
-            const yearFilter = document.getElementById('admin-year-filter').value;
-            const sortedTrs = [...translations].sort((a, b) => { 
-                const yearA = parseInt(a.year) || 0; 
-                const yearB = parseInt(b.year) || 0; 
-                if (yearB !== yearA) return yearB - yearA; 
-                const titleA = (typeof a.title === 'object' ? (a.title.zh || a.title) : a.title) || ''; 
-                const titleB = (typeof b.title === 'object' ? (b.title.zh || b.title) : b.title) || ''; 
-                return titleA.localeCompare(titleB, 'zh-HK'); 
-            });
-            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter);
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; 
-            if (adminTransPageIndex >= totalPages) adminTransPageIndex = totalPages - 1; 
-            if (adminTransPageIndex < 0) adminTransPageIndex = 0; 
-            
-            const startIdx = adminTransPageIndex * adminTransPerPage; 
-            const pageTrs = filteredTrs.slice(startIdx, startIdx + adminTransPerPage);
-            document.getElementById('admin-trans-page-indicator').textContent = `${adminTransPageIndex + 1} / ${totalPages}`;
-            document.getElementById('admin-trans-list').innerHTML = pageTrs.map(tr => {
-                let titleZh = typeof tr.title === 'object' ? (tr.title.zh || tr.title) : tr.title;
+            const listEl = document.getElementById('admin-trans-list');
+            const indicator = document.getElementById('admin-trans-page-indicator');
+            const yearSelect = document.getElementById('admin-year-filter');
+            if (!listEl) return;
+
+            if (yearSelect && yearSelect.options.length <= 1) {
+                const years = Array.from(new Set(translations.map(t => t.year).filter(Boolean))).sort().reverse();
+                years.forEach(y => {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.textContent = y;
+                    yearSelect.appendChild(opt);
+                });
+            }
+
+            const filtered = getAdminFilteredTranslations();
+            const totalPages = Math.ceil(filtered.length / adminTransItemsPerPage) || 1;
+            if (adminTransPageIndex >= totalPages) adminTransPageIndex = 0;
+            if (indicator) indicator.textContent = `${adminTransPageIndex + 1} / ${totalPages}`;
+
+            const start = adminTransPageIndex * adminTransItemsPerPage;
+            const pageItems = filtered.slice(start, start + adminTransItemsPerPage);
+
+            if (pageItems.length === 0) {
+                listEl.innerHTML = `<div class="p-8 text-center text-minimal-gray">目前沒有翻譯紀錄</div>`;
+                return;
+            }
+
+            listEl.innerHTML = pageItems.map(t => {
+                const tTitle = typeof t.title === 'object' ? (t.title.zh || t.title.en) : t.title;
                 return `
-                    <div class="py-3 flex items-center justify-between text-xs hover:bg-minimal-lightgray px-3 border border-transparent hover:border-minimal-border transition">
-                        <div class="flex items-center space-x-4">
-                            <img src="${tr.image || ''}" onerror="this.src='https://via.placeholder.com/50x70'" class="w-10 h-14 object-cover bg-white border border-minimal-accent shadow-hard">
+                    <div class="flex items-center justify-between p-3 bg-minimal-lightgray border border-minimal-border">
+                        <div class="flex items-center gap-3">
+                            <img src="${t.image || ''}" class="w-10 h-14 object-cover border border-minimal-border" onerror="this.src='https://via.placeholder.com/80x110?text=Movie'">
                             <div>
-                                <span class="font-bold text-minimal-accent block mb-1 tracking-wide">${titleZh || ''}</span>
-                                <span class="text-[10px] bg-white px-2 py-0.5 border border-minimal-accent font-bold">${tr.year || ''}</span>
+                                <div class="font-bold text-sm text-minimal-accent">${tTitle}</div>
+                                <div class="text-xs text-minimal-gray font-mono">${t.year || '—'} · ${t.type || '字幕翻譯'}</div>
                             </div>
                         </div>
-                        <div class="space-x-2 flex shrink-0 font-medium">
-                            <button type="button" onclick="openTransEditModal('${tr.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition shadow-hard">編輯</button>
-                            <button type="button" onclick="duplicateTranslation('${tr.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-minimal-lightgray transition shadow-hard">複製</button>
-                            <button type="button" onclick="deleteTranslation('${tr.id}')" class="px-4 py-1.5 bg-white text-minimal-accent border border-minimal-border hover:bg-[#ffdfdf] hover:text-red-600 hover:border-red-600 transition shadow-hard">刪除</button>
+                        <div class="flex gap-2">
+                            <button onclick="openEditTransModal('${t.id}')" class="px-3 py-1 bg-white border border-minimal-border text-xs hover:bg-minimal-accent hover:text-white transition">編輯</button>
+                            <button onclick="deleteTranslation('${t.id}')" class="px-3 py-1 bg-white border border-red-300 text-red-600 text-xs hover:bg-red-600 hover:text-white transition">刪除</button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function nextAdminTransPage() { 
-            const yearFilter = document.getElementById('admin-year-filter').value; 
-            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a)); 
-            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter); 
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; 
-            adminTransPageIndex = (adminTransPageIndex + 1) % totalPages; 
-            renderAdminTransLists(); 
+        function prevAdminTransPage() {
+            const filtered = getAdminFilteredTranslations();
+            const totalPages = Math.ceil(filtered.length / adminTransItemsPerPage) || 1;
+            adminTransPageIndex = (adminTransPageIndex - 1 + totalPages) % totalPages;
+            renderAdminTransLists();
         }
 
-        function prevAdminTransPage() { 
-            const yearFilter = document.getElementById('admin-year-filter').value; 
-            const sortedTrs = [...translations].sort((a, b) => parseInt(b.year) - parseInt(a)); 
-            const filteredTrs = yearFilter === 'all' ? sortedTrs : sortedTrs.filter(t => t.year === yearFilter); 
-            const totalPages = Math.ceil(filteredTrs.length / adminTransPerPage) || 1; 
-            adminTransPageIndex = (adminTransPageIndex - 1 + totalPages) % totalPages; 
-            renderAdminTransLists(); 
+        function nextAdminTransPage() {
+            const filtered = getAdminFilteredTranslations();
+            const totalPages = Math.ceil(filtered.length / adminTransItemsPerPage) || 1;
+            adminTransPageIndex = (adminTransPageIndex + 1) % totalPages;
+            renderAdminTransLists();
         }
 
-        function loadAboutForm() { 
-            document.getElementById('about-zh').value = aboutData.zh || ''; 
-            document.getElementById('about-en').value = aboutData.en || ''; 
-            document.getElementById('about-ja').value = aboutData.ja || ''; 
+        function openNewTransModal() {
+            document.getElementById('trans-modal-title').textContent = '新增電影翻譯';
+            document.getElementById('trans-edit-id').value = '';
+            document.getElementById('trans-title-zh').value = '';
+            document.getElementById('trans-title-en').value = '';
+            document.getElementById('trans-title-ja').value = '';
+            document.getElementById('trans-edit-year').value = new Date().getFullYear().toString();
+            document.getElementById('trans-edit-image').value = '';
+            document.getElementById('preview-trans').src = '';
+            document.getElementById('preview-trans').classList.add('hidden');
+            document.getElementById('preview-trans-icon').classList.remove('hidden');
+
+            const modal = document.getElementById('trans-edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        async function saveAbout(e) { 
-            e.preventDefault(); 
-            aboutData = { 
-                zh: document.getElementById('about-zh').value, 
-                en: document.getElementById('about-en').value, 
-                ja: document.getElementById('about-ja').value 
-            }; 
-            localStorage.setItem('local_about', JSON.stringify(aboutData));
-            try { 
-                await db.collection('portfolio').doc('about').set(aboutData); 
-                showToast('「關於我」已同步至雲端！'); 
-            } catch (err) { 
-                console.warn(err); 
-                showToast('已保存於本機！', 'info'); 
-            } 
-            renderAbout();
+        function openEditTransModal(id) {
+            const t = translations.find(item => item.id === id);
+            if (!t) return;
+            document.getElementById('trans-modal-title').textContent = '編輯電影翻譯';
+            document.getElementById('trans-edit-id').value = t.id;
+            document.getElementById('trans-title-zh').value = typeof t.title === 'object' ? (t.title.zh || '') : t.title;
+            document.getElementById('trans-title-en').value = typeof t.title === 'object' ? (t.title.en || '') : '';
+            document.getElementById('trans-title-ja').value = typeof t.title === 'object' ? (t.title.ja || '') : '';
+            document.getElementById('trans-edit-year').value = t.year || '';
+            document.getElementById('trans-edit-image').value = t.image || '';
+            previewAdminImage('trans-edit-image', 'preview-trans', 'preview-trans-icon');
+
+            const modal = document.getElementById('trans-edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        function openNewProjectModal() { 
-            document.getElementById('edit-id').value = ''; 
-            document.getElementById('edit-title-zh').value = ''; 
-            document.getElementById('edit-title-en').value = ''; 
-            document.getElementById('edit-title-ja').value = ''; 
-            document.getElementById('edit-cat-zh').value = '字體設計'; 
-            onCategorySelectChange(); 
-            document.getElementById('edit-image').value = 'image/'; 
-            document.getElementById('edit-gallery').value = ''; 
-            document.getElementById('edit-youtube').value = ''; 
-            document.getElementById('edit-desc-zh').value = ''; 
-            document.getElementById('edit-desc-en').value = ''; 
-            document.getElementById('edit-desc-ja').value = ''; 
-            document.getElementById('preview-main').classList.add('hidden'); 
-            document.getElementById('preview-main-icon').classList.remove('hidden'); 
-            document.getElementById('edit-modal-title').innerHTML = '新增專案'; 
-            
-            document.getElementById('admin-modal').classList.add('hidden');
-            document.getElementById('admin-modal').classList.remove('flex');
-            document.getElementById('edit-modal').classList.remove('hidden'); 
-            document.getElementById('edit-modal').classList.add('flex'); 
-        }
-
-        function openEditModal(id) { 
-            const project = projects.find(p => String(p.id) === String(id)); 
-            if (!project) return; 
-            document.getElementById('edit-id').value = project.id; 
-            document.getElementById('edit-title-zh').value = typeof project.title === 'object' ? (project.title.zh || '') : (project.title || ''); 
-            document.getElementById('edit-title-en').value = typeof project.title === 'object' ? (project.title.en || '') : (project.title || ''); 
-            document.getElementById('edit-title-ja').value = typeof project.title === 'object' ? (project.title.ja || '') : (project.title || ''); 
-            
-            let catZh = typeof project.category === 'object' ? (project.category.zh || '字體設計') : (project.category || '字體設計'); 
-            const selectEl = document.getElementById('edit-cat-zh'); 
-            if ([...selectEl.options].some(o => o.value === catZh)) {
-                selectEl.value = catZh; 
-            } else {
-                selectEl.value = '其他'; 
+        function closeTransEditModal() {
+            const modal = document.getElementById('trans-edit-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
-            onCategorySelectChange(); 
-            
-            document.getElementById('edit-image').value = project.image || ''; 
-            previewAdminImage('edit-image', 'preview-main', 'preview-main-icon'); 
-            document.getElementById('edit-gallery').value = project.gallery || ''; 
-            document.getElementById('edit-youtube').value = project.youtube || ''; 
-            document.getElementById('edit-desc-zh').value = typeof project.description === 'object' ? (project.description.zh || '') : (project.description || ''); 
-            document.getElementById('edit-desc-en').value = typeof project.description === 'object' ? (project.description.en || '') : (project.description || ''); 
-            document.getElementById('edit-desc-ja').value = typeof project.description === 'object' ? (project.description.ja || '') : (project.description || ''); 
-            document.getElementById('edit-modal-title').innerHTML = '編輯專案資料'; 
-            
-            document.getElementById('admin-modal').classList.add('hidden');
-            document.getElementById('admin-modal').classList.remove('flex');
-            document.getElementById('edit-modal').classList.remove('hidden'); 
-            document.getElementById('edit-modal').classList.add('flex'); 
         }
 
-        function closeEditModal() { 
-            document.getElementById('edit-modal').classList.add('hidden'); 
-            document.getElementById('edit-modal').classList.remove('flex'); 
-            toggleAdminModal(true); 
-        }
+        async function saveTranslation(event) {
+            if (event) event.preventDefault();
+            const id = document.getElementById('trans-edit-id').value;
+            const transData = {
+                title: {
+                    zh: document.getElementById('trans-title-zh').value.trim(),
+                    en: document.getElementById('trans-title-en').value.trim(),
+                    ja: document.getElementById('trans-title-ja').value.trim()
+                },
+                year: document.getElementById('trans-edit-year').value.trim(),
+                image: document.getElementById('trans-edit-image').value.trim(),
+                type: '日文字幕 ➔ 繁體中文'
+            };
 
-        async function saveProject(e) { 
-            e.preventDefault(); 
-            const id = document.getElementById('edit-id').value; 
-            let targetId = id || String(Date.now()); 
-            const projectData = { 
-                id: targetId, 
-                title: { 
-                    zh: document.getElementById('edit-title-zh').value, 
-                    en: document.getElementById('edit-title-en').value, 
-                    ja: document.getElementById('edit-title-ja').value 
-                }, 
-                category: { 
-                    zh: document.getElementById('edit-cat-zh').value, 
-                    en: document.getElementById('edit-cat-en').value, 
-                    ja: document.getElementById('edit-cat-ja').value 
-                }, 
-                image: document.getElementById('edit-image').value, 
-                gallery: document.getElementById('edit-gallery').value, 
-                youtube: document.getElementById('edit-youtube').value, 
-                description: { 
-                    zh: document.getElementById('edit-desc-zh').value, 
-                    en: document.getElementById('edit-desc-en').value, 
-                    ja: document.getElementById('edit-desc-ja').value 
-                } 
-            }; 
-            
-            if (id) { 
-                const idx = projects.findIndex(p => String(p.id) === String(id)); 
-                if(idx !== -1) projects[idx] = projectData; 
-            } else {
-                projects.unshift(projectData); 
-            }
-            localStorage.setItem('local_projects', JSON.stringify(projects));
-
-            try { 
-                await db.collection('projects').doc(targetId).set(projectData); 
-                showToast('專案資料已儲存至雲端！'); 
-            } catch (err) { 
-                console.warn(err); 
-                showToast('雲端受限，已儲存於本機！', 'info'); 
-            } 
-            
-            closeEditModal(); 
-            renderAdminLists(adminProjFilter); 
-            renderProjects();
-        }
-
-        async function deleteProject(id) { 
-            if (confirm('確定要刪除這個專案嗎？')) { 
-                projects = projects.filter(p => String(p.id) !== String(id)); 
-                localStorage.setItem('local_projects', JSON.stringify(projects));
-                renderAdminLists(adminProjFilter); 
-                renderProjects();
-                
-                try { 
-                    await db.collection('projects').doc(id).delete(); 
-                    showToast('專案已刪除！'); 
-                } catch(err) { 
-                    console.warn(err); 
-                    showToast('已從本地刪除'); 
-                } 
-            } 
-        }
-
-        async function duplicateProject(id) { 
-            const project = projects.find(p => String(p.id) === String(id)); 
-            if (!project) return; 
-            const newId = String(Date.now()); 
-            const clonedTitle = typeof project.title === 'object' ? { 
-                zh: (project.title.zh || '') + ' (複製)', 
-                en: (project.title.en || '') + ' (Copy)', 
-                ja: (project.title.ja || '') + ' (コピー)' 
-            } : project.title + ' (複製)'; 
-            
-            const newProject = { ...project, id: newId, title: clonedTitle }; 
-            projects.unshift(newProject); 
-            localStorage.setItem('local_projects', JSON.stringify(projects));
-            renderAdminLists(adminProjFilter); 
-            renderProjects();
-            
-            try { 
-                await db.collection('projects').doc(newId).set(newProject); 
-                showToast('專案已複製！'); 
-            } catch(err) { 
-                console.warn(err); 
-                showToast('已在本機完成複製'); 
-            } 
-        }
-
-        function openNewTransModal() { 
-            document.getElementById('trans-edit-id').value = ''; 
-            document.getElementById('trans-title-zh').value = ''; 
-            document.getElementById('trans-title-en').value = ''; 
-            document.getElementById('trans-title-ja').value = ''; 
-            document.getElementById('trans-edit-year').value = '2026'; 
-            document.getElementById('trans-edit-image').value = 'image/'; 
-            document.getElementById('preview-trans').classList.add('hidden'); 
-            document.getElementById('preview-trans-icon').classList.remove('hidden'); 
-            document.getElementById('trans-modal-title').innerHTML = '新增電影翻譯'; 
-            
-            document.getElementById('admin-modal').classList.add('hidden');
-            document.getElementById('admin-modal').classList.remove('flex');
-            document.getElementById('trans-edit-modal').classList.remove('hidden'); 
-            document.getElementById('trans-edit-modal').classList.add('flex'); 
-        }
-
-        function openTransEditModal(id) { 
-            const tr = translations.find(t => String(t.id) === String(id)); 
-            if (!tr) return; 
-            document.getElementById('trans-edit-id').value = tr.id; 
-            document.getElementById('trans-title-zh').value = typeof tr.title === 'object' ? (tr.title.zh || '') : (tr.title || ''); 
-            document.getElementById('trans-title-en').value = typeof tr.title === 'object' ? (tr.title.en || '') : (tr.title || ''); 
-            document.getElementById('trans-title-ja').value = typeof tr.title === 'object' ? (tr.title.ja || '') : (tr.title || ''); 
-            document.getElementById('trans-edit-year').value = tr.year || ''; 
-            document.getElementById('trans-edit-image').value = tr.image || ''; 
-            previewAdminImage('trans-edit-image', 'preview-trans', 'preview-trans-icon'); 
-            document.getElementById('trans-modal-title').innerHTML = '編輯電影翻譯'; 
-            
-            document.getElementById('admin-modal').classList.add('hidden');
-            document.getElementById('admin-modal').classList.remove('flex');
-            document.getElementById('trans-edit-modal').classList.remove('hidden'); 
-            document.getElementById('trans-edit-modal').classList.add('flex'); 
-        }
-
-        function closeTransEditModal() { 
-            document.getElementById('trans-edit-modal').classList.add('hidden'); 
-            document.getElementById('trans-edit-modal').classList.remove('flex'); 
-            toggleAdminModal(true); 
-        }
-
-        async function saveTranslation(e) { 
-            e.preventDefault(); 
-            const id = document.getElementById('trans-edit-id').value; 
-            let targetId = id || 't_' + Date.now(); 
-            const transData = { 
-                id: targetId, 
-                title: { 
-                    zh: document.getElementById('trans-title-zh').value, 
-                    en: document.getElementById('trans-title-en').value, 
-                    ja: document.getElementById('trans-title-ja').value 
-                }, 
-                year: document.getElementById('trans-edit-year').value, 
-                image: document.getElementById('trans-edit-image').value 
-            }; 
-            
-            if (id) { 
-                const idx = translations.findIndex(t => String(t.id) === String(id)); 
-                if(idx !== -1) translations[idx] = transData; 
-            } else {
-                translations.unshift(transData); 
-            }
-            localStorage.setItem('local_translations', JSON.stringify(translations));
-
-            try { 
-                await db.collection('translations').doc(targetId).set(transData); 
-                showToast('紀錄已同步至雲端！'); 
-            } catch(err) { 
-                console.warn(err); 
-                showToast('已保存於本機！', 'info'); 
-            } 
-
-            closeTransEditModal(); 
-            renderAdminTransLists(); 
-            renderTranslations(); 
-        }
-
-        async function deleteTranslation(id) { 
-            if (confirm('確定要刪除這筆紀錄嗎？')) { 
-                translations = translations.filter(t => String(t.id) !== String(id)); 
-                localStorage.setItem('local_translations', JSON.stringify(translations));
-                renderAdminTransLists(); 
+            try {
+                if (id) {
+                    await db.collection('translations').doc(id).set(transData, { merge: true });
+                    const idx = translations.findIndex(t => t.id === id);
+                    if (idx !== -1) translations[idx] = { id, ...transData };
+                } else {
+                    const docRef = await db.collection('translations').add(transData);
+                    translations.unshift({ id: docRef.id, ...transData });
+                }
+                closeTransEditModal();
                 renderTranslations();
-
-                try { 
-                    await db.collection('translations').doc(id).delete(); 
-                    showToast('紀錄已刪除！'); 
-                } catch(err) { 
-                    console.warn(err); 
-                    showToast('已自本機刪除'); 
-                } 
-            } 
+                renderAdminTransLists();
+                showToast('電影翻譯儲存成功');
+            } catch (err) {
+                showToast('儲存失敗: ' + err.message, true);
+            }
         }
 
-        async function duplicateTranslation(id) { 
-            const tr = translations.find(t => String(t.id) === String(id)); 
-            if (!tr) return; 
-            const newId = 't_' + Date.now(); 
-            const clonedTitle = typeof tr.title === 'object' ? { 
-                zh: (tr.title.zh || '') + ' (複製)', 
-                en: (tr.title.en || '') + ' (Copy)', 
-                ja: (tr.title.ja || '') + ' (コピー)' 
-            } : tr.title + ' (複製)'; 
-            
-            const newTr = { ...tr, id: newId, title: clonedTitle }; 
-            translations.unshift(newTr); 
-            localStorage.setItem('local_translations', JSON.stringify(translations));
-            renderAdminTransLists(); 
-            renderTranslations();
-
-            try { 
-                await db.collection('translations').doc(newId).set(newTr); 
-                showToast('紀錄已複製！'); 
-            } catch(err) { 
-                console.warn(err); 
-                showToast('已在本機完成複製'); 
-            } 
+        async function deleteTranslation(id) {
+            if (!confirm('確定要刪除此翻譯紀錄嗎？')) return;
+            try {
+                await db.collection('translations').doc(id).delete();
+                translations = translations.filter(t => t.id !== id);
+                renderTranslations();
+                renderAdminTransLists();
+                showToast('翻譯紀錄已刪除');
+            } catch (err) {
+                showToast('刪除失敗: ' + err.message, true);
+            }
         }
 
-        function scrollToTop() { 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        async function saveAbout(event) {
+            if (event) event.preventDefault();
+            aboutData = {
+                zh: document.getElementById('about-zh').value.trim(),
+                en: document.getElementById('about-en').value.trim(),
+                ja: document.getElementById('about-ja').value.trim()
+            };
+            try {
+                await db.collection('site').doc('about').set(aboutData, { merge: true });
+                renderAbout();
+                showToast('自我介紹已儲存');
+            } catch (err) {
+                showToast('儲存失敗: ' + err.message, true);
+            }
         }
 
-        window.addEventListener('scroll', () => {
-            const btn = document.getElementById('back-to-top');
-            const indicator = document.getElementById('scroll-indicator');
-            if (window.scrollY > 300) {
-                btn.classList.remove('opacity-0', 'pointer-events-none');
-                btn.classList.add('opacity-100', 'pointer-events-auto');
-                if(indicator) indicator.classList.replace('opacity-60', 'opacity-0');
-            } else {
-                btn.classList.add('opacity-0', 'pointer-events-none');
-                btn.classList.remove('opacity-100', 'pointer-events-auto');
-                if(indicator) indicator.classList.replace('opacity-0', 'opacity-60');
+        function exportDataJS() {
+            const data = {
+                projects,
+                translations,
+                aboutData,
+                exportedAt: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `johnsonyau_backup_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('備份檔案已下載');
+        }
+
+        // 雙擊頁尾版權文字或按 Ctrl+E / Cmd+E 快速喚出管理員登入
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+                e.preventDefault();
+                openPasswordModal();
             }
         });
 
-        window.addEventListener('DOMContentLoaded', () => { 
-            // 讀取並套用之前保存的語言（F5 不會跳回預設）
-            const savedLang = localStorage.getItem('portfolio_user_lang') || 'zh';
-            const savedIndex = langs.indexOf(savedLang);
-            if (savedIndex !== -1) currentLangIndex = savedIndex;
-            applyLanguage(savedLang);
+        // 綁定電影翻譯分頁按鈕
+        const transPrev = document.getElementById('trans-prev-page');
+        const transNext = document.getElementById('trans-next-page');
+        if (transPrev) transPrev.addEventListener('click', () => { transPageIndex--; renderTranslations(); });
+        if (transNext) transNext.addEventListener('click', () => { transPageIndex++; renderTranslations(); });
 
-            // 1. 原本的資料載入與滾動觸發
-            fetchCloudData(); 
-            const observer = new IntersectionObserver((entries) => { 
-                entries.forEach(entry => { 
-                    if (entry.isIntersecting) entry.target.classList.add('active'); 
-                }); 
-            }, { threshold: 0.15 }); 
-            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); 
-
-            // 2. 每次 F5 / 進入頁面都播放動畫
-            const overlay = document.getElementById('intro-overlay');
-            if (overlay) {
-                // 等 Logo 動畫展示約 3.2 秒後，優雅淡出
-                setTimeout(() => {
-                    overlay.style.opacity = '0';
-                    setTimeout(() => {
-                        overlay.style.visibility = 'hidden';
-                        overlay.remove(); // 徹底移除避免阻擋點擊
-                    }, 1200); // 1.2 秒柔和淡出
-                }, 3200);
-            }
+        // ==========================================
+        // 10. 頁面啟動入口
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initLoader();
+            initScrollEffects();
+            fetchCloudData();
         });
     </script>
 </body>
