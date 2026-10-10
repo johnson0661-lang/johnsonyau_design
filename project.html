@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Project Details | Johnson Yau</title>
+    <title id="project-page-title">Project Details | Johnson Yau</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,6 +39,35 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
+        /* 頂部 2px 極簡滾動進度條 */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: #111111;
+            z-index: 100;
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+
+        /* 專案頁極簡載入過渡 */
+        #project-loader {
+            position: fixed;
+            inset: 0;
+            background-color: #FAFAFA;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+        }
+        #project-loader.fade-out {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
+
         body {
             background-color: #FAFAFA;
             color: #222222;
@@ -53,116 +82,177 @@
             border-bottom: 1px solid #E5E5E5;
         }
 
-        /* 裝飾性裁切角標 (Crop Marks) */
         .crop-mark { position: absolute; width: 10px; height: 10px; border-color: #d1d5db; border-style: solid; pointer-events: none; }
         .crop-mark-tl { top: -6px; left: -6px; border-width: 1px 0 0 1px; }
         .crop-mark-tr { top: -6px; right: -6px; border-width: 1px 1px 0 0; }
         .crop-mark-bl { bottom: -6px; left: -6px; border-width: 0 0 1px 1px; }
         .crop-mark-br { bottom: -6px; right: -6px; border-width: 0 1px 1px 0; }
 
-        .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .reveal-up.active { opacity: 1; transform: translateY(0); }
+        .img-container {
+            border: 1px solid #111;
+            box-shadow: 2px 2px 0px 0px rgba(17,17,17,0.7);
+            transition: all 0.3s ease;
+        }
 
-        #lightbox-modal { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        #lightbox-modal.active { opacity: 1; pointer-events: auto; }
-        
-        .logo-invert { filter: none !important; }
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 燈箱淡入動畫 */
+        #lightbox-modal {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white min-h-screen flex flex-col justify-between relative">
+<body class="font-sans antialiased selection:bg-minimal-accent selection:text-white overflow-x-hidden relative">
 
+    <!-- 頂部進度條 -->
+    <div id="scroll-progress"></div>
+
+    <!-- 專案載入遮罩 -->
+    <div id="project-loader">
+        <div class="text-[10px] font-mono tracking-[0.3em] text-minimal-gray uppercase animate-pulse">
+            LOADING PROJECT...
+        </div>
+    </div>
+
+    <!-- Header 導覽列 -->
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
-            <a href="index.html" class="group flex items-center">
-                <img src="logo.png" alt="Johnson Yau Logo" style="filter: brightness(0);" class="h-8 w-auto object-contain transition duration-300" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            <a id="back-btn" href="index.html" class="flex items-center text-minimal-gray hover:text-minimal-accent transition font-medium">
+                <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
             </a>
 
-            <div class="flex items-center space-x-6 font-medium">
-                <div class="flex items-center space-x-3 border-r border-minimal-border pr-6">
-                    <button onclick="prevProject()" id="prev-proj-btn" class="w-9 h-9 bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-hard">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </button>
-                    <button onclick="nextProject()" id="next-proj-btn" class="w-9 h-9 bg-white text-minimal-gray hover:bg-minimal-accent hover:text-white border border-minimal-border transition flex items-center justify-center shadow-hard">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </button>
-                </div>
+            <a href="index.html" class="flex items-center">
+                <img src="logo.png" alt="Johnson Yau Logo" class="h-7 w-auto object-contain" style="filter: brightness(0) !important;" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
+            </a>
 
-                <a href="index.html#works" class="text-minimal-gray hover:text-minimal-accent transition flex items-center">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text" class="tracking-widest uppercase">返回作品列表</span>
-                </a>
-                <button onclick="switchProjectLanguage()" id="lang-btn" class="px-4 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition shadow-hard">
+            <div class="flex items-center space-x-3">
+                <!-- 專案前後切換 -->
+                <button onclick="prevProject()" title="上一個專案" class="w-8 h-8 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button onclick="nextProject()" title="下一個專案" class="w-8 h-8 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+                <!-- 語言切換 -->
+                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition font-medium shadow-hard">
                     EN
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-20 flex-grow w-full reveal-up active">
-        <!-- 主媒體容器 (已移除黑色外框及陰影) -->
-        <div class="relative w-full mb-16">
-            <div id="media-container" class="relative z-10 w-full bg-transparent transition duration-300 flex items-center justify-center overflow-hidden p-4 md:p-12">
-                <!-- 動態填入圖片或 YouTube iframe -->
+    <!-- 404 錯誤提示區塊（若 ID 不存在時顯示） -->
+    <div id="project-404" class="hidden max-w-4xl mx-auto px-6 py-32 text-center">
+        <h2 class="text-3xl font-bold text-minimal-accent mb-4">專案不存在或已被移除</h2>
+        <p class="text-minimal-gray text-sm mb-8 font-mono">PROJECT NOT FOUND (404)</p>
+        <a href="index.html" class="px-8 py-3 bg-minimal-accent text-white text-xs tracking-widest hover:bg-gray-800 transition shadow-hard">
+            返回首頁
+        </a>
+    </div>
+
+    <!-- 專案主要內容區塊 -->
+    <main id="project-content" class="max-w-5xl mx-auto px-6 py-20">
+        
+        <!-- 專案標題與分類 Header -->
+        <div class="mb-12 border-b border-minimal-border pb-8 reveal-up active">
+            <div class="flex items-center gap-3 mb-4">
+                <span id="project-cat" class="px-3 py-1 bg-white text-minimal-accent border border-minimal-border text-[11px] font-mono uppercase tracking-wider shadow-hard">
+                    CATEGORY
+                </span>
+            </div>
+            <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent mb-4 leading-tight">
+                Project Title
+            </h1>
+        </div>
+
+        <!-- 主圖展示 -->
+        <div class="relative mb-16 reveal-up active">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+            
+            <div class="img-container aspect-[16/9] w-full bg-white relative overflow-hidden flex items-center justify-center">
+                <img id="project-cover" src="" alt="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/1200x675?text=No+Cover+Image'">
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <!-- 左邊：細節圖庫容器 (無粗黑框與陰影) -->
-            <div class="lg:col-span-7 space-y-6">
-                <div class="bg-transparent flex items-center justify-center aspect-[16/10] relative group p-4 md:p-8">
-                    <img id="gallery-active-img" src="" alt="Gallery Detail" onclick="openLightbox(this.src)" class="w-full h-full object-contain transition duration-500 cursor-pointer">
-                    
-                    <div class="absolute bottom-4 right-4 px-3 py-1.5 bg-minimal-accent text-white text-[11px] font-medium opacity-0 group-hover:opacity-100 transition shadow-hard pointer-events-none">
-                        <i class="fa-solid fa-expand mr-1"></i> 點擊放大
-                    </div>
+        <!-- 專案簡介文字 (使用 whitespace-pre-line 保證排版安全) -->
+        <div class="max-w-3xl mb-20 reveal-up active">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-3">01 // PROJECT OVERVIEW</h3>
+            <div id="project-desc" class="text-base text-[#333] leading-relaxed whitespace-pre-line space-y-4"></div>
+        </div>
 
-                    <button onclick="prevGalleryImage(event)" class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white text-minimal-accent border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </button>
-                    <button onclick="nextGalleryImage(event)" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-white text-minimal-accent border border-minimal-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-minimal-accent hover:text-white shadow-hard">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </button>
-                </div>
-                <div id="pagination-dots" class="flex items-center justify-center space-x-3 pt-2"></div>
-            </div>
-
-            <!-- 右邊：分類標籤、大標題與詳細描述 (唯一乾淨版本) -->
-            <div class="lg:col-span-5 space-y-6 pt-2">
-                <div>
-                    <span id="project-category" class="inline-block text-[10px] font-semibold tracking-[0.2em] uppercase text-minimal-accent mb-3 px-3 py-1 bg-white border border-minimal-border shadow-hard"></span>
-                    <h1 id="project-title" class="text-2xl md:text-3xl font-bold tracking-tight text-minimal-accent leading-snug"></h1>
-                </div>
-
-                <h3 id="case-study-heading" class="text-[11px] uppercase tracking-[0.2em] text-minimal-accent font-semibold border-b border-minimal-border pb-3">DESIGN CONCEPT & CASE STUDY</h3>
-                <div id="project-description" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
+        <!-- YouTube 影片嵌入區塊 (選填，有資料時才顯示) -->
+        <div id="video-section" class="mb-20 hidden reveal-up active">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-4">02 // VIDEO SHOWCASE</h3>
+            <div class="img-container aspect-video w-full bg-black">
+                <iframe id="video-frame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
+
+        <!-- 細節圖庫 (Gallery) -->
+        <div id="gallery-section" class="mb-24 hidden reveal-up active">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-6">03 // DETAILS & GALLERY</h3>
+            <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </div>
+
+        <!-- 底部相鄰專案切換卡片 -->
+        <div class="border-t border-minimal-border pt-12 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <button onclick="prevProject()" class="w-full sm:w-auto px-6 py-3 bg-white text-minimal-accent border border-minimal-border hover:border-minimal-accent transition shadow-hard text-xs font-mono flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> <span id="prev-btn-text">PREVIOUS PROJECT</span>
+            </button>
+            <button onclick="nextProject()" class="w-full sm:w-auto px-6 py-3 bg-white text-minimal-accent border border-minimal-border hover:border-minimal-accent transition shadow-hard text-xs font-mono flex items-center justify-center gap-2">
+                <span id="next-btn-text">NEXT PROJECT</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
     </main>
 
-    <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm flex items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-minimal-accent w-12 h-12 bg-white border border-minimal-border flex items-center justify-center transition shadow-hard hover:bg-minimal-accent hover:text-white z-10">
-            <i class="fa-solid fa-xmark text-sm"></i>
+    <!-- 圖片放大檢視燈箱 (Lightbox Modal) -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden items-center justify-center p-4">
+        <!-- 關閉按鈕 -->
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white w-10 h-10 border border-white/20 hover:border-white flex items-center justify-center transition">
+            <i class="fa-solid fa-xmark text-lg"></i>
         </button>
-        <img id="lightbox-img" src="" alt="Enlarged View" class="max-w-full max-h-[90vh] object-contain" onclick="event.stopPropagation()">
+
+        <!-- 上一張 -->
+        <button onclick="prevGalleryImage(event)" class="absolute left-6 top-1/2 -translate-y-1/2 text-white w-12 h-12 border border-white/20 hover:border-white flex items-center justify-center transition">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </button>
+
+        <!-- 圖片本體 -->
+        <div class="max-w-5xl max-h-[85vh] flex items-center justify-center">
+            <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain shadow-2xl" alt="Lightbox Preview">
+        </div>
+
+        <!-- 下一張 -->
+        <button onclick="nextGalleryImage(event)" class="absolute right-6 top-1/2 -translate-y-1/2 text-white w-12 h-12 border border-white/20 hover:border-white flex items-center justify-center transition">
+            <i class="fa-solid fa-chevron-right text-lg"></i>
+        </button>
+
+        <!-- 圖片張數計數器 -->
+        <div id="lightbox-counter" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 font-mono text-xs">
+            1 / 1
+        </div>
     </div>
 
-    <!-- 固定右下角的回頂部按鈕 -->
-    <div class="fixed bottom-8 right-8 z-40 flex flex-col items-center justify-end">
-        <button id="back-to-top" onclick="scrollToTop()" class="w-11 h-11 bg-white border border-[#dddddd] text-minimal-accent flex items-center justify-center transition-all duration-500 shadow-btn hover:bg-[#f8f8f8] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] opacity-0 pointer-events-none mt-auto">
-            <span class="text-xl font-light leading-none mb-0.5">&uarr;</span>
-        </button>
-    </div>
-
-    <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-[#F5F5F5] mt-12 font-medium tracking-widest">
-        <p>&copy; 2026 JOHNSON YAU.</p>
+    <!-- 頁尾 -->
+    <footer class="py-12 text-center text-[11px] text-minimal-gray border-t border-minimal-border bg-minimal-lightgray">
+        <p class="font-medium tracking-widest">&copy; 2026 JOHNSON YAU.</p>
     </footer>
 
+    <!-- JavaScript 邏輯 -->
     <script>
-        const langs = ['zh', 'en', 'ja'];
-        const langNames = { zh: 'EN', en: '日', ja: '繁' };
-        const backTexts = { zh: "返回作品列表", en: "Back to Projects", ja: "プロジェクト一覧に戻る" };
-
-        let currentLangIndex = 0; let currentProjectData = null; let allProjects = []; let sameCategoryProjects = []; let currentIndexInCat = 0; let galleryImages = []; let activeGalleryIndex = 0;
-
+        // 1. Firebase 初始化
         const firebaseConfig = {
             apiKey: "AIzaSyBjpDZAYRiTgr_-N1rw862cdzGHy_fJ6qM",
             authDomain: "johnsonportfolio-1262d.firebaseapp.com",
@@ -174,102 +264,341 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        function getProjectIdFromURL() { const params = new URLSearchParams(window.location.search); return params.get('id') || '1'; }
+        // 2. 語系與文字對照
+        const langs = ['zh', 'en', 'ja'];
+        let currentLangIndex = 0;
 
+        const langText = {
+            zh: { back: "返回作品列表", prev: "上一個專案", next: "下一個專案" },
+            en: { back: "Back to Portfolio", prev: "PREVIOUS PROJECT", next: "NEXT PROJECT" },
+            ja: { back: "作品一覧に戻る", prev: "前のプロジェクト", next: "次のプロジェクト" }
+        };
+
+        function getLocalized(val) {
+            if (!val) return '';
+            if (typeof val === 'object') {
+                const langKey = langs[currentLangIndex] || 'zh';
+                return val[langKey] || val.zh || val.en || Object.values(val)[0] || '';
+            }
+            return val;
+        }
+
+        // 3. 專案狀態變數
+        let allProjects = [];
+        let sameCategoryProjects = [];
+        let currentProjectData = null;
+        let currentGalleryImages = [];
+        let currentLightboxIndex = 0;
+
+        function getProjectIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function initLanguageFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langs.includes(langParam)) {
+                currentLangIndex = langs.indexOf(langParam);
+                const nextLang = langs[(currentLangIndex + 1) % langs.length].toUpperCase();
+                const langBtn = document.getElementById('lang-btn');
+                if (langBtn) langBtn.textContent = nextLang;
+            }
+        }
+
+        // 4. 載入專案資料
         async function loadProject() {
-            try { const snapshot = await db.collection('projects').get(); if (!snapshot.empty) allProjects = snapshot.docs.map(doc => doc.data()); } 
-            catch (err) { console.error(err); }
+            initLanguageFromURL();
 
-            const id = getProjectIdFromURL(); currentProjectData = allProjects.find(p => p.id === id);
-            if (!currentProjectData && allProjects.length > 0) currentProjectData = allProjects[0];
-
-            const langParam = new URLSearchParams(window.location.search).get('lang');
-            if (langParam && langs.includes(langParam)) currentLangIndex = langs.indexOf(langParam);
-            else { const savedLang = localStorage.getItem('portfolio_lang'); if (savedLang && langs.includes(savedLang)) currentLangIndex = langs.indexOf(savedLang); }
-
-            document.getElementById('lang-btn').textContent = langNames[langs[currentLangIndex]];
-            calcSameCategoryProjects(); renderProjectContent();
-        }
-
-        function getNormalizedCategory(cat) {
-            if (typeof cat === 'object') return cat.zh || ''; let catStr = String(cat || '').trim();
-            if (catStr.includes('Typeface') || catStr.includes('字體')) return '字體設計'; if (catStr.includes('展覽') || catStr.includes('Exhibition')) return '展覽'; if (catStr.includes('Pop-up') || catStr.includes('快閃店')) return '快閃店'; if (catStr.includes('包裝') || catStr.includes('Packaging')) return '包裝設計'; if (catStr.includes('周邊') || catStr.includes('Merchandise')) return '周邊設計'; if (catStr.includes('影片') || catStr.includes('Video')) return '影片剪接'; return '其他';
-        }
-
-        function calcSameCategoryProjects() {
-            if (!currentProjectData) return; const currentNormCat = getNormalizedCategory(currentProjectData.category);
-            sameCategoryProjects = allProjects.filter(p => getNormalizedCategory(p.category) === currentNormCat);
-            currentIndexInCat = sameCategoryProjects.findIndex(p => p.id === currentProjectData.id); if (currentIndexInCat === -1) currentIndexInCat = 0;
-        }
-
-        function prevProject() { if (sameCategoryProjects.length <= 1) return; currentIndexInCat = (currentIndexInCat - 1 + sameCategoryProjects.length) % sameCategoryProjects.length; window.location.href = `project.html?id=${sameCategoryProjects[currentIndexInCat].id}&lang=${langs[currentLangIndex]}`; }
-        function nextProject() { if (sameCategoryProjects.length <= 1) return; currentIndexInCat = (currentIndexInCat + 1) % sameCategoryProjects.length; window.location.href = `project.html?id=${sameCategoryProjects[currentIndexInCat].id}&lang=${langs[currentLangIndex]}`; }
-
-        function extractYouTubeEmbedUrl(url) {
-            if (!url) return ''; let videoId = '';
-            if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1]?.split('?')[0]; else if (url.includes('watch?v=')) videoId = url.split('watch?v=')[1]?.split('&')[0]; else if (url.includes('embed/')) videoId = url.split('embed/')[1]?.split('?')[0]; else videoId = url.trim();
-            return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
-        }
-
-        function renderProjectContent() {
-            if (!currentProjectData) return; const langKey = langs[currentLangIndex];
-            const title = typeof currentProjectData.title === 'object' ? (currentProjectData.title[langKey] || currentProjectData.title.zh) : currentProjectData.title; let rawCat = currentProjectData.category; let category = typeof rawCat === 'object' ? (rawCat[langKey] || rawCat.zh) : rawCat; const description = typeof currentProjectData.description === 'object' ? (currentProjectData.description[langKey] || currentProjectData.description.zh) : currentProjectData.description;
-
-            document.getElementById('page-title').textContent = title + ' | Johnson Yau'; document.getElementById('project-title').textContent = title; document.getElementById('project-category').textContent = category; document.getElementById('project-description').innerHTML = `<p>${description.replace(/\n/g, '</p><p>')}</p>`; document.getElementById('back-text').textContent = backTexts[langKey];
-
-            const mediaContainer = document.getElementById('media-container'); const ytEmbedUrl = extractYouTubeEmbedUrl(currentProjectData.youtube);
-
-            if (ytEmbedUrl) {
-                mediaContainer.className = "relative z-10 w-full flex items-center justify-center p-4 md:p-8";
-                mediaContainer.innerHTML = `<div class="w-full aspect-video bg-[#111] shadow-hard"><iframe src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-            } else {
-                mediaContainer.className = "relative z-10 w-full transition duration-300 flex items-center justify-center overflow-hidden py-6";
-                mediaContainer.innerHTML = `
-                    <img id="main-preview-img" src="${currentProjectData.image}" onerror="this.src='https://via.placeholder.com/800x450?text=Image'" alt="Project Main Preview" class="max-h-[70vh] w-auto object-contain cursor-pointer transition hover:scale-[1.01]">
-                    <div class="absolute bottom-2 right-2 px-3 py-1.5 bg-minimal-accent text-white text-[11px] font-medium opacity-0 transition shadow-hard pointer-events-none z-20" id="zoom-hint">
-                        <i class="fa-solid fa-expand mr-1.5"></i> 點擊放大
-                    </div>
-                `;
-                mediaContainer.onmouseenter = () => { document.getElementById('zoom-hint').style.opacity = '1'; };
-                mediaContainer.onmouseleave = () => { document.getElementById('zoom-hint').style.opacity = '0'; };
-                mediaContainer.onclick = () => openLightbox(currentProjectData.image);
+            try {
+                if (typeof db !== 'undefined') {
+                    const snapshot = await db.collection('projects').orderBy('order', 'asc').get();
+                    if (!snapshot.empty) {
+                        allProjects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    }
+                }
+            } catch (err) {
+                console.warn("載入資料失敗:", err);
             }
 
-            galleryImages = []; if (currentProjectData.image) galleryImages.push(currentProjectData.image);
-            if (currentProjectData.gallery) { const extraImgs = currentProjectData.gallery.split(',').map(s => s.trim()).filter(Boolean); galleryImages = galleryImages.concat(extraImgs); }
-            if (activeGalleryIndex >= galleryImages.length) activeGalleryIndex = 0; updateGalleryDisplay();
+            const targetId = getProjectIdFromURL();
+            
+            // 強制轉字串比對，解決型別不一致 Bug
+            if (targetId && allProjects.length > 0) {
+                currentProjectData = allProjects.find(p => String(p.id) === String(targetId));
+            }
+
+            // 若網址沒有 ID，則預設展示第一個專案
+            if (!currentProjectData && !targetId && allProjects.length > 0) {
+                currentProjectData = allProjects[0];
+            }
+
+            // 淡出移除 Loading 畫面
+            const loader = document.getElementById('project-loader');
+            if (loader) {
+                loader.classList.add('fade-out');
+                setTimeout(() => loader.remove(), 500);
+            }
+
+            // 若查無資料，顯示 404
+            if (!currentProjectData) {
+                document.getElementById('project-content').classList.add('hidden');
+                document.getElementById('project-404').classList.remove('hidden');
+                return;
+            }
+
+            calcSameCategoryProjects();
+            renderProjectContent();
+            updateBackLink();
         }
 
-        function updateGalleryDisplay() {
-            if (galleryImages.length === 0) return; document.getElementById('gallery-active-img').src = galleryImages[activeGalleryIndex];
-            const dotsContainer = document.getElementById('pagination-dots');
-            dotsContainer.innerHTML = galleryImages.map((_, idx) => `<button onclick="setGalleryIndex(event, ${idx})" class="w-2.5 h-2.5 rounded-none transition-all duration-300 ${idx === activeGalleryIndex ? 'bg-minimal-accent border border-minimal-accent' : 'bg-transparent border border-minimal-border hover:bg-minimal-gray'}"></button>`).join('');
+        // 計算同分類的專案列表以供上下篇切換
+        function calcSameCategoryProjects() {
+            if (!currentProjectData) return;
+            const currentCat = typeof currentProjectData.category === 'object' ? currentProjectData.category.zh : currentProjectData.category;
+            sameCategoryProjects = allProjects.filter(p => {
+                const cat = typeof p.category === 'object' ? p.category.zh : p.category;
+                return cat === currentCat;
+            });
+            if (sameCategoryProjects.length === 0) {
+                sameCategoryProjects = allProjects;
+            }
         }
 
-        function setGalleryIndex(event, idx) { event.stopPropagation(); activeGalleryIndex = idx; updateGalleryDisplay(); }
-        function prevGalleryImage(event) { event.stopPropagation(); if (galleryImages.length === 0) return; activeGalleryIndex = (activeGalleryIndex - 1 + galleryImages.length) % galleryImages.length; updateGalleryDisplay(); }
-        function nextGalleryImage(event) { event.stopPropagation(); if (galleryImages.length === 0) return; activeGalleryIndex = (activeGalleryIndex + 1) % galleryImages.length; updateGalleryDisplay(); }
-        function openLightbox(imgSrc) { if (!imgSrc) return; document.getElementById('lightbox-img').src = imgSrc; document.getElementById('lightbox-modal').classList.add('active'); }
-        function closeLightbox() { document.getElementById('lightbox-modal').classList.remove('active'); }
+        // 渲染專案內容
+        function renderProjectContent() {
+            if (!currentProjectData) return;
 
-        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            const title = getLocalized(currentProjectData.title);
+            const category = getLocalized(currentProjectData.category);
+            const description = getLocalized(currentProjectData.description);
 
-        window.addEventListener('scroll', () => {
-            const btn = document.getElementById('back-to-top');
-            if (window.scrollY > 300) {
-                btn.classList.remove('opacity-0', 'pointer-events-none');
-                btn.classList.add('opacity-100', 'pointer-events-auto');
+            document.getElementById('project-page-title').textContent = `${title} | Johnson Yau`;
+            document.getElementById('project-title').textContent = title;
+            document.getElementById('project-cat').textContent = category;
+            document.getElementById('project-desc').textContent = description;
+
+            // 主圖
+            const coverEl = document.getElementById('project-cover');
+            if (currentProjectData.coverImage) {
+                coverEl.src = currentProjectData.coverImage;
+            }
+
+            // YouTube 影片
+            const videoSec = document.getElementById('video-section');
+            const videoFrame = document.getElementById('video-frame');
+            if (currentProjectData.youtube && currentProjectData.youtube.trim()) {
+                let yUrl = currentProjectData.youtube.trim();
+                if (yUrl.includes('watch?v=')) {
+                    yUrl = yUrl.replace('watch?v=', 'embed/');
+                } else if (yUrl.includes('youtu.be/')) {
+                    yUrl = yUrl.replace('youtu.be/', 'www.youtube.com/embed/');
+                }
+                videoFrame.src = yUrl;
+                videoSec.classList.remove('hidden');
             } else {
-                btn.classList.add('opacity-0', 'pointer-events-none');
-                btn.classList.remove('opacity-100', 'pointer-events-auto');
+                videoSec.classList.add('hidden');
+            }
+
+            // 細節圖庫
+            const gallerySec = document.getElementById('gallery-section');
+            const galleryGrid = document.getElementById('gallery-grid');
+            let imgs = [];
+            if (Array.isArray(currentProjectData.gallery)) {
+                imgs = currentProjectData.gallery.filter(Boolean);
+            } else if (typeof currentProjectData.gallery === 'string') {
+                imgs = currentProjectData.gallery.split(',').map(s => s.trim()).filter(Boolean);
+            }
+
+            currentGalleryImages = imgs;
+
+            if (imgs.length > 0) {
+                gallerySec.classList.remove('hidden');
+                galleryGrid.innerHTML = imgs.map((imgUrl, idx) => `
+                    <div onclick="openLightbox(${idx})" class="relative group cursor-pointer overflow-hidden border border-minimal-border bg-white shadow-hard hover:shadow-hard-hover transition">
+                        <div class="crop-mark crop-mark-tl"></div>
+                        <div class="crop-mark crop-mark-tr"></div>
+                        <div class="crop-mark crop-mark-bl"></div>
+                        <div class="crop-mark crop-mark-br"></div>
+                        <div class="aspect-[4/3] w-full overflow-hidden flex items-center justify-center">
+                            <img src="${imgUrl}" alt="Gallery Detail ${idx + 1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/800x600?text=Detail+Image'">
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                gallerySec.classList.add('hidden');
+            }
+        }
+
+        // 5. 語言切換
+        function switchLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            const nextLang = langs[(currentLangIndex + 1) % langs.length].toUpperCase();
+            
+            const langBtn = document.getElementById('lang-btn');
+            if (langBtn) langBtn.textContent = nextLang;
+
+            updateBackLink();
+            renderProjectContent();
+        }
+
+        function updateBackLink() {
+            const langKey = langs[currentLangIndex] || 'zh';
+            const t = langText[langKey] || langText.zh;
+
+            const backText = document.getElementById('back-text');
+            if (backText) backText.textContent = t.back;
+
+            const prevBtnText = document.getElementById('prev-btn-text');
+            if (prevBtnText) prevBtnText.textContent = t.prev;
+
+            const nextBtnText = document.getElementById('next-btn-text');
+            if (nextBtnText) nextBtnText.textContent = t.next;
+
+            const backBtn = document.getElementById('back-btn');
+            if (backBtn) backBtn.href = `index.html?lang=${langKey}`;
+        }
+
+        // 6. 前後專案切換
+        function prevProject() {
+            if (sameCategoryProjects.length <= 1) return;
+            const currentIdx = sameCategoryProjects.findIndex(p => String(p.id) === String(currentProjectData.id));
+            const prevIdx = (currentIdx - 1 + sameCategoryProjects.length) % sameCategoryProjects.length;
+            const prevId = sameCategoryProjects[prevIdx].id;
+            const langKey = langs[currentLangIndex] || 'zh';
+            window.location.href = `project.html?id=${prevId}&lang=${langKey}`;
+        }
+
+        function nextProject() {
+            if (sameCategoryProjects.length <= 1) return;
+            const currentIdx = sameCategoryProjects.findIndex(p => String(p.id) === String(currentProjectData.id));
+            const nextIdx = (currentIdx + 1) % sameCategoryProjects.length;
+            const nextId = sameCategoryProjects[nextIdx].id;
+            const langKey = langs[currentLangIndex] || 'zh';
+            window.location.href = `project.html?id=${nextId}&lang=${langKey}`;
+        }
+
+        // 7. 燈箱操作（修復鍵盤衝突）
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+
+            if (currentGalleryImages.length > 0) {
+                img.src = currentGalleryImages[currentLightboxIndex];
+                counter.textContent = `${currentLightboxIndex + 1} / ${currentGalleryImages.length}`;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function prevGalleryImage(e) {
+            if (e) e.stopPropagation();
+            if (currentGalleryImages.length <= 1) return;
+            currentLightboxIndex = (currentLightboxIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+            document.getElementById('lightbox-img').src = currentGalleryImages[currentLightboxIndex];
+            document.getElementById('lightbox-counter').textContent = `${currentLightboxIndex + 1} / ${currentGalleryImages.length}`;
+        }
+
+        function nextGalleryImage(e) {
+            if (e) e.stopPropagation();
+            if (currentGalleryImages.length <= 1) return;
+            currentLightboxIndex = (currentLightboxIndex + 1) % currentGalleryImages.length;
+            document.getElementById('lightbox-img').src = currentGalleryImages[currentLightboxIndex];
+            document.getElementById('lightbox-counter').textContent = `${currentLightboxIndex + 1} / ${currentGalleryImages.length}`;
+        }
+
+        // 8. 鍵盤事件監聽（徹底隔離燈箱與專案跳轉）
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox-modal');
+            const isLightboxActive = lightbox && !lightbox.classList.contains('hidden');
+
+            if (e.key === 'Escape') {
+                if (isLightboxActive) closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                if (isLightboxActive) {
+                    prevGalleryImage(); // 燈箱開啟時：切換上一張相
+                } else {
+                    prevProject();      // 燈箱關閉時：切換上一個專案
+                }
+            } else if (e.key === 'ArrowRight') {
+                if (isLightboxActive) {
+                    nextGalleryImage(); // 燈箱開啟時：切換下一張相
+                } else {
+                    nextProject();      // 燈箱關閉時：切換下一個專案
+                }
             }
         });
 
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); else if (e.key === 'ArrowLeft') prevProject(); else if (e.key === 'ArrowRight') nextProject(); });
+        // 9. 滾動進度條
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (totalHeight > 0) {
+                const progress = (window.scrollY / totalHeight) * 100;
+                const bar = document.getElementById('scroll-progress');
+                if (bar) bar.style.width = `${progress}%`;
+            }
+        });
 
-        function switchProjectLanguage() { currentLangIndex = (currentLangIndex + 1) % langs.length; const langKey = langs[currentLangIndex]; document.getElementById('lang-btn').textContent = langNames[langKey]; localStorage.setItem('portfolio_lang', langKey); renderProjectContent(); }
-
-        window.addEventListener('DOMContentLoaded', () => { loadProject(); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.15 }); document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el)); });
+        // 啟動入口
+        document.addEventListener('DOMContentLoaded', loadProject);
     </script>
 </body>
 </html>
+四、 快速同步：首頁（index.html）更換方案 C 三語 Tagline 與後台防呆
+若想將首頁 index.html 的 Tagline 同步替換為方案 C，並啟用 ?admin 自動彈出後台，只需打開 index.html：
+替換第 547 行起的 langMap 為：
+JavaScript
+const langMap = {
+    zh: {
+        siteTitle: "Johnson Yau | 多媒體設計與創意作品集",
+        navWorks: "精選專案",
+        navTrans: "電影翻譯紀錄",
+        navAbout: "關於我",
+        heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+        heroTitle: "視覺的凝練，<br><span class=\"text-minimal-gray\">語意的延伸</span>",
+        heroDesc: "融合設計美學與語文敏銳度，服務包括日本 IP 物料、品牌字型改編、快閃店展覽與院線動畫字幕。",
+        btnWorks: "探索作品",
+        btnTrans: "電影翻譯紀錄",
+        worksHeading: "專案分類",
+        aboutTitle: "自我介紹・聯絡方式",
+        btnFeatured: "精選作品"
+    },
+    en: {
+        siteTitle: "Johnson Yau | Multimedia Design & Creative Portfolio",
+        navWorks: "Selected Works",
+        navTrans: "Film Subtitles",
+        navAbout: "About Me",
+        heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+        heroTitle: "Distilling Vision,<br><span class=\"text-minimal-gray\">Expanding Meaning.</span>",
+        heroDesc: "Bridging visual aesthetics and linguistic nuance — specializing in Japanese IP licensing, typeface localization, pop-up exhibitions, and film subtitling.",
+        btnWorks: "Explore Works",
+        btnTrans: "Film Subtitles",
+        worksHeading: "Project Categories",
+        aboutTitle: "About Me & Contact",
+        btnFeatured: "Featured Works"
+    },
+    ja: {
+        siteTitle: "Johnson Yau | マルチメディアデザイン・制作実績",
+        navWorks: "プロジェクト",
+        navTrans: "映画字幕翻訳",
+        navAbout: "自己紹介",
+        heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+        heroTitle: "視覚の凝縮、<br><span class=\"text-minimal-gray\">語義の共鳴</span>",
+        heroDesc: "デザイン美学と言語の感性を融合し、日本アニメ・マンガIPのプロモーション、フォントローカライズ、ポップアップ展示企画、劇場版アニメ字幕翻訳に注力しています。",
+        btnWorks: "作品を見る",
+        btnTrans: "字幕翻訳実績",
+        worksHeading: "カテゴリー",
+        aboutTitle: "自己紹介・お問い合わせ",
+        btnFeatured: "注目作品"
+    }
+};
