@@ -1605,6 +1605,10 @@
             initLoader();
             initScrollEffects();
             fetchCloudData();
+            // 如果網址含有 ?admin，自動彈出後台登入框
+if (window.location.search.includes('admin') || window.location.hash.includes('admin')) {
+    openPasswordModal();
+}
         });
     </script>
 </body>
