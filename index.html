@@ -624,118 +624,155 @@
         const langs = ['zh', 'en', 'ja'];
         let currentLangIndex = 0;
 
+        // ==========================================
+        // 語系與多語言字典（包含完整 8 個分類按鈕）
+        // ==========================================
         const langMap = {
             zh: {
                 siteTitle: "Johnson Yau | 多媒體設計與創意作品集",
                 navWorks: "精選專案",
                 navTrans: "電影翻譯紀錄",
                 navAbout: "關於我",
-                heroTag: "Multimedia Design & IP Localization",
-                heroTitle: "簡約日式美學<br><span class=\"text-minimal-gray\">精準視覺敘事</span>",
-                heroDesc: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class=\"hidden md:inline\">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
+                heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+                heroTitle: "視覺的凝練，<br><span class=\"text-minimal-gray\">語意的延伸</span>",
+                heroDesc: "融合設計美學與語文敏銳度，服務包括日本 IP 物料、品牌字型改編、快閃店展覽與院線動畫字幕。",
                 btnWorks: "探索作品",
                 btnTrans: "電影翻譯紀錄",
+                worksSub: "Selected Projects",
                 worksHeading: "專案分類",
+                aboutSub: "About Me & Contact",
                 aboutTitle: "自我介紹・聯絡方式",
-                btnFeatured: "精選作品"
+                transHeading: "電影翻譯紀錄",
+                transDesc: "日語院線字幕 · 日本動漫 IP 本地化",
+                categories: {
+                    featured: "精選作品",
+                    type: "字體設計",
+                    exhibition: "展覽",
+                    popup: "快閃店",
+                    pkg: "包裝設計",
+                    merch: "周邊設計",
+                    video: "影片剪接",
+                    other: "其他"
+                }
             },
             en: {
                 siteTitle: "Johnson Yau | Multimedia Design & Creative Portfolio",
                 navWorks: "Selected Works",
                 navTrans: "Film Subtitles",
                 navAbout: "About Me",
-                heroTag: "Multimedia Design & IP Localization",
-                heroTitle: "Minimal Aesthetics<br><span class=\"text-minimal-gray\">Visual Narrative</span>",
-                heroDesc: "Specializing in Japanese anime IP promotion, typeface localization,<br class=\"hidden md:inline\">pop-up store exhibitions, packaging, and Japanese film subtitling.",
+                heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+                heroTitle: "Distilling Vision,<br><span class=\"text-minimal-gray\">Expanding Meaning.</span>",
+                heroDesc: "Bridging visual aesthetics and linguistic nuance — specializing in Japanese IP licensing, typeface localization, pop-up exhibitions, and film subtitling.",
                 btnWorks: "Explore Works",
                 btnTrans: "Film Subtitles",
+                worksSub: "Selected Projects",
                 worksHeading: "Project Categories",
+                aboutSub: "About Me & Contact",
                 aboutTitle: "About Me & Contact",
-                btnFeatured: "Featured Works"
+                transHeading: "Film Subtitles Archive",
+                transDesc: "Japanese Film Subtitles · Anime IP Localization",
+                categories: {
+                    featured: "Featured Works",
+                    type: "Typography",
+                    exhibition: "Exhibition",
+                    popup: "Pop-up Store",
+                    pkg: "Packaging",
+                    merch: "Merchandise",
+                    video: "Video Editing",
+                    other: "Others"
+                }
             },
             ja: {
                 siteTitle: "Johnson Yau | マルチメディアデザイン・制作実績",
                 navWorks: "プロジェクト",
                 navTrans: "映画字幕翻訳",
                 navAbout: "自己紹介",
-                heroTag: "Multimedia Design & IP Localization",
-                heroTitle: "ミニマルな日本美学<br><span class=\"text-minimal-gray\">視覚的な物語性</span>",
-                heroDesc: "日本アニメ・マンガIPのプロモーション、フォントローカライズ、<br class=\"hidden md:inline\">ポップアップ展示企画、パッケージデザイン、日本語字幕翻訳に注力。",
+                heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
+                heroTitle: "視覚の凝縮、<br><span class=\"text-minimal-gray\">語義の共鳴</span>",
+                heroDesc: "デザイン美学と言語の感性を融合し、日本アニメ・マンガIPのプロモーション、フォントローカライズ、ポップアップ展示企画、劇場版アニメ字幕翻訳に注力しています。",
                 btnWorks: "作品を見る",
                 btnTrans: "字幕翻訳実績",
-                worksHeading: "カテゴリー",
+                worksSub: "Selected Projects",
+                worksHeading: "プロジェクトカテゴリー",
+                aboutSub: "About Me & Contact",
                 aboutTitle: "自己紹介・お問い合わせ",
-                btnFeatured: "注目作品"
+                transHeading: "映画字幕翻訳実績",
+                transDesc: "劇場版日本語字幕 · アニメIPローカライズ",
+                categories: {
+                    featured: "注目作品",
+                    type: "文字デザイン",
+                    exhibition: "展示",
+                    popup: "ポップアップストア",
+                    pkg: "パッケージデザイン",
+                    merch: "グッズデザイン",
+                    video: "映像編集",
+                    other: "その他"
+                }
             }
         };
 
-        let aboutData = {
-            zh: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
-            en: "Focused on Japanese anime IP licensing promotions, typography localization, pop-up exhibitions, packaging design, and Japanese subtitle translation.",
-            ja: "日本のアニメ・マンガIPの宣伝資料、ロゴのローカライズ、ポップアップストアの展示企画、パッケージデザイン、および日本語字幕付き映画の翻訳に注力しています。"
-        };
+        // ==========================================
+        // 語言切換核心函式
+        // ==========================================
+        function switchLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langs.length;
+            const langKey = langs[currentLangIndex];
+            const nextLang = langs[(currentLangIndex + 1) % langs.length].toUpperCase();
 
-        function getLocalized(val) {
-            if (!val) return '';
-            if (typeof val === 'object') {
-                const langKey = langs[currentLangIndex] || 'zh';
-                return val[langKey] || val.zh || val.en || Object.values(val)[0] || '';
+            // 更新按鈕文字 (例如目前是 EN，按鈕顯示下一個 JA)
+            const langBtn = document.getElementById('lang-btn');
+            if (langBtn) langBtn.textContent = nextLang;
+
+            const t = langMap[langKey] || langMap.zh;
+            document.title = t.siteTitle;
+
+            // 導覽列
+            document.querySelectorAll('.nav-works').forEach(el => el.textContent = t.navWorks);
+            document.querySelectorAll('.nav-trans').forEach(el => el.textContent = t.navTrans);
+            document.querySelectorAll('.nav-about').forEach(el => el.textContent = t.navAbout);
+
+            // Hero 區塊
+            const heroTag = document.querySelector('.hero-tag');
+            if (heroTag) heroTag.textContent = t.heroTag;
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) heroTitle.innerHTML = t.heroTitle;
+            const heroDesc = document.querySelector('.hero-desc');
+            if (heroDesc) heroDesc.innerHTML = t.heroDesc;
+            const btnWorks = document.querySelector('.btn-works');
+            if (btnWorks) btnWorks.textContent = t.btnWorks;
+            const btnTrans = document.querySelector('.btn-trans');
+            if (btnTrans) btnTrans.textContent = t.btnTrans;
+
+            // 專案標題與分類按鈕 (全 8 個按鈕即時翻譯)
+            const worksHeading = document.getElementById('works-heading');
+            if (worksHeading) worksHeading.textContent = t.worksHeading;
+
+            const cats = t.categories;
+            if (cats) {
+                const bFeatured = document.getElementById('btn-featured'); if (bFeatured) bFeatured.textContent = cats.featured;
+                const bType = document.getElementById('btn-type');         if (bType) bType.textContent = cats.type;
+                const bExhib = document.getElementById('btn-exhibition');  if (bExhib) bExhib.textContent = cats.exhibition;
+                const bPopup = document.getElementById('btn-popup');       if (bPopup) bPopup.textContent = cats.popup;
+                const bPkg = document.getElementById('btn-pkg');           if (bPkg) bPkg.textContent = cats.pkg;
+                const bMerch = document.getElementById('btn-merch');       if (bMerch) bMerch.textContent = cats.merch;
+                const bVideo = document.getElementById('btn-video');       if (bVideo) bVideo.textContent = cats.video;
+                const bOther = document.getElementById('btn-other');       if (bOther) bOther.textContent = cats.other;
             }
-            return val;
-        }
 
-        // ==========================================
-        // 2. 作品集與電影翻譯狀態
-        // ==========================================
-        let projects = [];
-        let currentFilter = 'featured';
-        let currentPageIndex = 0;
-        const itemsPerPage = 8;
+            // 電影翻譯區塊標題
+            const transHeading = document.getElementById('trans-heading');
+            if (transHeading) transHeading.textContent = t.transHeading;
+            const transDesc = document.getElementById('trans-desc');
+            if (transDesc) transDesc.textContent = t.transDesc;
 
-        let translations = [];
-        let transPageIndex = 0;
-        const transItemsPerPage = 12;
+            // 關於我區塊標題
+            const aboutTitle = document.getElementById('about-title');
+            if (aboutTitle) aboutTitle.textContent = t.aboutTitle;
 
-        let adminProjPageIndex = 0;
-        const adminProjItemsPerPage = 6;
-        let adminCurrentFilter = 'all';
-
-        let adminTransPageIndex = 0;
-        const adminTransItemsPerPage = 6;
-
-        // 離線保底翻譯清單
-        const fallbackTranslations = [
-            { title: { zh: "假面騎士 555 20th PARADISE REGAINED", en: "Masked Rider 555 20th PARADISE REGAINED", ja: "仮面ライダー555 20th パラダイス・リゲインド" }, year: "2024", type: "日文字幕 ➔ 繁體中文", image: "https://johnson0661-lang.github.io/johnsonyau_design/assets/images/movies/faiz.jpg" },
-            { title: { zh: "假面騎士 THE WINTER MOVIE 歌查德與極狐", en: "Kamen Rider The Winter Movie Gotchard & Geats", ja: "仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "少女與戰車 最終章 第4話", en: "Girls und Panzer das Finale: Part 4", ja: "ガールズ＆パンツァー 最終章 第4話" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "新・假面騎士", en: "Shin Masked Rider", ja: "シン・仮面ライダー" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "假面騎士 Geats × Revice Battle Royale", en: "Kamen Rider Geats × Revice Battle Royale", ja: "仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "電影 五等分的新娘", en: "The Quintessential Quintuplets Movie", ja: "映画 五等分の花嫁" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "來自深淵 深沉靈魂的黎明", en: "Made in Abyss: Dawn of the Deep Soul", ja: "劇場版メイドインアビス 深き魂の黎明" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "數碼暴龍 Last Evolution 絆", en: "Digimon Adventure: Last Evolution Kizuna", ja: "デジモンアドベンチャー LAST EVOLUTION 絆" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "為美好的世界獻上祝福！紅傳說", en: "KonoSuba: Legend of Crimson", ja: "この素晴らしい世界に祝福を！紅伝説" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" },
-            { title: { zh: "Fate/stay night [Heaven's Feel] II. lost butterfly", en: "Fate/stay night [Heaven's Feel] II", ja: "劇場版 Fate/stay night [Heaven's Feel] II" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" }
-        ];
-
-        // ==========================================
-        // 3. Loading 動畫控制（徹底修復 1 秒回閃）
-        // ==========================================
-        function initLoader() {
-            const overlay = document.getElementById('intro-overlay');
-            if (!overlay) return;
-
-            setTimeout(() => {
-                overlay.classList.add('fade-out');
-                overlay.addEventListener('transitionend', () => {
-                    overlay.remove();
-                }, { once: true });
-
-                setTimeout(() => {
-                    if (document.getElementById('intro-overlay')) {
-                        overlay.remove();
-                    }
-                }, 900);
-            }, 2200);
+            // 重新渲染列表資料
+            renderProjects();
+            renderTranslations();
+            renderAbout();
         }
 
         // ==========================================
