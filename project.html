@@ -91,15 +91,46 @@
         .img-container {
             border: 1px solid #111;
             box-shadow: 2px 2px 0px 0px rgba(17,17,17,0.7);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .reveal-up {
+        /* --- Apple 風格滾動微動態 --- */
+        .apple-reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(32px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
-        .reveal-up.active {
+        .apple-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 封面主圖 Apple 風格視差縮放容器 */
+        .hero-img-box {
+            overflow: hidden;
+            transform: scale(0.98);
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-img-box.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .hero-img-box img {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-img-box:hover img {
+            transform: scale(1.03);
+        }
+
+        /* 圖庫細節卡片交錯進場 */
+        .gallery-card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .gallery-card.active {
             opacity: 1;
             transform: translateY(0);
         }
@@ -122,27 +153,21 @@
         </div>
     </div>
 
-    <!-- Header 導覽列 -->
+    <!-- Header 導覽列（乾淨極簡：已移除重複的頂部箭頭按鈕） -->
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide">
-            <a id="back-btn" href="index.html" class="flex items-center text-minimal-gray hover:text-minimal-accent transition font-medium">
-                <i class="fa-solid fa-arrow-left mr-2"></i> <span id="back-text">返回作品列表</span>
+            <a id="back-btn" href="index.html" class="group flex items-center text-minimal-gray hover:text-minimal-accent transition font-medium">
+                <i class="fa-solid fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i> 
+                <span id="back-text">返回作品列表</span>
             </a>
 
             <a href="index.html" class="flex items-center">
                 <img src="logo.png" alt="Johnson Yau Logo" class="h-7 w-auto object-contain" style="filter: brightness(0) !important;" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'">
             </a>
 
-            <div class="flex items-center space-x-3">
-                <!-- 專案前後切換 -->
-                <button onclick="prevProject()" title="上一個專案" class="w-8 h-8 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
-                    <i class="fa-solid fa-chevron-left text-xs"></i>
-                </button>
-                <button onclick="nextProject()" title="下一個專案" class="w-8 h-8 bg-white border border-minimal-border text-minimal-accent flex items-center justify-center hover:bg-minimal-accent hover:text-white transition shadow-hard">
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-                <!-- 語言切換 -->
-                <button onclick="switchLanguage()" id="lang-btn" class="px-3 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition font-medium shadow-hard">
+            <div class="flex items-center">
+                <!-- 語言切換按鈕 -->
+                <button onclick="switchLanguage()" id="lang-btn" class="px-3.5 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition font-medium shadow-hard">
                     EN
                 </button>
             </div>
@@ -161,85 +186,97 @@
     <!-- 專案主要內容區塊 -->
     <main id="project-content" class="max-w-5xl mx-auto px-6 py-20">
         
-        <!-- 專案標題與分類 Header -->
-        <div class="mb-12 border-b border-minimal-border pb-8 reveal-up active">
+        <!-- 專案標題與分類 Header (Apple 式平滑進場) -->
+        <div class="mb-14 border-b border-minimal-border pb-8 apple-reveal active">
             <div class="flex items-center gap-3 mb-4">
                 <span id="project-cat" class="px-3 py-1 bg-white text-minimal-accent border border-minimal-border text-[11px] font-mono uppercase tracking-wider shadow-hard">
                     CATEGORY
                 </span>
             </div>
-            <h1 id="project-title" class="text-3xl md:text-5xl font-bold tracking-tight text-minimal-accent mb-4 leading-tight">
+            <h1 id="project-title" class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-minimal-accent mb-4 leading-tight">
                 Project Title
             </h1>
         </div>
 
-        <!-- 主圖展示 -->
-        <div class="relative mb-16 reveal-up active">
+        <!-- 主圖展示 (Apple 視差縮放質感) -->
+        <div class="relative mb-20">
             <div class="crop-mark crop-mark-tl"></div>
             <div class="crop-mark crop-mark-tr"></div>
             <div class="crop-mark crop-mark-bl"></div>
             <div class="crop-mark crop-mark-br"></div>
             
-            <div class="img-container aspect-[16/9] w-full bg-white relative overflow-hidden flex items-center justify-center">
+            <div class="hero-img-box img-container aspect-[16/9] w-full bg-white relative active">
                 <img id="project-cover" src="" alt="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/1200x675?text=No+Cover+Image'">
             </div>
         </div>
 
-        <!-- 專案簡介文字 (使用 whitespace-pre-line 保證排版安全) -->
-        <div class="max-w-3xl mb-20 reveal-up active">
-            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-3">01 // PROJECT OVERVIEW</h3>
-            <div id="project-desc" class="text-base text-[#333] leading-relaxed whitespace-pre-line space-y-4"></div>
+        <!-- 專案簡介文字 (Apple 標題層次排版) -->
+        <div class="max-w-3xl mb-24 apple-reveal">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-4">01 // PROJECT OVERVIEW</h3>
+            <div id="project-desc" class="text-base md:text-lg text-[#333] leading-relaxed whitespace-pre-line space-y-4 font-normal"></div>
         </div>
 
-        <!-- YouTube 影片嵌入區塊 (選填，有資料時才顯示) -->
-        <div id="video-section" class="mb-20 hidden reveal-up active">
+        <!-- YouTube 影片嵌入區塊 (選填) -->
+        <div id="video-section" class="mb-24 hidden apple-reveal">
             <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-4">02 // VIDEO SHOWCASE</h3>
             <div class="img-container aspect-video w-full bg-black">
                 <iframe id="video-frame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
-        <!-- 細節圖庫 (Gallery) -->
-        <div id="gallery-section" class="mb-24 hidden reveal-up active">
-            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-6">03 // DETAILS & GALLERY</h3>
+        <!-- 細節圖庫 (Apple 瀑布交錯滑動進場) -->
+        <div id="gallery-section" class="mb-28 hidden apple-reveal">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-minimal-gray mb-8">03 // DETAILS & GALLERY</h3>
             <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
 
-        <!-- 底部相鄰專案切換卡片 -->
-        <div class="border-t border-minimal-border pt-12 flex flex-col sm:flex-row justify-between items-center gap-6">
-            <button onclick="prevProject()" class="w-full sm:w-auto px-6 py-3 bg-white text-minimal-accent border border-minimal-border hover:border-minimal-accent transition shadow-hard text-xs font-mono flex items-center justify-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> <span id="prev-btn-text">PREVIOUS PROJECT</span>
-            </button>
-            <button onclick="nextProject()" class="w-full sm:w-auto px-6 py-3 bg-white text-minimal-accent border border-minimal-border hover:border-minimal-accent transition shadow-hard text-xs font-mono flex items-center justify-center gap-2">
-                <span id="next-btn-text">NEXT PROJECT</span> <i class="fa-solid fa-arrow-right"></i>
-            </button>
+        <!-- 底部專案導覽（升級為具有下一個作品標題預覽的高質感卡片） -->
+        <div class="border-t border-minimal-border pt-16 pb-8 apple-reveal">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- 上一個專案按鈕 -->
+                <button onclick="prevProject()" id="prev-btn-card" class="group text-left p-6 bg-white border border-minimal-border hover:border-minimal-accent transition duration-300 shadow-hard flex flex-col justify-between">
+                    <span class="text-[10px] font-mono text-minimal-gray uppercase tracking-widest flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1.5 transition-transform duration-300"></i>
+                        <span id="prev-btn-text">PREVIOUS PROJECT</span>
+                    </span>
+                    <span id="prev-project-name" class="font-bold text-base text-minimal-accent line-clamp-1">
+                        —
+                    </span>
+                </button>
+
+                <!-- 下一個專案按鈕 -->
+                <button onclick="nextProject()" id="next-btn-card" class="group text-right p-6 bg-white border border-minimal-border hover:border-minimal-accent transition duration-300 shadow-hard flex flex-col justify-between">
+                    <span class="text-[10px] font-mono text-minimal-gray uppercase tracking-widest flex items-center justify-end gap-2 mb-3">
+                        <span id="next-btn-text">NEXT PROJECT</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1.5 transition-transform duration-300"></i>
+                    </span>
+                    <span id="next-project-name" class="font-bold text-base text-minimal-accent line-clamp-1">
+                        —
+                    </span>
+                </button>
+            </div>
         </div>
 
     </main>
 
     <!-- 圖片放大檢視燈箱 (Lightbox Modal) -->
     <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden items-center justify-center p-4">
-        <!-- 關閉按鈕 -->
         <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white w-10 h-10 border border-white/20 hover:border-white flex items-center justify-center transition">
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
 
-        <!-- 上一張 -->
         <button onclick="prevGalleryImage(event)" class="absolute left-6 top-1/2 -translate-y-1/2 text-white w-12 h-12 border border-white/20 hover:border-white flex items-center justify-center transition">
             <i class="fa-solid fa-chevron-left text-lg"></i>
         </button>
 
-        <!-- 圖片本體 -->
         <div class="max-w-5xl max-h-[85vh] flex items-center justify-center">
             <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain shadow-2xl" alt="Lightbox Preview">
         </div>
 
-        <!-- 下一張 -->
         <button onclick="nextGalleryImage(event)" class="absolute right-6 top-1/2 -translate-y-1/2 text-white w-12 h-12 border border-white/20 hover:border-white flex items-center justify-center transition">
             <i class="fa-solid fa-chevron-right text-lg"></i>
         </button>
 
-        <!-- 圖片張數計數器 -->
         <div id="lightbox-counter" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 font-mono text-xs">
             1 / 1
         </div>
@@ -337,7 +374,7 @@
             const loader = document.getElementById('project-loader');
             if (loader) {
                 loader.classList.add('fade-out');
-                setTimeout(() => loader.remove(), 500);
+                setTimeout(() => loader.remove(), 400);
             }
 
             // 若查無資料，顯示 404
@@ -350,9 +387,10 @@
             calcSameCategoryProjects();
             renderProjectContent();
             updateBackLink();
+            initAppleScrollAnimation();
         }
 
-        // 計算同分類的專案列表以供上下篇切換
+        // 計算同分類專案與相鄰預覽標題
         function calcSameCategoryProjects() {
             if (!currentProjectData) return;
             const currentCat = typeof currentProjectData.category === 'object' ? currentProjectData.category.zh : currentProjectData.category;
@@ -362,6 +400,24 @@
             });
             if (sameCategoryProjects.length === 0) {
                 sameCategoryProjects = allProjects;
+            }
+
+            // 更新底部按鈕上的作品名稱預覽
+            const currentIdx = sameCategoryProjects.findIndex(p => String(p.id) === String(currentProjectData.id));
+            const prevIdx = (currentIdx - 1 + sameCategoryProjects.length) % sameCategoryProjects.length;
+            const nextIdx = (currentIdx + 1) % sameCategoryProjects.length;
+
+            const prevProjectObj = sameCategoryProjects[prevIdx];
+            const nextProjectObj = sameCategoryProjects[nextIdx];
+
+            const prevNameEl = document.getElementById('prev-project-name');
+            const nextNameEl = document.getElementById('next-project-name');
+
+            if (prevNameEl && prevProjectObj) {
+                prevNameEl.textContent = getLocalized(prevProjectObj.title);
+            }
+            if (nextNameEl && nextProjectObj) {
+                nextNameEl.textContent = getLocalized(nextProjectObj.title);
             }
         }
 
@@ -400,7 +456,7 @@
                 videoSec.classList.add('hidden');
             }
 
-            // 細節圖庫
+            // 細節圖庫（交錯進場）
             const gallerySec = document.getElementById('gallery-section');
             const galleryGrid = document.getElementById('gallery-grid');
             let imgs = [];
@@ -415,13 +471,15 @@
             if (imgs.length > 0) {
                 gallerySec.classList.remove('hidden');
                 galleryGrid.innerHTML = imgs.map((imgUrl, idx) => `
-                    <div onclick="openLightbox(${idx})" class="relative group cursor-pointer overflow-hidden border border-minimal-border bg-white shadow-hard hover:shadow-hard-hover transition">
+                    <div onclick="openLightbox(${idx})" 
+                         style="transition-delay: ${(idx % 2) * 0.12}s"
+                         class="gallery-card relative group cursor-pointer overflow-hidden border border-minimal-border bg-white shadow-hard hover:shadow-hard-hover hover:-translate-y-1 transition-all duration-500">
                         <div class="crop-mark crop-mark-tl"></div>
                         <div class="crop-mark crop-mark-tr"></div>
                         <div class="crop-mark crop-mark-bl"></div>
                         <div class="crop-mark crop-mark-br"></div>
                         <div class="aspect-[4/3] w-full overflow-hidden flex items-center justify-center">
-                            <img src="${imgUrl}" alt="Gallery Detail ${idx + 1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/800x600?text=Detail+Image'">
+                            <img src="${imgUrl}" alt="Gallery Detail ${idx + 1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" onerror="this.src='https://via.placeholder.com/800x600?text=Detail+Image'">
                         </div>
                     </div>
                 `).join('');
@@ -439,6 +497,7 @@
             if (langBtn) langBtn.textContent = nextLang;
 
             updateBackLink();
+            calcSameCategoryProjects();
             renderProjectContent();
         }
 
@@ -478,7 +537,7 @@
             window.location.href = `project.html?id=${nextId}&lang=${langKey}`;
         }
 
-        // 7. 燈箱操作（修復鍵盤衝突）
+        // 7. 燈箱操作（鍵盤左右鍵徹底隔離）
         function openLightbox(index) {
             currentLightboxIndex = index;
             const modal = document.getElementById('lightbox-modal');
@@ -517,7 +576,7 @@
             document.getElementById('lightbox-counter').textContent = `${currentLightboxIndex + 1} / ${currentGalleryImages.length}`;
         }
 
-        // 8. 鍵盤事件監聽（徹底隔離燈箱與專案跳轉）
+        // 8. 鍵盤事件監聽
         document.addEventListener('keydown', (e) => {
             const lightbox = document.getElementById('lightbox-modal');
             const isLightboxActive = lightbox && !lightbox.classList.contains('hidden');
@@ -526,20 +585,38 @@
                 if (isLightboxActive) closeLightbox();
             } else if (e.key === 'ArrowLeft') {
                 if (isLightboxActive) {
-                    prevGalleryImage(); // 燈箱開啟時：切換上一張相
+                    prevGalleryImage();
                 } else {
-                    prevProject();      // 燈箱關閉時：切換上一個專案
+                    prevProject();
                 }
             } else if (e.key === 'ArrowRight') {
                 if (isLightboxActive) {
-                    nextGalleryImage(); // 燈箱開啟時：切換下一張相
+                    nextGalleryImage();
                 } else {
-                    nextProject();      // 燈箱關閉時：切換下一個專案
+                    nextProject();
                 }
             }
         });
 
-        // 9. 滾動進度條
+        // 9. Apple 式滾動動畫監聽器
+        function initAppleScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.apple-reveal, .gallery-card, .hero-img-box').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // 10. 滾動進度條
         window.addEventListener('scroll', () => {
             const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
             if (totalHeight > 0) {
@@ -551,8 +628,6 @@
 
         // 啟動入口
         document.addEventListener('DOMContentLoaded', loadProject);
-
-        </script>
+    </script>
 </body>
 </html>
-    
