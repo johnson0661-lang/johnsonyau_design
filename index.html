@@ -39,7 +39,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-        /* --- 1. Loading 終止淡出樣式（徹底修復 1 秒回閃） --- */
+        /* 1. Loading 終止淡出樣式（徹底解決回閃） */
         #intro-overlay.fade-out {
             opacity: 0 !important;
             pointer-events: none !important;
@@ -47,7 +47,7 @@
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease !important;
         }
 
-        /* --- 2. 頂部 2px 極簡滾動進度條 --- */
+        /* 2. 頂部 2px 極簡滾動進度條 */
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -59,7 +59,7 @@
             transition: width 0.1s ease-out;
         }
 
-        /* --- 3. 電影翻譯：懸浮海報預覽卡 (Desktop) --- */
+        /* 3. 電影翻譯：懸浮海報預覽卡 (Desktop) */
         .movie-hover-preview {
             position: fixed;
             pointer-events: none;
@@ -82,7 +82,7 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* --- 4. 滾動淡入動畫優化 --- */
+        /* 4. 滾動淡入動畫 */
         .reveal-up {
             opacity: 0;
             transform: translateY(24px);
@@ -210,7 +210,7 @@
 
     <div id="toast-container"></div>
 
-    <!-- Header -->
+    <!-- Header 導覽列 -->
     <header class="sticky top-0 z-50 glass-header">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between text-xs tracking-wide relative">
             <a href="index.html" class="group flex items-center z-10">
@@ -221,28 +221,33 @@
                 <a href="index.html#translation" class="nav-trans hover:text-minimal-accent transition">電影翻譯紀錄</a>
                 <a href="index.html#about" class="nav-about hover:text-minimal-accent transition">關於我</a>
             </nav>
-            <div class="z-10 flex items-center gap-4">
+            <div class="z-10 flex items-center gap-3">
+                <!-- 語言切換按鈕 -->
                 <button onclick="switchLanguage()" id="lang-btn" class="px-4 py-1.5 bg-transparent text-minimal-accent border border-minimal-accent hover:bg-minimal-accent hover:text-white transition font-medium shadow-hard">
                     EN
+                </button>
+                <!-- 低調管理員登入按鈕 -->
+                <button onclick="openPasswordModal()" title="後台管理" class="px-3 py-1.5 bg-white text-minimal-gray hover:text-minimal-accent border border-minimal-border hover:border-minimal-accent transition font-medium shadow-hard">
+                    <i class="fa-solid fa-lock text-xs"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (方案 C 標題與簡介) -->
     <section class="min-h-[80vh] max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col justify-center items-center text-center relative reveal-up active">
         <div class="relative p-8">
             <div class="crop-mark crop-mark-tl"></div><div class="crop-mark crop-mark-tr"></div>
             <div class="crop-mark crop-mark-bl"></div><div class="crop-mark crop-mark-br"></div>
 
             <span class="hero-tag inline-block text-[10px] uppercase tracking-[0.25em] text-minimal-accent font-semibold mb-8 px-4 py-1.5 border border-minimal-border bg-white shadow-hard">
-                Multimedia Design & IP Localization
+                IP LOCALIZATION & MULTIMEDIA DESIGN
             </span>
             <h1 class="hero-title text-5xl md:text-7xl font-bold tracking-tight text-minimal-accent mb-8 leading-[1.1] text-center">
-                簡約日式美學<br><span class="text-minimal-gray">精準視覺敘事</span>
+                視覺的凝練，<br><span class="text-minimal-gray">語意的延伸</span>
             </h1>
             <p class="hero-desc text-lg md:text-xl text-minimal-gray font-normal max-w-2xl mx-auto leading-relaxed mb-12 text-center">
-                專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、<br class="hidden md:inline">Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。
+                融合設計美學與語文敏銳度，服務包括日本 IP 物料、品牌字型改編、<br class="hidden md:inline">快閃店展覽與院線動畫字幕。
             </p>
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="#works" class="btn-works px-8 py-3 bg-minimal-accent text-white text-sm font-medium border border-minimal-accent hover:bg-transparent hover:text-minimal-accent transition shadow-hard">
@@ -255,11 +260,11 @@
         </div>
     </section>
 
-    <!-- Works Section -->
+    <!-- Works Section (選粹作品) -->
     <section id="works" class="max-w-7xl mx-auto px-6 py-32 reveal-up relative">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-minimal-border pb-6">
             <div>
-                <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Selected Projects</h2>
+                <h2 id="works-sub" class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">Selected Projects</h2>
                 <h3 id="works-heading" class="text-3xl md:text-4xl font-bold tracking-tight text-minimal-accent">專案分類</h3>
             </div>
             <div id="pagination-controls" class="hidden items-center space-x-3 shrink-0 self-end md:self-auto">
@@ -271,6 +276,8 @@
                 </button>
             </div>
         </div>
+        
+        <!-- 分類按鈕 (8 個分類按鈕均支援三語即時切換) -->
         <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs mb-12 font-medium tracking-wider">
             <button onclick="filterProjects('featured', this)" class="filter-btn active px-5 py-2.5 bg-minimal-accent text-white border border-minimal-accent transition shadow-hard" id="btn-featured">精選作品</button>
             <button onclick="filterProjects('字體設計', this)" class="filter-btn px-5 py-2.5 bg-white text-minimal-gray hover:text-minimal-accent transition border border-minimal-border shadow-hard" id="btn-type">字體設計</button>
@@ -281,17 +288,17 @@
             <button onclick="filterProjects('影片剪接', this)" class="filter-btn px-5 py-2.5 bg-white text-minimal-gray hover:text-minimal-accent transition border border-minimal-border shadow-hard" id="btn-video">影片剪接</button>
             <button onclick="filterProjects('其他', this)" class="filter-btn px-5 py-2.5 bg-white text-minimal-gray hover:text-minimal-accent transition border border-minimal-border shadow-hard" id="btn-other">其他</button>
         </div>
-        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" onmouseenter="pauseAutoPlay()" onmouseleave="startAutoPlay()"></div>
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12"></div>
     </section>
 
-    <!-- 電影翻譯區塊（極簡雜誌清單風 + 懸浮海報預覽） -->
+    <!-- 電影翻譯區塊 (極簡雜誌清單風 + 懸浮海報預覽) -->
     <section id="translation" class="max-w-6xl mx-auto px-6 py-28 reveal-up relative">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-minimal-border pb-6">
             <div>
                 <span class="text-[10px] font-mono text-minimal-gray tracking-widest uppercase block mb-1">02 // TRANSLATION ARCHIVE</span>
-                <h2 class="text-2xl font-bold tracking-tight text-minimal-accent">電影翻譯紀錄</h2>
+                <h2 id="trans-heading" class="text-2xl font-bold tracking-tight text-minimal-accent">電影翻譯紀錄</h2>
             </div>
-            <p class="text-xs text-minimal-gray font-mono mt-4 md:mt-0">
+            <p id="trans-desc" class="text-xs text-minimal-gray font-mono mt-4 md:mt-0">
                 日語院線字幕 · 日本動漫 IP 本地化
             </p>
         </div>
@@ -300,9 +307,7 @@
         <div id="movie-preview" class="movie-hover-preview hidden md:block"></div>
 
         <!-- 電影清單容器 -->
-        <div id="translation-list" class="divide-y divide-minimal-border border-y border-minimal-border">
-            <!-- 由 JavaScript 動態生成 -->
-        </div>
+        <div id="translation-list" class="divide-y divide-minimal-border border-y border-minimal-border"></div>
 
         <!-- 分頁控制 -->
         <div id="trans-pagination-controls" class="hidden justify-center items-center gap-4 mt-12 font-mono text-xs">
@@ -312,7 +317,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section (關於我) -->
     <section id="about" class="bg-minimal-lightgray py-40 reveal-up border-t border-minimal-border relative">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-5 flex justify-center relative">
@@ -325,7 +330,7 @@
             </div>
             <div class="md:col-span-7 space-y-6">
                 <div class="border-b border-minimal-border pb-4">
-                    <h2 class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">About Me & Contact</h2>
+                    <h2 id="about-sub" class="text-[10px] uppercase tracking-[0.2em] text-minimal-gray font-semibold mb-2">About Me & Contact</h2>
                     <h3 id="about-title" class="text-3xl font-bold text-minimal-accent tracking-tight">自我介紹・聯絡方式</h3>
                 </div>
                 <div id="about-desc" class="text-[#444] font-normal leading-relaxed text-sm space-y-4"></div>
@@ -604,6 +609,14 @@
     <!-- Script Logic -->
     <script>
         // ==========================================
+        // 全域防呆：3.5 秒後強制解鎖 Loading，保證永不卡住
+        // ==========================================
+        setTimeout(() => {
+            const overlay = document.getElementById('intro-overlay');
+            if (overlay) overlay.remove();
+        }, 3500);
+
+        // ==========================================
         // 1. Firebase 初始化與管理員設定
         // ==========================================
         const firebaseConfig = {
@@ -624,9 +637,6 @@
         const langs = ['zh', 'en', 'ja'];
         let currentLangIndex = 0;
 
-        // ==========================================
-        // 語系與多語言字典（包含完整 8 個分類按鈕）
-        // ==========================================
         const langMap = {
             zh: {
                 siteTitle: "Johnson Yau | 多媒體設計與創意作品集",
@@ -635,7 +645,7 @@
                 navAbout: "關於我",
                 heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
                 heroTitle: "視覺的凝練，<br><span class=\"text-minimal-gray\">語意的延伸</span>",
-                heroDesc: "融合設計美學與語文敏銳度，服務包括日本 IP 物料、品牌字型改編、快閃店展覽與院線動畫字幕。",
+                heroDesc: "融合設計美學與語文敏銳度，服務包括日本 IP 物料、品牌字型改編、<br class=\"hidden md:inline\">快閃店展覽與院線動畫字幕。",
                 btnWorks: "探索作品",
                 btnTrans: "電影翻譯紀錄",
                 worksSub: "Selected Projects",
@@ -662,7 +672,7 @@
                 navAbout: "About Me",
                 heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
                 heroTitle: "Distilling Vision,<br><span class=\"text-minimal-gray\">Expanding Meaning.</span>",
-                heroDesc: "Bridging visual aesthetics and linguistic nuance — specializing in Japanese IP licensing, typeface localization, pop-up exhibitions, and film subtitling.",
+                heroDesc: "Bridging visual aesthetics and linguistic nuance — specializing in Japanese IP licensing,<br class=\"hidden md:inline\">typeface localization, pop-up exhibitions, and film subtitling.",
                 btnWorks: "Explore Works",
                 btnTrans: "Film Subtitles",
                 worksSub: "Selected Projects",
@@ -689,7 +699,7 @@
                 navAbout: "自己紹介",
                 heroTag: "IP LOCALIZATION & MULTIMEDIA DESIGN",
                 heroTitle: "視覚の凝縮、<br><span class=\"text-minimal-gray\">語義の共鳴</span>",
-                heroDesc: "デザイン美学と言語の感性を融合し、日本アニメ・マンガIPのプロモーション、フォントローカライズ、ポップアップ展示企画、劇場版アニメ字幕翻訳に注力しています。",
+                heroDesc: "デザイン美学と言語の感性を融合し、日本アニメ・マンガIPのプロモーション、<br class=\"hidden md:inline\">フォントローカライズ、ポップアップ展示企画、劇場版アニメ字幕翻訳に注力しています。",
                 btnWorks: "作品を見る",
                 btnTrans: "字幕翻訳実績",
                 worksSub: "Selected Projects",
@@ -711,72 +721,76 @@
             }
         };
 
-        // ==========================================
-        // 語言切換核心函式
-        // ==========================================
-        function switchLanguage() {
-            currentLangIndex = (currentLangIndex + 1) % langs.length;
-            const langKey = langs[currentLangIndex];
-            const nextLang = langs[(currentLangIndex + 1) % langs.length].toUpperCase();
+        let aboutData = {
+            zh: "專注於日本動漫 IP 授權宣傳物料、Typeface 本地化、Pop-up Store 展覽規劃、實體包裝與日文字幕電影翻譯。",
+            en: "Focused on Japanese anime IP licensing promotions, typography localization, pop-up exhibitions, packaging design, and Japanese subtitle translation.",
+            ja: "日本のアニメ・マンガIPの宣伝資料、ロゴのローカライズ、ポップアップストアの展示企画、パッケージデザイン、および日本語字幕付き映画の翻訳に注力しています。"
+        };
 
-            // 更新按鈕文字 (例如目前是 EN，按鈕顯示下一個 JA)
-            const langBtn = document.getElementById('lang-btn');
-            if (langBtn) langBtn.textContent = nextLang;
-
-            const t = langMap[langKey] || langMap.zh;
-            document.title = t.siteTitle;
-
-            // 導覽列
-            document.querySelectorAll('.nav-works').forEach(el => el.textContent = t.navWorks);
-            document.querySelectorAll('.nav-trans').forEach(el => el.textContent = t.navTrans);
-            document.querySelectorAll('.nav-about').forEach(el => el.textContent = t.navAbout);
-
-            // Hero 區塊
-            const heroTag = document.querySelector('.hero-tag');
-            if (heroTag) heroTag.textContent = t.heroTag;
-            const heroTitle = document.querySelector('.hero-title');
-            if (heroTitle) heroTitle.innerHTML = t.heroTitle;
-            const heroDesc = document.querySelector('.hero-desc');
-            if (heroDesc) heroDesc.innerHTML = t.heroDesc;
-            const btnWorks = document.querySelector('.btn-works');
-            if (btnWorks) btnWorks.textContent = t.btnWorks;
-            const btnTrans = document.querySelector('.btn-trans');
-            if (btnTrans) btnTrans.textContent = t.btnTrans;
-
-            // 專案標題與分類按鈕 (全 8 個按鈕即時翻譯)
-            const worksHeading = document.getElementById('works-heading');
-            if (worksHeading) worksHeading.textContent = t.worksHeading;
-
-            const cats = t.categories;
-            if (cats) {
-                const bFeatured = document.getElementById('btn-featured'); if (bFeatured) bFeatured.textContent = cats.featured;
-                const bType = document.getElementById('btn-type');         if (bType) bType.textContent = cats.type;
-                const bExhib = document.getElementById('btn-exhibition');  if (bExhib) bExhib.textContent = cats.exhibition;
-                const bPopup = document.getElementById('btn-popup');       if (bPopup) bPopup.textContent = cats.popup;
-                const bPkg = document.getElementById('btn-pkg');           if (bPkg) bPkg.textContent = cats.pkg;
-                const bMerch = document.getElementById('btn-merch');       if (bMerch) bMerch.textContent = cats.merch;
-                const bVideo = document.getElementById('btn-video');       if (bVideo) bVideo.textContent = cats.video;
-                const bOther = document.getElementById('btn-other');       if (bOther) bOther.textContent = cats.other;
+        function getLocalized(val) {
+            if (!val) return '';
+            if (typeof val === 'object') {
+                const langKey = langs[currentLangIndex] || 'zh';
+                return val[langKey] || val.zh || val.en || Object.values(val)[0] || '';
             }
-
-            // 電影翻譯區塊標題
-            const transHeading = document.getElementById('trans-heading');
-            if (transHeading) transHeading.textContent = t.transHeading;
-            const transDesc = document.getElementById('trans-desc');
-            if (transDesc) transDesc.textContent = t.transDesc;
-
-            // 關於我區塊標題
-            const aboutTitle = document.getElementById('about-title');
-            if (aboutTitle) aboutTitle.textContent = t.aboutTitle;
-
-            // 重新渲染列表資料
-            renderProjects();
-            renderTranslations();
-            renderAbout();
+            return val;
         }
 
         // ==========================================
-        // 4. 滾動效果、進度條與回到頂部
+        // 2. 作品集與電影翻譯狀態
+        // ==========================================
+        let projects = [];
+        let currentFilter = 'featured';
+        let currentPageIndex = 0;
+        const itemsPerPage = 8;
+
+        let translations = [];
+        let transPageIndex = 0;
+        const transItemsPerPage = 12;
+
+        let adminProjPageIndex = 0;
+        const adminProjItemsPerPage = 6;
+        let adminCurrentFilter = 'all';
+
+        let adminTransPageIndex = 0;
+        const adminTransItemsPerPage = 6;
+
+        const fallbackTranslations = [
+            { title: { zh: "假面騎士 555 20th PARADISE REGAINED", en: "Masked Rider 555 20th PARADISE REGAINED", ja: "仮面ライダー555 20th パラダイス・リゲインド" }, year: "2024", type: "日文字幕 ➔ 繁體中文", image: "https://johnson0661-lang.github.io/johnsonyau_design/assets/images/movies/faiz.jpg" },
+            { title: { zh: "假面騎士 THE WINTER MOVIE 歌查德與極狐", en: "Kamen Rider The Winter Movie Gotchard & Geats", ja: "仮面ライダー THE WINTER MOVIE ガッチャード＆ギーツ" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "少女與戰車 最終章 第4話", en: "Girls und Panzer das Finale: Part 4", ja: "ガールズ＆パンツァー 最終章 第4話" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "新・假面騎士", en: "Shin Masked Rider", ja: "シン・仮面ライダー" }, year: "2023", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "假面騎士 Geats × Revice Battle Royale", en: "Kamen Rider Geats × Revice Battle Royale", ja: "仮面ライダーギーツ×リバイス MOVIEバトルロワイヤル" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "電影 五等分的新娘", en: "The Quintessential Quintuplets Movie", ja: "映画 五等分の花嫁" }, year: "2022", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "來自深淵 深沉靈魂的黎明", en: "Made in Abyss: Dawn of the Deep Soul", ja: "劇場版メイドインアビス 深き魂の黎明" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "數碼暴龍 Last Evolution 絆", en: "Digimon Adventure: Last Evolution Kizuna", ja: "デジモンアドベンチャー LAST EVOLUTION 絆" }, year: "2020", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "為美好的世界獻上祝福！紅傳說", en: "KonoSuba: Legend of Crimson", ja: "この素晴らしい世界に祝福を！紅伝説" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" },
+            { title: { zh: "Fate/stay night [Heaven's Feel] II. lost butterfly", en: "Fate/stay night [Heaven's Feel] II", ja: "劇場版 Fate/stay night [Heaven's Feel] II" }, year: "2019", type: "日文字幕 ➔ 繁體中文", image: "" }
+        ];
+
+        // ==========================================
+        // 3. Loading 動畫控制
+        // ==========================================
+        function initLoader() {
+            const overlay = document.getElementById('intro-overlay');
+            if (!overlay) return;
+
+            setTimeout(() => {
+                overlay.classList.add('fade-out');
+                overlay.addEventListener('transitionend', () => {
+                    overlay.remove();
+                }, { once: true });
+
+                setTimeout(() => {
+                    if (document.getElementById('intro-overlay')) {
+                        overlay.remove();
+                    }
+                }, 800);
+            }, 2000);
+        }
+
+        // ==========================================
+        // 4. 滾動效果與回到頂部
         // ==========================================
         function initScrollEffects() {
             window.addEventListener('scroll', () => {
@@ -830,7 +844,7 @@
         }
 
         // ==========================================
-        // 5. 語言切換
+        // 5. 語言切換（8 個分類按鈕三語切換）
         // ==========================================
         function switchLanguage() {
             currentLangIndex = (currentLangIndex + 1) % langs.length;
@@ -842,6 +856,7 @@
 
             const t = langMap[langKey] || langMap.zh;
             document.title = t.siteTitle;
+
             document.querySelectorAll('.nav-works').forEach(el => el.textContent = t.navWorks);
             document.querySelectorAll('.nav-trans').forEach(el => el.textContent = t.navTrans);
             document.querySelectorAll('.nav-about').forEach(el => el.textContent = t.navAbout);
@@ -856,12 +871,30 @@
             if (btnWorks) btnWorks.textContent = t.btnWorks;
             const btnTrans = document.querySelector('.btn-trans');
             if (btnTrans) btnTrans.textContent = t.btnTrans;
+
             const worksHeading = document.getElementById('works-heading');
             if (worksHeading) worksHeading.textContent = t.worksHeading;
+
+            // 8 個分類按鈕即時翻譯
+            const cats = t.categories;
+            if (cats) {
+                const bFeatured = document.getElementById('btn-featured'); if (bFeatured) bFeatured.textContent = cats.featured;
+                const bType = document.getElementById('btn-type');         if (bType) bType.textContent = cats.type;
+                const bExhib = document.getElementById('btn-exhibition');  if (bExhib) bExhib.textContent = cats.exhibition;
+                const bPopup = document.getElementById('btn-popup');       if (bPopup) bPopup.textContent = cats.popup;
+                const bPkg = document.getElementById('btn-pkg');           if (bPkg) bPkg.textContent = cats.pkg;
+                const bMerch = document.getElementById('btn-merch');       if (bMerch) bMerch.textContent = cats.merch;
+                const bVideo = document.getElementById('btn-video');       if (bVideo) bVideo.textContent = cats.video;
+                const bOther = document.getElementById('btn-other');       if (bOther) bOther.textContent = cats.other;
+            }
+
+            const transHeading = document.getElementById('trans-heading');
+            if (transHeading) transHeading.textContent = t.transHeading;
+            const transDesc = document.getElementById('trans-desc');
+            if (transDesc) transDesc.textContent = t.transDesc;
+
             const aboutTitle = document.getElementById('about-title');
             if (aboutTitle) aboutTitle.textContent = t.aboutTitle;
-            const btnFeatured = document.getElementById('btn-featured');
-            if (btnFeatured) btnFeatured.textContent = t.btnFeatured;
 
             renderProjects();
             renderTranslations();
@@ -884,7 +917,7 @@
         }
 
         // ==========================================
-        // 6. 電影翻譯：清單排版與懸浮海報預覽
+        // 6. 電影翻譯：清單渲染與懸浮海報預覽
         // ==========================================
         function renderTranslations() {
             const container = document.getElementById('translation-list');
@@ -1063,9 +1096,6 @@
             renderProjects();
         }
 
-        function startAutoPlay() {}
-        function pauseAutoPlay() {}
-
         // ==========================================
         // 8. 雲端資料同步 (Firebase Firestore)
         // ==========================================
@@ -1098,14 +1128,14 @@
                     renderAbout();
                 }
             } catch (err) {
-                console.warn("Firebase 備用資料載入模式:", err);
+                console.warn("Firebase 備用模式:", err);
                 renderTranslations();
                 renderAbout();
             }
         }
 
         // ==========================================
-        // 9. 管理員後台控制邏輯
+        // 9. 管理員後台控制
         // ==========================================
         function showToast(msg, isError = false) {
             const container = document.getElementById('toast-container');
@@ -1378,7 +1408,6 @@
                 renderAdminProjectsList();
                 showToast('專案儲存成功');
             } catch (err) {
-                console.error(err);
                 showToast('儲存失敗: ' + err.message, true);
             }
         }
@@ -1642,10 +1671,13 @@
             initLoader();
             initScrollEffects();
             fetchCloudData();
-            // 如果網址含有 ?admin，自動彈出後台登入框
-if (window.location.search.includes('admin') || window.location.hash.includes('admin')) {
-    openPasswordModal();
-}
+
+            // 若網址含有 ?admin，跳過等待立即彈出登入框
+            if (window.location.search.includes('admin') || window.location.hash.includes('admin')) {
+                const overlay = document.getElementById('intro-overlay');
+                if (overlay) overlay.remove();
+                openPasswordModal();
+            }
         });
     </script>
 </body>
